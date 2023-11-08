@@ -5,12 +5,15 @@ const commands = [
     "ls -la",
     "[ -d apps/backend ] || mkdir -p apps/backend",
     "[ -d apps/backend ] || mkdir -p apps/backend",
+    "[ -d apps/backend ] || mkdir -p apps/backend",
     "[ -d apps/frontend ] || mkdir -p apps/frontend",
+    "echo 'Finished: creating app folders' && echo ' '",
 
     // Creates a .env if not present in source folder
     "[ -h .env ] || ln -s ../shared/.env .env",
     "[ -h apps/backend/.env ] || ln -s ../../.env apps/backend/.env",
-    "[ -h apps/frontend/.env ] || ln -s ../../.env apps/frontend/.env"
+    "[ -h apps/frontend/.env ] || ln -s ../../.env apps/frontend/.env",
+    "echo 'Finished: creating .env symlinks for apps' && echo ' '",
 ];
 
 module.exports = hookUtility.createCommandString(commands);
