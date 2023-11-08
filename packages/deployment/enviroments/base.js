@@ -2,9 +2,9 @@ const postDeployHook = require("../hooks/postDeploy");
 const preDeployHook = require("../hooks/preDeploy");
 
 module.exports = {
-    "user": "",
-    "host": "",
-    "repo": "",
+    "user": "root",
+    "host": "49.13.69.55",
+    "repo": "git@github.com:balatD/balatinac.dev.git",
     "post-deploy": postDeployHook,
     "pre-deploy": preDeployHook
 }
