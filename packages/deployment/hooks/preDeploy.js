@@ -2,6 +2,8 @@ const hookUtility = require("./hookUtility");
 
 const commands = [
     // Check if app folders exist and create them if not
+    "ls -la",
+    "[ -d apps/backend ] || mkdir -p apps/backend",
     "[ -d apps/backend ] || mkdir -p apps/backend",
     "[ -d apps/frontend ] || mkdir -p apps/frontend",
 
