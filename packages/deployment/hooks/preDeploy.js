@@ -15,6 +15,7 @@ const commands = [
     "echo ' ' && echo '  ○ Finished: creating .env symlinks for apps' && echo ' '",
 
     // Check nvm version
+    '. ~/.bashrc',
     "nvm list",
     "echo ' ' && echo '  ○ Check: nvm versions' && echo ' '",
 ];
