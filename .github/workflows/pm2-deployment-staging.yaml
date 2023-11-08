@@ -1,0 +1,19 @@
+name: 'balatinac.dev - Staging - Automated Deployment with PM2'
+
+on:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  pm2-configuration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - run: npm install pm2@latest -g
+      - run: pm2 -V
+      - run: pm2 ps
+      - run: pm2 deploy ecosystem.config.js staging
