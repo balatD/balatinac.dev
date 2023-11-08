@@ -6,5 +6,6 @@ module.exports = {
     "host": "49.13.69.55",
     "repo": "git@github.com:balatD/balatinac.dev.git",
     "post-deploy": postDeployHook,
-    "pre-deploy": preDeployHook
+    "pre-deploy": preDeployHook,
+    "ssh_options": "StrictHostKeyChecking=no"
 }
