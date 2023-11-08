@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "global_configurations",
+  "info": {
+    "singularName": "global-configuration",
+    "pluralName": "global-configurations",
+    "displayName": "Global Configuration"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "company": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
