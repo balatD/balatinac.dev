@@ -12,6 +12,7 @@
     "react": "^18",
     "react-dom": "^18",
     "next": "14.0.1",
+    "geist": "1.1.0",
     "dotenv": "16.3.1",
     "@mtrimolet/cross-var": "1.2.1",
     "balatinac-dev-shared-config": "*",

@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import colors from 'tailwindcss/colors';
 
 const config: Config = {
   content: [
@@ -7,12 +8,14 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
+    colors: {
+      ...colors,
+      dark: '#181920',
+      grey: '#798082',
+      light: '#898E85'
+    },
+    fontFamily: {
+      mono: ['var(--font-geist-mono)'],
     },
   },
   plugins: [],

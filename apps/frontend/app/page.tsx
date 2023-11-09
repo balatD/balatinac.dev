@@ -1,9 +1,13 @@
 import Image from 'next/image'
+import Navigation from '@/ui/shared/navigation'
+import HomepageHero from '@/ui/shared/hero'
+
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center">
-      <h1 className='text-white'>Coming soon...</h1>
+    <main className='font-mono font-light'>
+      <Navigation />
+      <HomepageHero />
     </main>
   )
 }
