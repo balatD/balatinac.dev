@@ -14,6 +14,7 @@
     "next": "14.0.1",
     "geist": "1.1.0",
     "dotenv": "16.3.1",
+    "clsx": "2.0.0",
     "@mtrimolet/cross-var": "1.2.1",
     "balatinac-dev-shared-config": "*",
     "balatinac-dev-shared-tsconfig": "*"
