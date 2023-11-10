@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import Navigation from '@/ui/shared/navigation'
-import HomepageHero from '@/ui/shared/hero'
+import Navigation from './ui/shared/navigation'
+import HomepageHero from './ui/shared/hero'
 
 
 export default function Home() {
