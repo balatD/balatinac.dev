@@ -27,7 +27,7 @@
     "npm": ">=7.0.0",
     "node": ">=14.0.0"
   },
-  "packageManager": "npm@18.16.0",
+  "packageManager": "npm@18.18.2",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
