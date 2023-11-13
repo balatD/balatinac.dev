@@ -23,5 +23,4 @@ jobs:
           node-version: '18.x'
       - run: npm install pm2@latest -g
       - run: pm2 -V
-      - run: pm2 ps
       - run: pm2 deploy ecosystem.config.js production
