@@ -1,8 +1,8 @@
 module.exports = {
     name: 'frontend',
-    cwd: './apps/frontend',
-    script: 'npm',
+    script: 'node_modules/next/dist/bin/next',
     args: 'start',
+    cwd: './apps/frontend',
     instances: 'max',
     exec_mode: 'cluster'
 };
