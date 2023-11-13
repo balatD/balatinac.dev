@@ -1,7 +1,7 @@
 module.exports = {
     name: 'backend',
     cwd: './apps/backend',
-    script: 'npm run start',
+    script: 'server.js',
     instances: 'max',
     exec_mode: 'cluster'
 };
