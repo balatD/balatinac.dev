@@ -14,7 +14,7 @@ const Navigation = () => {
     }
 
     return (
-        <div className='border-b border-l border-t border-grey/[.55] m-auto'>
+        <div className='border-b border-l border-t border-r border-grey/[.55] m-auto'>
             <div className='flex flex-row justify-between'>
                 <div className='branding text-white p-10 border-r border-grey/[.55]'>balatinac.dev</div>
                 <nav className='hidden md:block'>
