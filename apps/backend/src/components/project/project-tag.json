@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_project_project_tags",
+  "info": {
+    "displayName": "ProjectTag",
+    "icon": "grid",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "tag": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "typo3",
+        "next.js",
+        "tailwind",
+        "strapi",
+        "javascript",
+        "php"
+      ]
+    }
+  }
+}

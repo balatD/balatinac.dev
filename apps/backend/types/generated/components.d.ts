@@ -1,5 +1,20 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
+export interface ProjectProjectTag extends Schema.Component {
+  collectionName: 'components_project_project_tags';
+  info: {
+    displayName: 'ProjectTag';
+    icon: 'grid';
+    description: '';
+  };
+  attributes: {
+    tag: Attribute.String;
+    icon: Attribute.Enumeration<
+      ['typo3', 'next.js', 'tailwind', 'strapi', 'javascript', 'php']
+    >;
+  };
+}
+
 export interface SharedMetaSocial extends Schema.Component {
   collectionName: 'components_shared_meta_socials';
   info: {
@@ -54,6 +69,7 @@ export interface SharedSeo extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'project.project-tag': ProjectProjectTag;
       'shared.meta-social': SharedMetaSocial;
       'shared.seo': SharedSeo;
     }
