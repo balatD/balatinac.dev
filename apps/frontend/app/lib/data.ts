@@ -16,6 +16,9 @@ export async function fetchAllProjects() {
             {
                 headers: { Authorization: "Bearer " + STRAPI_API_PUBLIC_KEY },
                 cache: "no-store",
+                next: {
+                    revalidate: 3600
+                }
             }
         );
 
@@ -34,6 +37,9 @@ export async function fetchAllBlogArticles() {
             {
                 headers: { Authorization: "Bearer " + STRAPI_API_PUBLIC_KEY },
                 cache: "no-store",
+                next: {
+                    revalidate: 3600
+                }
             }
         );
 

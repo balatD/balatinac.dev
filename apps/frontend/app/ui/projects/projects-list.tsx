@@ -2,7 +2,6 @@ import React from 'react';
 import ProjectCard from '@/ui/projects/project-card';
 import { fetchAllProjects } from '@/lib/data';
 import type { Project } from '@/lib/definitions';
-import { Suspense } from 'react';
 
 const ProjectList = async () => {
     const projects = await fetchAllProjects();

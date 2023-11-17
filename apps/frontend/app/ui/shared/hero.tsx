@@ -16,8 +16,8 @@ const HomepageHero = () => {
                         <div className='h-[400px] md:h-[70vh] relative overflow-x-hidden'>
                             <div className="absolute top-0 -left-4 w-72 h-72 bg-slate-500 rounded-full opacity-70 mix-blend-color-dodge filter blur-xl animate-blob"></div>
                             <div className="absolute top-20 -right-4 w-72 h-72 bg-light rounded-full opacity-70 mix-blend-color-dodge filter blur-xl animate-blob animation-delay-2000"></div>
-
-                            <Image className='object-cover' src='/portrait.png' alt='Picture of the author' fill={true} />
+                            {/* Disable till proper image is found */}
+                            {/* <Image className='object-cover' src='/portrait.png' alt='Picture of the author' fill={true} /> */}
                         </div>
                         <div className='h-[400px] md:h-[30vh] font-thin text-white p-10 space-y-5'>
                             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis, sequi!</p>
