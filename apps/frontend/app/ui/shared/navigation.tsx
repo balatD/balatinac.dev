@@ -16,32 +16,32 @@ const Navigation = () => {
     };
 
     return (
-        <div className="border-b border-l border-t border-r border-grey/[.55] m-auto">
+        <div className="border-grey/[.55] m-auto border-b border-l border-r border-t">
             <div className="flex flex-row justify-between">
-                <div className="branding text-white p-10 border-r border-grey/[.55]">
+                <div className="branding border-grey/[.55] border-r p-10 text-white">
                     balatinac.dev
                 </div>
                 <nav className="hidden md:block">
                     <ul className="flex flex-row">
                         <Link href="/">
-                            <li className="p-10 border-l border-grey/[.55] hover:bg-light text-white cursor-pointer transition">
+                            <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Home
                             </li>
                         </Link>
                         <Link href="/#projects">
-                            <li className="p-10 border-l border-grey/[.55] hover:bg-light text-white cursor-pointer transition">
+                            <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Projects
                             </li>
                         </Link>
                         <Link href="/#blog">
-                            <li className="p-10 border-l border-grey/[.55] hover:bg-light text-white cursor-pointer transition">
+                            <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Blog
                             </li>
                         </Link>
                     </ul>
                 </nav>
                 <button
-                    className="border-l border-grey/[.55] md:hidden p-10 text-white hover:bg-light flex flex-col"
+                    className="border-grey/[.55] hover:bg-light flex flex-col border-l p-10 text-white md:hidden"
                     onClick={mobileNavigationClickHandler}
                 >
                     {mobileNavigationToggle ? (
@@ -58,17 +58,17 @@ const Navigation = () => {
                 } md:hidden`}
             >
                 <ul className="flex flex-col">
-                    <li className="p-10 border-r border-t border-grey/[.55] hover:bg-light cursor-pointer transition">
+                    <li className="border-grey/[.55] hover:bg-light cursor-pointer border-r border-t p-10 transition">
                         <a className="text-white" href="/">
                             Home
                         </a>
                     </li>
-                    <li className="p-10 border-r border-t border-grey/[.55] hover:bg-light cursor-pointer transition">
+                    <li className="border-grey/[.55] hover:bg-light cursor-pointer border-r border-t p-10 transition">
                         <a className="text-white" href="/">
                             Projects
                         </a>
                     </li>
-                    <li className="p-10 border-r border-t border-grey/[.55] hover:bg-light cursor-pointer transition">
+                    <li className="border-grey/[.55] hover:bg-light cursor-pointer border-r border-t p-10 transition">
                         <a className="text-white" href="/">
                             Blog
                         </a>

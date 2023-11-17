@@ -11,8 +11,8 @@ import JavaScriptIcon from '@/ui/tech-stack/icons/javascript-icon';
 
 const TechStackSlider = () => {
     return (
-        <div className="border-b border-grey/[.55]">
-            <div className="relative flex overflow-x-hidden gap-10 pt-10 pb-10 [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+        <div className="border-grey/[.55] border-b">
+            <div className="relative flex gap-10 overflow-x-hidden pb-10 pt-10 [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
                 <div className="animate-marquee flex min-w-full shrink-0 items-center justify-around gap-10">
                     <NextJSIcon />
                     <ReactIcon />

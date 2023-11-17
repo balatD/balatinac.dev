@@ -2,26 +2,26 @@ import React from 'react';
 
 const ProjectsSkeletonCard = () => {
     return (
-        <article className="border p-10 border-grey/[.55] rounded-lg transition-all h-30 opacity-20 animate-pulse">
-            <div className="h-2 bg-white rounded-full w-48 mb-4"></div>
-            <div className="h-2 bg-white rounded-full max-w-[480px] mb-5"></div>
-            <div className="h-2 bg-white rounded-full mb-5"></div>
-            <div className="h-2 bg-white rounded-full max-w-[440px] mb-5"></div>
-            <div className="h-2 bg-white rounded-full max-w-[460px] mb-5"></div>
-            <div className="h-2 bg-white rounded-full max-w-[360px] mb-5"></div>
-            <div className="h-2 bg-white rounded-full max-w-[460px] mb-5"></div>
-            <div className="h-2 bg-white rounded-full max-w-[360px]"></div>
+        <article className="border-grey/[.55] h-30 animate-pulse rounded-lg border p-10 opacity-20 transition-all">
+            <div className="mb-4 h-2 w-48 rounded-full bg-white"></div>
+            <div className="mb-5 h-2 max-w-[480px] rounded-full bg-white"></div>
+            <div className="mb-5 h-2 rounded-full bg-white"></div>
+            <div className="mb-5 h-2 max-w-[440px] rounded-full bg-white"></div>
+            <div className="mb-5 h-2 max-w-[460px] rounded-full bg-white"></div>
+            <div className="mb-5 h-2 max-w-[360px] rounded-full bg-white"></div>
+            <div className="mb-5 h-2 max-w-[460px] rounded-full bg-white"></div>
+            <div className="h-2 max-w-[360px] rounded-full bg-white"></div>
         </article>
     );
 };
 
 const ProjectsSkeleton = () => {
     return (
-        <div className="border-b pb-32 border-grey/[.55]" id="projects">
-            <div className="mt-32 ml-10 mr-10 flex flex-col content-center">
+        <div className="border-grey/[.55] border-b pb-32" id="projects">
+            <div className="ml-10 mr-10 mt-32 flex flex-col content-center">
                 <h2 className="mb-10">
                     <a
-                        className="text-white font-semibold text-5xl hover:decoration-3 hover:underline"
+                        className="hover:decoration-3 text-5xl font-semibold text-white hover:underline"
                         href="#projects"
                     >
                         Projects

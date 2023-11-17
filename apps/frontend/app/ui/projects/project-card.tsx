@@ -9,8 +9,8 @@ interface ProjectCardProps {
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
     return (
-        <article className="hover:shadow-md hover:shadow-lighterDark flex flex-col text-white border p-10 border-grey/[.55] rounded-lg hover:bg-lighterDark transition-all">
-            <div className="mb-5 gap-2 flex flex-wrap">
+        <article className="hover:shadow-lighterDark border-grey/[.55] hover:bg-lighterDark flex flex-col rounded-lg border p-10 text-white transition-all hover:shadow-md">
+            <div className="mb-5 flex flex-wrap gap-2">
                 {project.attributes.tags &&
                     project.attributes.tags.map((tag) => (
                         <ProjectTechIcon
@@ -20,14 +20,14 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                         />
                     ))}
             </div>
-            <h5 className="text-3xl mb-5">{project.attributes.name}</h5>
+            <h5 className="mb-5 text-3xl">{project.attributes.name}</h5>
             <p>{project.attributes.shortDescription}</p>
             <div className="mt-10">
                 {project.attributes.githubLink && (
                     <a
                         href={project.attributes.githubLink}
                         target="_blank"
-                        className="pt-3 pb-3 flex gap-4 items-center hover:underline"
+                        className="flex items-center gap-4 pb-3 pt-3 hover:underline"
                     >
                         Take me to the repository <FiArrowUpRight />
                     </a>
@@ -36,7 +36,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                     <a
                         href={project.attributes.websiteLink}
                         target="_blank"
-                        className="pt-3 pb-3 flex gap-4 items-center hover:underline"
+                        className="flex items-center gap-4 pb-3 pt-3 hover:underline"
                     >
                         Take me to the website <FiArrowUpRight />
                     </a>

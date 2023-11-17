@@ -7,11 +7,11 @@ const ProjectList = async () => {
     const projects = await fetchAllProjects();
 
     return (
-        <div className="border-b pb-32 border-grey/[.55]" id="projects">
-            <div className="mt-32 ml-10 mr-10 flex flex-col content-center">
+        <div className="border-grey/[.55] border-b pb-32" id="projects">
+            <div className="ml-10 mr-10 mt-32 flex flex-col content-center">
                 <h2 className="mb-10">
                     <a
-                        className="text-white font-semibold text-5xl hover:decoration-3 hover:underline"
+                        className="hover:decoration-3 text-5xl font-semibold text-white hover:underline"
                         href="#projects"
                     >
                         Projects
