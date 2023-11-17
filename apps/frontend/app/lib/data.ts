@@ -15,14 +15,13 @@ export async function fetchAllProjects() {
             STRAPI_API_ENDPOINT + '/api/projects?' + query,
             {
                 headers: { Authorization: "Bearer " + STRAPI_API_PUBLIC_KEY },
-                cache: "no-store",
                 next: {
                     revalidate: 3600
                 }
             }
         );
 
-        await timeout(2000);
+        await timeout(5000);
         return await response.json() as Projects;
     } catch (error) {
         console.error('API Endpoint Error:', error);
@@ -36,7 +35,6 @@ export async function fetchAllBlogArticles() {
             STRAPI_API_ENDPOINT + '/api/blog-articles',
             {
                 headers: { Authorization: "Bearer " + STRAPI_API_PUBLIC_KEY },
-                cache: "no-store",
                 next: {
                     revalidate: 3600
                 }
@@ -66,7 +64,6 @@ export async function fetchBlogArticleContent(slug: string) {
             STRAPI_API_ENDPOINT + '/api/blog-articles?' + query,
             {
                 headers: { Authorization: "Bearer " + STRAPI_API_PUBLIC_KEY },
-                cache: "no-store",
             }
         );
 

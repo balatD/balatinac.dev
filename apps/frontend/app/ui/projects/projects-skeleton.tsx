@@ -2,7 +2,7 @@ import React from 'react'
 
 const ProjectsSkeletonCard = () => {
     return (
-        <article className='border p-10 border-grey/[.55] rounded-lg transition-all h-30 opacity-20'>
+        <article className='border p-10 border-grey/[.55] rounded-lg transition-all h-30 opacity-20 animate-pulse'>
             <div className="h-2 bg-white rounded-full w-48 mb-4"></div>
             <div className="h-2 bg-white rounded-full max-w-[480px] mb-5"></div>
             <div className="h-2 bg-white rounded-full mb-5"></div>
@@ -22,7 +22,7 @@ const ProjectsSkeleton = () => {
                 <h2 className='mb-10'>
                     <a className='text-white font-semibold text-5xl hover:decoration-3 hover:underline' href="#projects">Projects</a>
                 </h2>
-                <div className='grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8 animate-pulse'>
+                <div className='grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8'>
                     <ProjectsSkeletonCard />
                     <ProjectsSkeletonCard />
                     <ProjectsSkeletonCard />

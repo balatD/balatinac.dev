@@ -22,7 +22,7 @@ const Icon = (icon: { icon: string }) => {
 
 const ProjectTechIcon = (tag: { tag: string, icon: string }) => {
     return (
-        <span className='inline-flex bg-light rounded-full items-center justify-center pr-2 pl-2 text-sm gap-2'>
+        <span className='inline-flex bg-light rounded-full items-center justify-center pr-2 pl-2 text-sm gap-2 hover:bg-slate-900 transition cursor-pointer'>
             <Icon icon={tag.icon} /> {tag.tag}
         </span>
     )

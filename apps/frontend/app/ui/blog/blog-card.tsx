@@ -12,7 +12,7 @@ const BlogCard = ({ blog }: BlogCardProps) => {
     const blogSlug = `/blog/${blog.attributes.slug}`;
 
     return (
-        <article className='hover:shadow-sm hover:shadow-light flex flex-col text-white border p-10 border-grey/[.55] rounded-lg hover:bg-dark transition-all'>
+        <article className='hover:shadow-md hover:shadow-lighterDark flex flex-col text-white border p-10 border-grey/[.55] rounded-lg hover:bg-lighterDark transition-all'>
             <div className='flex flex-row gap-4'>
                 <div className='flex flex-col'>
                     <span className='mb-3 font-extralight text-slate-400 text-sm'>{format(date, 'd.LL.yyyy')}</span>

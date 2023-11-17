@@ -9,7 +9,7 @@ interface ProjectCardProps {
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
     return (
-        <article className='hover:shadow-sm hover:shadow-light flex flex-col text-white border p-10 border-grey/[.55] rounded-lg hover:bg-dark transition-all'>
+        <article className='hover:shadow-md hover:shadow-lighterDark flex flex-col text-white border p-10 border-grey/[.55] rounded-lg hover:bg-lighterDark transition-all'>
             <div className='mb-5 gap-2 flex flex-wrap'>
                 {project.attributes.tags && project.attributes.tags.map((tag) => <ProjectTechIcon key={tag.id} tag={tag.tag} icon={tag.icon} />)}
             </div>
