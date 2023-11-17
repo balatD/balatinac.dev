@@ -3,7 +3,6 @@ import BlogCard from '@/ui/blog/blog-card';
 import type { BlogArticle } from '@/lib/definitions';
 import { fetchAllBlogArticles } from '@/lib/data';
 
-
 const BlogList = async () => {
     const blogArticles = await fetchAllBlogArticles();
 
@@ -20,7 +19,6 @@ const BlogList = async () => {
                 }
             </div>
         </div>
-
     )
 }
 
