@@ -1,28 +1,27 @@
-import { BlogArticles, Projects } from "@/lib/definitions";
+import { BlogArticles, Projects } from '@/lib/definitions';
 import qs from 'qs';
 
 const STRAPI_API_PUBLIC_KEY = process.env.STRAPI_API_PUBLIC_KEY as string;
 const STRAPI_API_ENDPOINT = process.env.STRAPI_API_ENDPOINT as string;
 
-const timeout = (ms: number) => new Promise(res => setTimeout(res, ms));
+const timeout = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export async function fetchAllProjects() {
     try {
         const query = qs.stringify({
-            populate: 'tags'
+            populate: 'tags',
         });
         const response = await fetch(
             STRAPI_API_ENDPOINT + '/api/projects?' + query,
             {
-                headers: { Authorization: "Bearer " + STRAPI_API_PUBLIC_KEY },
+                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
                 next: {
-                    revalidate: 3600
-                }
+                    revalidate: 3600,
+                },
             }
         );
 
-        await timeout(5000);
-        return await response.json() as Projects;
+        return (await response.json()) as Projects;
     } catch (error) {
         console.error('API Endpoint Error:', error);
         throw new Error('Failed to fetch projects.');
@@ -34,15 +33,14 @@ export async function fetchAllBlogArticles() {
         const response = await fetch(
             STRAPI_API_ENDPOINT + '/api/blog-articles',
             {
-                headers: { Authorization: "Bearer " + STRAPI_API_PUBLIC_KEY },
+                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
                 next: {
-                    revalidate: 3600
-                }
+                    revalidate: 3600,
+                },
             }
         );
 
-        await timeout(2000);
-        return await response.json() as BlogArticles;
+        return (await response.json()) as BlogArticles;
     } catch (error) {
         console.error('API Endpoint Error:', error);
         throw new Error('Failed to fetch blog articles.');
@@ -54,21 +52,21 @@ export async function fetchBlogArticleContent(slug: string) {
         const query = qs.stringify({
             filters: {
                 slug: {
-                    eq: slug
-                }
+                    eq: slug,
+                },
             },
-            populate: 'body'
+            populate: 'body',
         });
 
         const response = await fetch(
             STRAPI_API_ENDPOINT + '/api/blog-articles?' + query,
             {
-                headers: { Authorization: "Bearer " + STRAPI_API_PUBLIC_KEY },
+                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
             }
         );
 
         await timeout(2000);
-        return await response.json() as BlogArticles;
+        return (await response.json()) as BlogArticles;
     } catch (error) {
         console.error('API Endpoint Error:', error);
         throw new Error('Failed to fetch blog articles.');

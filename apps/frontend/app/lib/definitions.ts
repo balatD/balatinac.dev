@@ -14,12 +14,12 @@ export type Project = {
             icon: string;
             __component: string;
         }[];
-    }
-}
+    };
+};
 
 export type Projects = {
     data: Project[];
-}
+};
 
 export type BlogArticle = {
     id: number;
@@ -31,10 +31,9 @@ export type BlogArticle = {
         createdAt: string;
         updatedAt: string;
         publishedAt: string;
-    }
-}
+    };
+};
 
 export type BlogArticles = {
     data: BlogArticle[];
-}
-
+};
