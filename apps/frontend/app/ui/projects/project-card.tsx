@@ -7,7 +7,6 @@ interface ProjectCardProps {
     project: Project;
 };
 
-
 const ProjectCard = ({ project }: ProjectCardProps) => {
     return (
         <article className='hover:shadow-sm hover:shadow-light flex flex-col text-white border p-10 border-grey/[.55] rounded-lg hover:bg-dark transition-all'>
