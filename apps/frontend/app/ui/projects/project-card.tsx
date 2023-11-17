@@ -3,7 +3,12 @@ import { FiArrowUpRight } from 'react-icons/fi';
 import { Project } from '@/lib/definitions';
 import ProjectTechIcon from '@/ui/projects/project-tech-icon';
 
-const ProjectCard = ({ project }: Project) => {
+interface ProjectCardProps {
+    project: Project;
+};
+
+
+const ProjectCard = ({ project }: ProjectCardProps) => {
     return (
         <article className='hover:shadow-sm hover:shadow-light flex flex-col text-white border p-10 border-grey/[.55] rounded-lg hover:bg-dark transition-all'>
             <div className='mb-3 gap-2 flex'>

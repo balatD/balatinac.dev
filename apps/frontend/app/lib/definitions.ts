@@ -27,9 +27,10 @@ export type BlogArticle = {
         title: string;
         body: {};
         shortDescription: string;
-        createdAt: Date;
-        updatedAt: Date;
-        publishedAt: Date;
+        slug: string;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
     }
 }
 
