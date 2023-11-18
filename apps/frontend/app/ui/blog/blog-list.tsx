@@ -7,7 +7,7 @@ const BlogList = async () => {
     const blogArticles = await fetchAllBlogArticles();
 
     return (
-        <div className="border-grey/[.55] border-b pb-32" id="blog">
+        <div className="border-grey/[.55] pb-32" id="blog">
             <div className="ml-10 mr-10 mt-32 flex flex-col content-center">
                 <h2 className="mb-10">
                     <a

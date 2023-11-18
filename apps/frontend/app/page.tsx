@@ -5,7 +5,7 @@ import ProjectList from '@/ui/projects/projects-list';
 import BlogList from '@/ui/blog/blog-list';
 import Footer from '@/ui/shared/footer';
 import ProjectsSkeleton from '@/ui/projects/projects-skeleton';
-import BlogSkeleton from '@/ui/blog/blog-skeleton';
+import { BlogSkeleton } from '@/ui/blog/blog-skeleton';
 import { Suspense } from 'react';
 
 export default function Home() {

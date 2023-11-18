@@ -1,5 +1,20 @@
 import React from 'react';
 
+export const BlogArticleSkeleton = () => {
+    return (
+        <div className='border-grey/[.55] pt-16 pb-16 px-4 mx-8 md:mx-auto max-w-screen-lg border-r border-l '>
+            <div className='animate-pulse'>
+                <div className="mb-4 h-2 w-48 rounded bg-white"></div>
+                <div className="mb-4 h-16 w-128 rounded bg-white"></div>
+                <div className="mb-4 h-32 rounded bg-white"></div>
+                <div className="mb-4 h-32 rounded bg-white"></div>
+                <div className="mb-4 h-64 rounded bg-white"></div>
+                <div className="mb-4 h-48 rounded bg-white"></div>
+            </div>
+        </div>
+    );
+}
+
 const BlogSkeletonCard = () => {
     return (
         <article className="border-grey/[.55] h-30 animate-pulse rounded-lg border p-10 opacity-20 transition-all">
@@ -15,7 +30,7 @@ const BlogSkeletonCard = () => {
     );
 };
 
-const BlogSkeleton = () => {
+export const BlogSkeleton = () => {
     return (
         <div className="border-grey/[.55] border-b pb-32" id="blog">
             <div className="ml-10 mr-10 mt-32 flex flex-col content-center">
@@ -36,5 +51,3 @@ const BlogSkeleton = () => {
         </div>
     );
 };
-
-export default BlogSkeleton;

@@ -5,7 +5,7 @@ import { RiTwitterXLine } from 'react-icons/ri';
 
 const Footer = () => {
     return (
-        <div className="border-grey/[.55] flex justify-between border-b p-10">
+        <div className="border-grey/[.55] flex justify-between border-b border-t p-10">
             <span className="justify-center text-white">
                 balatinac.dev <span className="text-grey"> - 2023</span>
             </span>
