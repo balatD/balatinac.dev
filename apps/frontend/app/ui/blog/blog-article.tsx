@@ -11,6 +11,7 @@ const BlogArticle = async ({ children, slug }: { children: React.ReactNode, slug
         <div className='border-grey/[.55] pt-16 pb-16 px-4 mx-8 md:mx-auto text-white max-w-screen-lg border-r border-l relative'>
             {children}
             {blogArticleContent.data.length > 0 && (
+                // @ts-ignore
                 <BlogArticleContent content={blogArticleContent.data[0].attributes.body} />
             )}
             <div className="mb-3 text-md font-extralight text-slate-400 absolute bottom-5 left-8">
