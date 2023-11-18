@@ -3,7 +3,6 @@
 import React from 'react';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Link from 'next/link';
-import { CopyBlock, atomOneDark } from 'react-code-blocks';
 
 type BlocksRendererProps = Parameters<typeof BlocksRenderer>[0];
 
@@ -16,22 +15,11 @@ const BlogArticleContent = (props: BlocksRendererProps) => {
                     blocks={{
                         paragraph: ({ children }) => <p className="text-white mb-4">{children}</p>,
                         quote: ({ children }) => <blockquote className="text-white italic mt-8 mb-8 bg-lighterDark p-5 rounded">{children}</blockquote>,
-                        code: ({ children }: { children: [props: any] }) => {
-                            if (children && children[0] && children[0].props && children[0].props.text) {
-                                const codeText = children[0].props.text;
-                                return <div className='mt-8 mb-8'>
-                                    <CopyBlock
-                                        text={codeText}
-                                        language={'javascript'}
-                                        showLineNumbers={false}
-                                        theme={atomOneDark}
-                                        codeBlock
-                                    />
-                                </div>;
-                            }
-
-                            return <></>;
-                        },
+                        code: (props) => (
+                            <pre className='bg-lighterDark mt-8 mb-8 p-5 rounded'>
+                                <code>{props.children}</code>
+                            </pre>
+                        ),
                         image: ({ image }) => (
                             <div className='mt-8 mb-8 flex justify-center'>
                                 <img src={image.url} alt={image.alternativeText} />
@@ -60,6 +48,7 @@ const BlogArticleContent = (props: BlocksRendererProps) => {
                     modifiers={{
                         bold: ({ children }) => <strong>{children}</strong>,
                         italic: ({ children }) => <span className="italic">{children}</span>,
+                        underline: ({ children }) => <span className="bg-lighterDark pr-2 pl-2 rounded py-1">{children}</span>,
                     }}
                 />
             )}
