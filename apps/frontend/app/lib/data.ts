@@ -16,7 +16,7 @@ export async function fetchAllProjects() {
             {
                 headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
                 next: {
-                    revalidate: 3600,
+                    revalidate: 0,
                 },
             }
         );
@@ -35,7 +35,7 @@ export async function fetchAllBlogArticles() {
             {
                 headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
                 next: {
-                    revalidate: 3600,
+                    revalidate: 0,
                 },
             }
         );
@@ -62,10 +62,12 @@ export async function fetchBlogArticleContent(slug: string) {
             STRAPI_API_ENDPOINT + '/api/blog-articles?' + query,
             {
                 headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
+                next: {
+                    revalidate: 100,
+                },
             }
         );
 
-        await timeout(2000);
         return (await response.json()) as BlogArticles;
     } catch (error) {
         console.error('API Endpoint Error:', error);
