@@ -22,7 +22,7 @@ const BlogArticleContent = (props: BlocksRendererProps) => {
                         ),
                         image: ({ image }) => (
                             <div className='mt-8 mb-8 flex justify-center'>
-                                <img src={image.url} alt={image.alternativeText} />
+                                <img src={image.url} />
                             </div>
                         ),
                         heading: ({ children, level }) => {
