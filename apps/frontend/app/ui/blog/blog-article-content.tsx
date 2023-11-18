@@ -16,17 +16,22 @@ const BlogArticleContent = (props: BlocksRendererProps) => {
                     blocks={{
                         paragraph: ({ children }) => <p className="text-white mb-4">{children}</p>,
                         quote: ({ children }) => <blockquote className="text-white italic mt-8 mb-8 bg-lighterDark p-5 rounded">{children}</blockquote>,
-                        code: ({ children }) => (
-                            <div className='mt-8 mb-8'>
-                                <CopyBlock
-                                    text={children[0].props.text}
-                                    language={'javascript'}
-                                    showLineNumbers={false}
-                                    theme={atomOneDark}
-                                    codeBlock
-                                />
-                            </div>
-                        ),
+                        code: ({ children }: { children: [props: any] }) => {
+                            if (children && children[0] && children[0].props && children[0].props.text) {
+                                const codeText = children[0].props.text;
+                                return <div className='mt-8 mb-8'>
+                                    <CopyBlock
+                                        text={codeText}
+                                        language={'javascript'}
+                                        showLineNumbers={false}
+                                        theme={atomOneDark}
+                                        codeBlock
+                                    />
+                                </div>;
+                            }
+
+                            return <></>;
+                        },
                         image: ({ image }) => (
                             <div className='mt-8 mb-8 flex justify-center'>
                                 <img src={image.url} alt={image.alternativeText} />
