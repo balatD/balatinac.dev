@@ -3,7 +3,7 @@ import { fetchBlogArticleContent } from '@/lib/data';
 import BlogArticleContent from '@/ui/blog/blog-article-content';
 import { parseISO, format } from 'date-fns';
 
-const BlogArticle = async ({ children, slug }: { children: React.ReactNode, slug }) => {
+const BlogArticle = async ({ children, slug }: { children: React.ReactNode, slug: string }) => {
     const blogArticleContent = await fetchBlogArticleContent(slug);
     const date = parseISO(blogArticleContent.data[0].attributes.publishedAt);
 
