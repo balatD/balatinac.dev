@@ -6,17 +6,21 @@ import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Suspense } from 'react';
 
-
 export default async function Blog({ params }: { params: { slug: string } }) {
     return (
         <main className="font-mono font-light">
             <Navigation />
             <Suspense fallback={<BlogArticleSkeleton />}>
                 <BlogArticle slug={params.slug}>
-                    <Link href='/#blog' className='flex flex-row items-center gap-2 mb-5 hover:underline'><FiArrowLeft /> Back to Home</Link>
+                    <Link
+                        href="/#blog"
+                        className="mb-5 flex flex-row items-center gap-2 hover:underline"
+                    >
+                        <FiArrowLeft /> Back to Home
+                    </Link>
                 </BlogArticle>
             </Suspense>
             <Footer />
-        </main >
+        </main>
     );
 }

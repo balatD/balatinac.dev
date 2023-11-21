@@ -2,10 +2,10 @@ import React from 'react';
 
 export const BlogArticleSkeleton = () => {
     return (
-        <div className='border-grey/[.55] pt-16 pb-16 px-4 mx-8 md:mx-auto max-w-screen-lg border-r border-l '>
-            <div className='animate-pulse'>
+        <div className="border-grey/[.55] mx-8 max-w-screen-lg border-l border-r px-4 pb-16 pt-16 md:mx-auto ">
+            <div className="animate-pulse">
                 <div className="mb-4 h-2 w-48 rounded bg-white"></div>
-                <div className="mb-4 h-16 w-128 rounded bg-white"></div>
+                <div className="w-128 mb-4 h-16 rounded bg-white"></div>
                 <div className="mb-4 h-32 rounded bg-white"></div>
                 <div className="mb-4 h-32 rounded bg-white"></div>
                 <div className="mb-4 h-64 rounded bg-white"></div>
@@ -13,7 +13,7 @@ export const BlogArticleSkeleton = () => {
             </div>
         </div>
     );
-}
+};
 
 const BlogSkeletonCard = () => {
     return (
