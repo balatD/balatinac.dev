@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import GlobeDecoration from '@/ui/shared/globe';
 
 const HomepageHero = () => {
     return (
@@ -17,11 +18,10 @@ const HomepageHero = () => {
                 </div>
                 <div className="border-grey/[.55] md:flex-1 md:border-l">
                     <div className="flex-col">
-                        <div className="relative h-[400px] overflow-x-hidden md:h-[70vh]">
+                        <div className="md:border-grey/[.55] relative h-[400px] overflow-hidden overflow-x-hidden md:h-[70vh] md:border-b">
                             <div className="animate-blob absolute -left-4 top-0 h-72 w-72 rounded-full bg-slate-500 opacity-70 mix-blend-color-dodge blur-xl filter"></div>
                             <div className="bg-light animate-blob animation-delay-2000 absolute -right-4 top-20 h-72 w-72 rounded-full opacity-70 mix-blend-color-dodge blur-xl filter"></div>
-                            {/* Disable till proper image is found */}
-                            {/* <Image className='object-cover' src='/portrait.png' alt='Picture of the author' fill={true} /> */}
+                            <GlobeDecoration />
                         </div>
                         <div className="h-[400px] space-y-5 p-10 font-thin text-white md:h-[30vh]">
                             <p>

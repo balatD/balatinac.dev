@@ -6,3 +6,8 @@ body {
   @apply bg-dark;
   background-image: url(/noise.png);
 }
+
+.globe-center {
+  left: 50%;
+  transform: translateX(-50%);
+}

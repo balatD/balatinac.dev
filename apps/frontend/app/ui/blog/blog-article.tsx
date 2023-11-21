@@ -18,7 +18,9 @@ const BlogArticle = async ({
             {children}
             {blogArticleContent.data.length > 0 && (
                 // @ts-ignore
-                <BlogArticleContent content={blogArticleContent.data[0].attributes.body} />
+                <BlogArticleContent
+                    content={blogArticleContent.data[0].attributes.body}
+                />
             )}
             <div className="text-md absolute bottom-5 left-8 mb-3 font-extralight text-slate-400">
                 Published at: {format(date, 'd.LL.yyyy')}
