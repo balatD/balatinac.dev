@@ -14,7 +14,7 @@ const GlobeDecoration = () => {
         globeEl.current.controls().autoRotateSpeed = 1.5;
         // @ts-ignore
         globeEl.current.controls().enableZoom = false;
-    }, [globeEl.current]);
+    }, []);
 
     const pointsData = [
         {
@@ -31,11 +31,11 @@ const GlobeDecoration = () => {
             <Globe
                 ref={globeEl}
                 backgroundColor={'rgba(0,0,0,0)'}
-                width="1000"
-                height="1000"
+                width={1000}
+                height={1000}
                 showAtmosphere={true}
                 atmosphereColor={'#898E85'}
-                atmosphereAltitude={'0.5'}
+                atmosphereAltitude={0.5}
                 globeImageUrl={'./globe-texture.png'}
             />
         </div>
