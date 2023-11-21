@@ -74,3 +74,67 @@ export async function fetchBlogArticleContent(slug: string) {
         throw new Error('Failed to fetch blog articles.');
     }
 }
+
+export async function fetchBlogArticleMetadata(slug: string) {
+    try {
+        const query = qs.stringify({
+            filters: {
+                slug: {
+                    eq: slug,
+                },
+            },
+            populate: {
+                seo: {
+                    populate: '*',
+                },
+            },
+        });
+
+        const response = await fetch(
+            STRAPI_API_ENDPOINT + '/api/blog-articles?' + query,
+            {
+                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
+                next: {
+                    revalidate: 100,
+                },
+            }
+        );
+
+        return (await response.json()) as BlogArticles;
+    } catch (error) {
+        console.error('API Endpoint Error:', error);
+        throw new Error('Failed to fetch blog articles.');
+    }
+}
+
+export async function fetchPageMetadataBySlug(slug: string) {
+    try {
+        const query = qs.stringify({
+            filters: {
+                slug: {
+                    eq: slug,
+                },
+            },
+            populate: {
+                seo: {
+                    populate: '*',
+                },
+            },
+        });
+
+        const response = await fetch(
+            STRAPI_API_ENDPOINT + '/api/pages?' + query,
+            {
+                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
+                next: {
+                    revalidate: 100,
+                },
+            }
+        );
+
+        return (await response.json()) as BlogArticles;
+    } catch (error) {
+        console.error('API Endpoint Error:', error);
+        throw new Error('Failed to fetch blog articles.');
+    }
+}

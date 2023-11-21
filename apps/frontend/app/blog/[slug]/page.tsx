@@ -1,12 +1,31 @@
 import Navigation from '@/ui/shared/navigation';
 import Footer from '@/ui/shared/footer';
 import BlogArticle from '@/ui/blog/blog-article';
-import { BlogArticleSkeleton } from '@/ui/blog/blog-skeleton';
 import Link from 'next/link';
+import { BlogArticleSkeleton } from '@/ui/blog/blog-skeleton';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Suspense } from 'react';
+import { Metadata, ResolvingMetadata } from 'next';
+import { fetchBlogArticleMetadata } from '@/lib/data';
+import { generateMetadataFromEndpoint } from '@/lib/metadata';
 
-export default async function Blog({ params }: { params: { slug: string } }) {
+type Props = {
+    params: { slug: string };
+};
+
+export async function generateMetadata(
+    { params }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const { data } = await fetchBlogArticleMetadata(params.slug);
+
+    return generateMetadataFromEndpoint(
+        data[0].attributes.seo,
+        'blog/' + params.slug
+    );
+}
+
+export default async function Blog({ params }: Props) {
     return (
         <main className="font-mono font-light">
             <Navigation />

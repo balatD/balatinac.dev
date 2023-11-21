@@ -31,9 +31,30 @@ export type BlogArticle = {
         createdAt: string;
         updatedAt: string;
         publishedAt: string;
+        seo: SeoData;
     };
 };
 
 export type BlogArticles = {
     data: BlogArticle[];
+};
+
+export type SeoData = {
+    metaTitle: string;
+    metaDescription: string;
+    keywords: string;
+    metaRobots: string;
+    structuredData: string;
+    metaViewport: string;
+    canonicalURL: string;
+    metaImage: {
+        data: {
+            attributes: {
+                width: number;
+                height: number;
+                url: string;
+            };
+        };
+    };
+    metaSocial: object;
 };

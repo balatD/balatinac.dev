@@ -7,6 +7,21 @@ import Footer from '@/ui/shared/footer';
 import ProjectsSkeleton from '@/ui/projects/projects-skeleton';
 import { BlogSkeleton } from '@/ui/blog/blog-skeleton';
 import { Suspense } from 'react';
+import { Metadata, ResolvingMetadata } from 'next';
+import { fetchPageMetadataBySlug } from '@/lib/data';
+import { generateMetadataFromEndpoint } from '@/lib/metadata';
+
+type Props = {
+    params: { slug: string };
+};
+
+export async function generateMetadata(
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const { data } = await fetchPageMetadataBySlug('homepage');
+
+    return generateMetadataFromEndpoint(data[0].attributes.seo, '');
+}
 
 export default function Home() {
     return (
