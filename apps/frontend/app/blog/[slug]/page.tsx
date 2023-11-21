@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { BlogArticleSkeleton } from '@/ui/blog/blog-skeleton';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Suspense } from 'react';
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata, } from 'next';
 import { fetchBlogArticleMetadata } from '@/lib/data';
 import { generateMetadataFromEndpoint } from '@/lib/metadata';
 
@@ -14,8 +14,7 @@ type Props = {
 };
 
 export async function generateMetadata(
-    { params }: Props,
-    parent: ResolvingMetadata
+    { params }: Props
 ): Promise<Metadata> {
     const { data } = await fetchBlogArticleMetadata(params.slug);
 
