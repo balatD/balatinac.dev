@@ -14,7 +14,7 @@ const BlogArticle = async ({
     const date = parseISO(blogArticleContent.data[0].attributes.publishedAt);
 
     return (
-        <div className="border-grey/[.55] relative mx-8 max-w-screen-lg border-l border-r px-4 pb-16 pt-16 text-white md:mx-auto">
+        <div className="border-grey/[.55] relative mx-8 max-w-screen-lg border-l border-r px-4 pb-16 pt-16 text-white mx-auto">
             {children}
             {blogArticleContent.data.length > 0 && (
                 // @ts-ignore

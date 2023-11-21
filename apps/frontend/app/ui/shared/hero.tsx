@@ -1,34 +1,40 @@
 import React from 'react';
-import Image from 'next/image';
-import GlobeDecoration from '@/ui/shared/globe';
+import dynamic from 'next/dynamic';
+
+const Globe = dynamic(() => import('@/ui/shared/globe').then((mod) => mod.default), {
+    ssr: false,
+    loading: () => (
+        <div className="w-full h-[500px] flex justify-center items-center text-white animate-pulse">
+            <span>Loading the globe!</span>
+        </div>
+    ),
+});
 
 const HomepageHero = () => {
     return (
         <div>
             <div className="border-grey/[.55] flex flex-col border-b md:h-screen md:flex-row">
-                <div className="m-auto mb-20 mt-10 mt-20 flex flex-col justify-center space-y-3 pl-10 pr-10 text-white md:flex-1">
-                    <div>
+                <div className="m-auto flex flex-col mt-20 md:mt-auto justify-center space-y-3 pl-10 pr-10 text-white md:flex-1">
+                    <div className='text-center md:text-left'>
                         <h1 className="text-4xl font-bold md:text-8xl">
                             Dragan <br /> Balatinac
                         </h1>
-                        <h3 className="text-xl font-thin md:text-4xl">
+                        <h3 className="text-xl font-thin mt-4 md:text-4xl">
                             Full-Stack Developer
                         </h3>
+                        <p className='mt-4 italic'>Making the web work and look nice!</p>
                     </div>
                 </div>
-                <div className="border-grey/[.55] md:flex-1 md:border-l">
+                <div className="border-grey/[.55] md:flex-1 md:border-l ">
                     <div className="flex-col">
                         <div className="md:border-grey/[.55] relative h-[400px] overflow-hidden overflow-x-hidden md:h-[70vh] md:border-b">
-                            <div className="animate-blob absolute -left-4 top-0 h-72 w-72 rounded-full bg-slate-500 opacity-70 mix-blend-color-dodge blur-xl filter"></div>
-                            <div className="bg-light animate-blob animation-delay-2000 absolute -right-4 top-20 h-72 w-72 rounded-full opacity-70 mix-blend-color-dodge blur-xl filter"></div>
-                            <GlobeDecoration />
+                            <Globe />
                         </div>
-                        <div className="h-[400px] space-y-5 p-10 font-thin text-white md:h-[30vh]">
+                        <div className="h-[400px] space-y-5 p-10 font-thin text-white md:h-[30vh] flex flex-col justify-center">
                             <p>
-                                Lorem ipsum dolor sit, amet consectetur
-                                adipisicing elit. Perspiciatis, sequi!
+                                If we want users to like our software, we should design it to behave like a likable person.
                             </p>
-                            <p>- Test, 2023</p>
+                            <p>- Alan Cooper</p>
                         </div>
                     </div>
                 </div>

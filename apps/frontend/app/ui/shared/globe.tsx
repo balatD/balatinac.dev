@@ -2,26 +2,19 @@
 
 import React from 'react';
 import { useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
-
-const Globe = dynamic(
-    () => import('react-globe.gl').then((mod) => mod.default),
-    {
-        ssr: false,
-    }
-);
+import Globe from "react-globe.gl";
 
 const GlobeDecoration = () => {
-    const globeElement = useRef();
+    const globeEl = useRef();
 
     useEffect(() => {
-        const globe = globeElement.current;
-
-        if (globe) {
-            // @ts-ignore
-            globe.controls().autoRotate();
-        }
-    }, []);
+        // @ts-ignore
+        globeEl.current.controls().autoRotate = true;
+        // @ts-ignore
+        globeEl.current.controls().autoRotateSpeed = 1.5;
+        // @ts-ignore
+        globeEl.current.controls().enableZoom = false;
+    }, [globeEl.current]);
 
     const pointsData = [
         {
@@ -34,16 +27,16 @@ const GlobeDecoration = () => {
     ];
 
     return (
-        <div className="globe-center absolute z-50 overflow-hidden">
+        <div className="globe-center absolute z-50 overflow-hidden opacity-50">
             <Globe
-                ref={globeElement}
+                ref={globeEl}
                 backgroundColor={'rgba(0,0,0,0)'}
                 width="1000"
                 height="1000"
-                pointsData={pointsData}
-                showAtmosphere={false}
-                globeImageUrl={'./earth-dark.jpg'}
-                bumpImageUrl={'./earth-topology.png'}
+                showAtmosphere={true}
+                atmosphereColor={'#898E85'}
+                atmosphereAltitude={'0.5'}
+                globeImageUrl={'./globe-texture.png'}
             />
         </div>
     );

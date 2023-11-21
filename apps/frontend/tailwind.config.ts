@@ -29,7 +29,7 @@ const config: Config = {
                         transform: 'translate(0, 0) scale(1)',
                     },
                     '25%': {
-                        transform: 'translate(20px, -50px) scale(1.1)',
+                        transform: 'translate(39px, -50px) scale(1.1)',
                     },
                     '50%': {
                         transform: 'translate(0, 20px) scale(1)',
