@@ -20,8 +20,6 @@
     "date-fns": "2.30.0",
     "react-globe.gl": "2.27.0",
     "@strapi/blocks-react-renderer": "1.0.0-beta.0",
-    "balatinac-dev-shared-config": "*",
-    "balatinac-dev-shared-tsconfig": "*"
   },
   "devDependencies": {
     "typescript": "^5",
