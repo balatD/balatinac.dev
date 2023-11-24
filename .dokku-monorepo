@@ -1,0 +1,2 @@
+backend=apps/backend
+frontend=apps/frontend
