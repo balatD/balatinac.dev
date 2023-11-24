@@ -18,11 +18,11 @@ jobs:
       - name: Backend Deployment
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@49.13.69.55:22/backend'
+          git_remote_url: 'ssh://dokku@49.13.69.55:backend'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Frontend Deployment
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@49.13.69.55:22/frontend'
+          git_remote_url: 'ssh://dokku@49.13.69.55:frontend'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
