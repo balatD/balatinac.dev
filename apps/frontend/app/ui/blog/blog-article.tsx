@@ -23,7 +23,7 @@ const BlogArticle = async ({
             )}
             <div className="text-md absolute bottom-5 mb-3 flex gap-5 font-extralight text-slate-400">
                 <span>Published at: {format(date, 'd.LL.yyyy')}</span>
-                <span>//</span>
+                <span>/</span>
                 <BlogViewCount slug={slug} />
             </div>
         </div>
