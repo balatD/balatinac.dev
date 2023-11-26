@@ -13,12 +13,11 @@ const BlogViewCount = ({ slug }: { slug: string }) => {
             try {
                 if (!isViewCountUpdated) {
                     const response = await await updateBlogViewCount(slug);
-                    console.log(response);
                     // @ts-ignore
                     setViewCount(response.data.attributes.viewCount);
                 }
             } catch (err) {
-                console.log('Error updating view count');
+                console.error('Error updating view count', err);
             }
         };
 
