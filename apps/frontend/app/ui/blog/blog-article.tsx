@@ -18,10 +18,8 @@ const BlogArticle = async ({
         <div className="border-grey/[.55] relative mx-auto max-w-screen-lg border-l border-r px-4 pb-16 pt-16 text-white">
             {children}
             {blogArticleContent.data.length > 0 && (
-                <>
-                    {/* @ts-ignore */}
-                    <BlogArticleContent content={blogArticleContent.data[0].attributes.body} />
-                </>
+                // @ts-ignore
+                <BlogArticleContent content={blogArticleContent.data[0].attributes.body} />
             )}
             <div className="text-md absolute bottom-5 mb-3 flex gap-5 font-extralight text-slate-400">
                 <span>Published at: {format(date, 'd.LL.yyyy')}</span>
