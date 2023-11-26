@@ -23,17 +23,17 @@ const Navigation = () => {
                 </div>
                 <nav className="hidden md:block">
                     <ul className="flex flex-row">
-                        <Link href="/">
+                        <Link href="/" scroll={false}>
                             <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Home
                             </li>
                         </Link>
-                        <Link href="/#projects">
+                        <Link href="/#projects" scroll={false}>
                             <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Projects
                             </li>
                         </Link>
-                        <Link href="/#blog">
+                        <Link href="/#blog" scroll={false}>
                             <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Blog
                             </li>
@@ -53,9 +53,8 @@ const Navigation = () => {
             </div>
 
             <nav
-                className={`${
-                    mobileNavigationToggle ? 'visible' : 'hidden'
-                } md:hidden`}
+                className={`${mobileNavigationToggle ? 'visible' : 'hidden'
+                    } md:hidden`}
             >
                 <ul className="flex flex-col">
                     <li className="border-grey/[.55] hover:bg-light cursor-pointer border-r border-t p-10 transition">

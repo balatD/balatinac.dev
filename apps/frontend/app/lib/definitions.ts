@@ -28,6 +28,7 @@ export type BlogArticle = {
         body: {};
         shortDescription: string;
         slug: string;
+        viewCount: number;
         createdAt: string;
         updatedAt: string;
         publishedAt: string;

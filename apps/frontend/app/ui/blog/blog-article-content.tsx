@@ -35,43 +35,43 @@ const BlogArticleContent = (props: BlocksRendererProps) => {
                             switch (level) {
                                 case 1:
                                     return (
-                                        <h1 className="mb-8 text-5xl">
+                                        <h1 className="mb-8 mt-8 text-5xl">
                                             {children}
                                         </h1>
                                     );
                                 case 2:
                                     return (
-                                        <h2 className="mb-8 text-4xl">
+                                        <h2 className="mb-8 mt-8 text-4xl">
                                             {children}
                                         </h2>
                                     );
                                 case 3:
                                     return (
-                                        <h3 className="mb-4 text-3xl">
+                                        <h3 className="mb-4 mt-12 text-3xl">
                                             {children}
                                         </h3>
                                     );
                                 case 4:
                                     return (
-                                        <h4 className="mb-4 text-2xl">
+                                        <h4 className="mb-4 mt-10 text-2xl">
                                             {children}
                                         </h4>
                                     );
                                 case 5:
                                     return (
-                                        <h5 className="mb-4 text-xl">
+                                        <h5 className="mb-4 mt-10 text-xl">
                                             {children}
                                         </h5>
                                     );
                                 case 6:
                                     return (
-                                        <h6 className="mb-4 text-lg">
+                                        <h6 className="mb-4 mt-10 text-lg">
                                             {children}
                                         </h6>
                                     );
                                 default:
                                     return (
-                                        <h1 className="mb-8 text-5xl">
+                                        <h1 className="mb-8 mt-8 text-5xl">
                                             {children}
                                         </h1>
                                     );

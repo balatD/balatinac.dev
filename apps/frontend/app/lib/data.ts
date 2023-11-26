@@ -1,8 +1,9 @@
 import { BlogArticles, Projects } from '@/lib/definitions';
 import qs from 'qs';
 
-const STRAPI_API_PUBLIC_KEY = process.env.STRAPI_API_PUBLIC_KEY as string;
-const STRAPI_API_ENDPOINT = process.env.STRAPI_API_ENDPOINT as string;
+export const STRAPI_API_PUBLIC_KEY = process.env
+    .STRAPI_API_PUBLIC_KEY as string;
+export const STRAPI_API_ENDPOINT = process.env.STRAPI_API_ENDPOINT as string;
 
 const timeout = (ms: number) => new Promise((res) => setTimeout(res, ms));
 

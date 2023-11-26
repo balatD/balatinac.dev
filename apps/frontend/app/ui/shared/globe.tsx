@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useEffect, useRef } from 'react';
-import Globe from "react-globe.gl";
+import Globe from 'react-globe.gl';
 
 const GlobeDecoration = () => {
     const globeEl = useRef();
