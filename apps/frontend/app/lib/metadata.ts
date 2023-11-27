@@ -26,7 +26,7 @@ export async function generateMetadataFromEndpoint(
                 images: seoData.metaImage.data && [
                     {
                         url:
-                            process.env.STRAPI_API_ENDPOINT +
+                            process.env.STRAPI_MEDIA_URL +
                             seoData.metaImage.data.attributes.url,
                         width: seoData.metaImage.data.attributes.width,
                         height: seoData.metaImage.data.attributes.height,
