@@ -4,7 +4,7 @@ name: 'Dokku Deployment'
 on:
   push:
     branches:
-      - feature/dokku-testing
+      - develop
 
 jobs:
   deploy:
@@ -18,13 +18,13 @@ jobs:
       - name: Backend Deployment
         uses: dokku/github-action@master
         with:
-          branch: feature/dokku-testing
+          branch: develop
           git_remote_url: 'ssh://dokku@49.13.69.55:22/backend'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Frontend Deployment
         uses: dokku/github-action@master
         with:
-          branch: feature/dokku-testing
+          branch: develop
           git_remote_url: 'ssh://dokku@49.13.69.55:22/frontend'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
