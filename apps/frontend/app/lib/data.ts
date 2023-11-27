@@ -53,7 +53,7 @@ export async function fetchBlogArticleContent(slug: string) {
         const query = qs.stringify({
             filters: {
                 slug: {
-                    eq: slug,
+                    $eq: slug,
                 },
             },
             populate: 'body',
@@ -69,6 +69,8 @@ export async function fetchBlogArticleContent(slug: string) {
             }
         );
 
+        console.log(STRAPI_API_ENDPOINT + '/api/blog-articles?' + query);
+
         return (await response.json()) as BlogArticles;
     } catch (error) {
         console.error('API Endpoint Error:', error);
@@ -81,7 +83,7 @@ export async function fetchBlogArticleMetadata(slug: string) {
         const query = qs.stringify({
             filters: {
                 slug: {
-                    eq: slug,
+                    $eq: slug,
                 },
             },
             populate: {
@@ -113,7 +115,7 @@ export async function fetchPageMetadataBySlug(slug: string) {
         const query = qs.stringify({
             filters: {
                 slug: {
-                    eq: slug,
+                    $eq: slug,
                 },
             },
             populate: {

@@ -9,7 +9,7 @@ export async function updateBlogViewCount(slug: string) {
         const query = qs.stringify({
             filters: {
                 slug: {
-                    eq: slug,
+                    $eq: slug,
                 },
             },
         });
@@ -30,8 +30,8 @@ export async function updateBlogViewCount(slug: string) {
 
         const putResponse = await fetch(
             STRAPI_API_ENDPOINT +
-                '/api/blog-articles/' +
-                blogArticle.data[0].id,
+            '/api/blog-articles/' +
+            blogArticle.data[0].id,
             {
                 method: 'PUT',
                 headers: {

@@ -14,6 +14,8 @@ const BlogArticle = async ({
     const blogArticleContent = await fetchBlogArticleContent(slug);
     const date = parseISO(blogArticleContent.data[0].attributes.publishedAt);
 
+    console.log(blogArticleContent)
+
     return (
         <div className="border-grey/[.55] relative mx-auto max-w-screen-lg border-l border-r px-4 pb-16 pt-16 text-white">
             {children}
