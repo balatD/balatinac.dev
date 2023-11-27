@@ -10,7 +10,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <PlausibleProvider customDomain="https://analytics.balatinac.dev/js/script.js" domain="balatinac.dev" selfHosted={true} />
+                <PlausibleProvider customDomain="https://analytics.balatinac.dev" domain="balatinac.dev" selfHosted={true} />
             </head>
             <body className={GeistMono.variable}>{children}</body>
         </html>
