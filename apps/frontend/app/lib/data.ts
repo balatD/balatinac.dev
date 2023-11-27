@@ -13,9 +13,9 @@ export async function fetchAllProjects() {
             populate: 'tags',
         });
         const response = await fetch(
-            STRAPI_API_ENDPOINT + '/api/projects?' + query,
+            `${STRAPI_API_ENDPOINT}/api/projects?${query}`,
             {
-                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
+                headers: { Authorization: `Bearer ${STRAPI_API_PUBLIC_KEY}` },
                 next: {
                     revalidate: 0,
                 },
@@ -32,9 +32,9 @@ export async function fetchAllProjects() {
 export async function fetchAllBlogArticles() {
     try {
         const response = await fetch(
-            STRAPI_API_ENDPOINT + '/api/blog-articles',
+            `${STRAPI_API_ENDPOINT}/api/blog-articles`,
             {
-                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
+                headers: { Authorization: `Bearer ${STRAPI_API_PUBLIC_KEY}` },
                 next: {
                     revalidate: 0,
                 },
@@ -60,16 +60,14 @@ export async function fetchBlogArticleContent(slug: string) {
         });
 
         const response = await fetch(
-            STRAPI_API_ENDPOINT + '/api/blog-articles?' + query,
+            `${STRAPI_API_ENDPOINT}/api/blog-articles?${query}`,
             {
-                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
+                headers: { Authorization: `Bearer ${STRAPI_API_PUBLIC_KEY}` },
                 next: {
                     revalidate: 100,
                 },
             }
         );
-
-        console.log(STRAPI_API_ENDPOINT + '/api/blog-articles?' + query);
 
         return (await response.json()) as BlogArticles;
     } catch (error) {

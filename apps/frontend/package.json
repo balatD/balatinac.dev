@@ -6,7 +6,8 @@
     "dev": "dotenv -- cross-var next dev -p %FRONTEND_PORT%",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "npx @biomejs/biome lint app",
+    "format": "npx @biomejs/biome format app --write"
   },
   "dependencies": {
     "react": "^18",
