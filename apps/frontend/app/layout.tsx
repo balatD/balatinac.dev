@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
+import '@/globals.css';
 import { GeistMono } from 'geist/font/mono';
-import './globals.css';
+import PlausibleProvider from 'next-plausible';
 
 export default function RootLayout({
     children,
@@ -9,6 +9,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
+            <head>
+                <PlausibleProvider customDomain="https://analytics.balatinac.dev/js/script.js" domain="balatinac.dev" selfHosted={true} />
+            </head>
             <body className={GeistMono.variable}>{children}</body>
         </html>
     );

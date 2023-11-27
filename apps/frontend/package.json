@@ -21,7 +21,8 @@
     "react-globe.gl": "2.27.0",
     "@strapi/blocks-react-renderer": "1.0.0-beta.0",
     "qs": "6.11.2",
-    "@types/qs": "^6.9.10"
+    "@types/qs": "^6.9.10",
+    "next-plausible": "3.11.3"
   },
   "devDependencies": {
     "typescript": "^5",
