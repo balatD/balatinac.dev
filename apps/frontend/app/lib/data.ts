@@ -30,8 +30,12 @@ export async function fetchAllProjects() {
 
 export async function fetchAllBlogArticles() {
     try {
+        const query = qs.stringify({
+            sort: 'publishedAt:desc'
+        });
+
         const response = await fetch(
-            `${STRAPI_API_ENDPOINT}/api/blog-articles`,
+            `${STRAPI_API_ENDPOINT}/api/blog-articles?${query}`,
             {
                 headers: { Authorization: `Bearer ${STRAPI_API_PUBLIC_KEY}` },
                 next: {
