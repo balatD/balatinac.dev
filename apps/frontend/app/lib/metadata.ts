@@ -7,7 +7,7 @@ export async function generateMetadataFromEndpoint(
     if (seoData) {
         return {
             title:
-                seoData.metaTitle + ' - balatinac.dev' ??
+                `${seoData.metaTitle} - balatinac.dev` ??
                 'homepage - balatinac.dev',
             description: seoData.metaDescription,
             keywords: seoData.keywords,
@@ -21,7 +21,7 @@ export async function generateMetadataFromEndpoint(
             openGraph: {
                 title: seoData.metaTitle,
                 description: seoData.metaDescription,
-                url: 'https://balatinac.dev/' + slug,
+                url: `https://balatinac.dev/${slug}`,
                 siteName: 'balatinac.dev',
                 images: seoData.metaImage.data && [
                     {
@@ -36,7 +36,7 @@ export async function generateMetadataFromEndpoint(
                 type: 'website',
             },
         };
-    } else {
-        return {};
     }
+    
+    return {};
 }

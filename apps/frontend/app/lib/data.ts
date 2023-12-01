@@ -1,8 +1,7 @@
 import { BlogArticles, Projects } from '@/lib/definitions';
 import qs from 'qs';
 
-export const STRAPI_API_PUBLIC_KEY = process.env
-    .STRAPI_API_PUBLIC_KEY as string;
+export const STRAPI_API_PUBLIC_KEY = process.env.STRAPI_API_PUBLIC_KEY as string;
 export const STRAPI_API_ENDPOINT = process.env.STRAPI_API_ENDPOINT as string;
 
 const timeout = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -14,14 +13,14 @@ export async function fetchAllProjects() {
         });
         const response = await fetch(
             `${STRAPI_API_ENDPOINT}/api/projects?${query}`,
-            {
+            { 
                 headers: { Authorization: `Bearer ${STRAPI_API_PUBLIC_KEY}` },
                 next: {
                     revalidate: 0,
                 },
             }
         );
-
+        
         return (await response.json()) as Projects;
     } catch (error) {
         console.error('API Endpoint Error:', error);
@@ -91,10 +90,11 @@ export async function fetchBlogArticleMetadata(slug: string) {
             },
         });
 
+
         const response = await fetch(
-            STRAPI_API_ENDPOINT + '/api/blog-articles?' + query,
+            `${STRAPI_API_ENDPOINT}/api/blog-articles?${query}`,
             {
-                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
+                headers: { Authorization: `Bearer ${STRAPI_API_PUBLIC_KEY}` },
                 next: {
                     revalidate: 100,
                 },
@@ -123,10 +123,12 @@ export async function fetchPageMetadataBySlug(slug: string) {
             },
         });
 
+        console.log(`${STRAPI_API_ENDPOINT}/api/blog-articles?${query}`);
+
         const response = await fetch(
-            STRAPI_API_ENDPOINT + '/api/pages?' + query,
+            `${STRAPI_API_ENDPOINT}/api/pages?${query}`,
             {
-                headers: { Authorization: 'Bearer ' + STRAPI_API_PUBLIC_KEY },
+                headers: { Authorization: `Bearer ${STRAPI_API_PUBLIC_KEY}` },
                 next: {
                     revalidate: 100,
                 },
@@ -136,6 +138,6 @@ export async function fetchPageMetadataBySlug(slug: string) {
         return (await response.json()) as BlogArticles;
     } catch (error) {
         console.error('API Endpoint Error:', error);
-        throw new Error('Failed to fetch blog articles.');
+        throw new Error('Failed to fetch metadata.');
     }
 }
