@@ -10,33 +10,32 @@ import { fetchBlogArticleMetadata } from '@/lib/data';
 import { generateMetadataFromEndpoint } from '@/lib/metadata';
 
 type Props = {
-    params: { slug: string };
+  params: { slug: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { data } = await fetchBlogArticleMetadata(params.slug);
+  const { data } = await fetchBlogArticleMetadata(params.slug);
 
-    return generateMetadataFromEndpoint(
-        data[0].attributes.seo,
-        'blog/' + params.slug
-    );
+  return generateMetadataFromEndpoint(
+    data[0].attributes.seo,
+    `blog/${params.slug}`
+  );
 }
 
 export default async function Blog({ params }: Props) {
-    return (
-        <main className="font-mono font-light">
-            <Navigation />
-            <Suspense fallback={<BlogArticleSkeleton />}>
-                <BlogArticle slug={params.slug}>
-                    <Link
-                        href="/#blog"
-                        className="mb-5 flex flex-row items-center gap-2 hover:underline"
-                    >
-                        <FiArrowLeft /> Back to Home
-                    </Link>
-                </BlogArticle>
-            </Suspense>
-            <Footer />
-        </main>
-    );
+  return (
+    <main className="font-mono font-light">
+      <Navigation />      <Suspense fallback={<BlogArticleSkeleton />}>
+        <BlogArticle slug={params.slug}>
+          <Link
+            href="/#blog"
+            className="mb-5 flex flex-row items-center gap-2 hover:underline"
+          >
+            <FiArrowLeft /> Back to Home
+          </Link>
+        </BlogArticle>
+      </Suspense>
+      <Footer />
+    </main>
+  );
 }

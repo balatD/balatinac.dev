@@ -23,17 +23,17 @@ const Navigation = () => {
                 </div>
                 <nav className="hidden md:block">
                     <ul className="flex flex-row">
-                        <Link href="/" scroll={false}>
+                        <Link href="/">
                             <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Home
                             </li>
                         </Link>
-                        <Link href="/#projects" scroll={false}>
+                        <Link href="/#projects">
                             <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Projects
                             </li>
                         </Link>
-                        <Link href="/#blog" scroll={false}>
+                        <Link href="/#blog">
                             <li className="border-grey/[.55] hover:bg-light cursor-pointer border-l p-10 text-white transition">
                                 Blog
                             </li>

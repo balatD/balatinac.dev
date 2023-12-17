@@ -12,7 +12,7 @@ const BlogViewCount = ({ slug }: { slug: string }) => {
         const handleViewCountUpdate = async () => {
             try {
                 if (!isViewCountUpdated) {
-                    const response = await await updateBlogViewCount(slug);
+                    const response = await updateBlogViewCount(slug);
                     // @ts-ignore
                     setViewCount(response.data.attributes.viewCount);
                 }
