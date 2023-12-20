@@ -3,6 +3,7 @@
 import React from 'react';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Link from 'next/link';
+// @ts-ignore
 import Highlight from 'react-highlight';
 
 import 'highlight.js/styles/dracula.css';
@@ -25,7 +26,7 @@ const BlogArticleContent = (props: BlocksRendererProps) => {
                             </blockquote>
                         ),
                         code: (props) => (
-                            <Highlight className='highlightAuto rounded p-5'>
+                            <Highlight className='highlightAuto rounded'>
                                 {props.children}
                             </Highlight>
                         ),
