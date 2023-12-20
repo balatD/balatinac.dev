@@ -1,39 +1,40 @@
 {
-  "name": "balatinac-dev-frontend",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "dotenv -- cross-var next dev -p %FRONTEND_PORT%",
-    "build": "next build",
-    "start": "next start",
-    "lint": "npx @biomejs/biome lint app",
-    "format": "npx @biomejs/biome format app --write"
-  },
-  "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.0.1",
-    "geist": "1.1.0",
-    "dotenv": "16.3.1",
-    "clsx": "2.0.0",
-    "@mtrimolet/cross-var": "1.2.1",
-    "react-icons": "4.12.0",
-    "date-fns": "2.30.0",
-    "react-globe.gl": "2.27.0",
-    "@strapi/blocks-react-renderer": "1.0.0-beta.0",
-    "qs": "6.11.2",
-    "@types/qs": "^6.9.10",
-    "next-plausible": "3.11.3"
-  },
-  "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.1"
-  }
+    "name": "balatinac-dev-frontend",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "dotenv -- cross-var next dev -p %FRONTEND_PORT%",
+        "build": "next build",
+        "start": "next start",
+        "lint": "npx @biomejs/biome lint app",
+        "format": "npx @biomejs/biome format app --write"
+    },
+    "dependencies": {
+        "react": "^18",
+        "react-dom": "^18",
+        "next": "14.0.1",
+        "geist": "1.1.0",
+        "dotenv": "16.3.1",
+        "clsx": "2.0.0",
+        "@mtrimolet/cross-var": "1.2.1",
+        "react-icons": "4.12.0",
+        "date-fns": "2.30.0",
+        "react-globe.gl": "2.27.0",
+        "@strapi/blocks-react-renderer": "v1.0.0",
+        "react-highlight": "0.15.0",
+        "qs": "6.11.2",
+        "@types/qs": "^6.9.10",
+        "next-plausible": "3.11.3"
+    },
+    "devDependencies": {
+        "typescript": "^5",
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "autoprefixer": "^10.0.1",
+        "postcss": "^8",
+        "tailwindcss": "^3.3.0",
+        "eslint": "^8",
+        "eslint-config-next": "14.0.1"
+    }
 }

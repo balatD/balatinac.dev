@@ -3,6 +3,9 @@
 import React from 'react';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Link from 'next/link';
+import Highlight from 'react-highlight';
+
+import 'highlight.js/styles/dracula.css';
 
 type BlocksRendererProps = Parameters<typeof BlocksRenderer>[0];
 
@@ -22,9 +25,9 @@ const BlogArticleContent = (props: BlocksRendererProps) => {
                             </blockquote>
                         ),
                         code: (props) => (
-                            <pre className="bg-lighterDark mb-8 mt-8 rounded p-5">
-                                <code>{props.children}</code>
-                            </pre>
+                            <Highlight className='highlightAuto rounded p-5'>
+                                {props.children}
+                            </Highlight>
                         ),
                         image: ({ image }) => (
                             <div className="mb-8 mt-8 flex justify-center">
