@@ -3,8 +3,11 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
+import cloudflare from '@astrojs/cloudflare';
+
 export default defineConfig({
   site: 'https://balatinac.dev',
+
   markdown: {
     shikiConfig: {
       themes: {
@@ -13,17 +16,22 @@ export default defineConfig({
       },
     },
   },
+
   trailingSlash: 'always',
+
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'viewport',
   },
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   build: {
     inlineStylesheets: 'auto',
   },
+
   integrations: [
     sitemap({
       changefreq: 'monthly',
@@ -32,4 +40,6 @@ export default defineConfig({
       filter: (page) => !page.includes('/draft/'),
     }),
   ],
+
+  adapter: cloudflare(),
 });
