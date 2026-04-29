@@ -73,8 +73,8 @@ export const translations: Record<string, Record<string, string>> = {
   // === Work index ===
   'workIndex.crumb': { en: 'Selected Work', de: 'Ausgewählte Arbeiten' },
   'workIndex.heading': {
-    en: 'Things I\'ve <span class="text-accent">built</span>, broken, and shipped.',
-    de: 'Dinge, die ich <span class="text-accent">gebaut</span>, kaputt gemacht und ausgeliefert habe.',
+    en: 'Things I\'ve worked on — and <span class="text-accent">learned</span> from.',
+    de: 'Sachen, an denen ich <span class="text-accent">gearbeitet</span> habe — und aus denen ich etwas mitgenommen habe.',
   },
   'workIndex.sub': {
     en: 'Backend platforms, custom CMS work, and the DevOps glue that holds them together.',
@@ -85,12 +85,12 @@ export const translations: Record<string, Record<string, string>> = {
   'blogIndex.crumb': { en: 'Writing', de: 'Texte' },
   'blogIndex.label': { en: 'Writing · Notes from the server room', de: 'Texte · Notizen aus dem Serverraum' },
   'blogIndex.heading': {
-    en: 'Things I learned the <span class="text-accent">hard</span> way.',
-    de: 'Dinge, die ich auf die <span class="text-accent">harte</span> Tour gelernt habe.',
+    en: 'Written down before I <span class="text-accent">forget</span> again.',
+    de: 'Aufgeschrieben, bevor ich es wieder <span class="text-accent">vergesse</span>.',
   },
   'blogIndex.sub': {
-    en: 'Short posts about TYPO3, PHP, and the DevOps choices I keep coming back to. Mostly so future-me can stop solving the same problem twice.',
-    de: 'Kurze Beiträge über TYPO3, PHP und die DevOps-Entscheidungen, zu denen ich immer wieder zurückkehre. Hauptsächlich damit mein zukünftiges Ich das gleiche Problem nicht zweimal löst.',
+    en: 'Short posts from my day-to-day between TYPO3, Astro, PHP, Docker, AI, and everything else that ends up on my servers. Mostly so future-me can skip the research.',
+    de: 'Kurze Beiträge aus meinem Alltag zwischen TYPO3, Astro, PHP, Docker, KI und allem, was sonst auf meinen Servern landet. Vor allem, damit Zukunfts-Ich sich die Recherche spart.',
   },
   'blogIndex.draft': { en: 'Draft', de: 'Entwurf' },
 
