@@ -1,0 +1,28 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  meta: string;
+  tags?: string;
+  draft?: boolean;
+}
+
+const { href, title, description, meta, tags, draft = false } = Astro.props;
+---
+
+<li data-tags={tags}>
+  <a
+    class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group"
+    href={href}
+  >
+    <div>
+      <div class="text-[17px] font-medium leading-snug text-balance">
+        {title}
+        {draft && <span class="font-mono text-[11px] text-accent ml-2 tracking-wider align-[2px] uppercase">Draft</span>}
+      </div>
+      <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">{description}</div>
+    </div>
+    <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">{meta}</div>
+  </a>
+</li>

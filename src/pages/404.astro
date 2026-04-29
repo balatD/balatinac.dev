@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 — Not found" description="Page not found." noindex={true}>
+  <meta name="i18n-title" content="title.404" slot="default" />
+  <section class="pt-[140px] pb-20 sm:pt-[160px] sm:pb-24 md:pt-[200px] md:pb-[140px]">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <p class="font-mono text-[13px] text-accent m-0 mb-6">404</p>
+      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance" data-i18n="404.heading">Page not found.</h1>
+      <p class="text-[18px] leading-[1.6] text-muted m-0 mb-8 max-w-[50ch] text-pretty" data-i18n="404.sub">
+        Whatever was here isn't anymore — or never was. Either way, let's get you back.
+      </p>
+      <div class="flex flex-wrap gap-x-6 gap-y-4 font-mono text-[14px]">
+        <a class="cta-link inline-flex items-center gap-2 pb-1 text-fg border-b border-fg hover:text-accent hover:border-accent" href="/" data-i18n="404.home">← Home</a>
+        <a class="cta-link inline-flex items-center gap-2 pb-1 text-muted border-b border-rule hover:text-accent hover:border-accent" href="/work/" data-i18n="404.work">Work</a>
+        <a class="cta-link inline-flex items-center gap-2 pb-1 text-muted border-b border-rule hover:text-accent hover:border-accent" href="/blog/" data-i18n="404.writing">Writing</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

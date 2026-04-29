@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import JsonLd from '../components/layout/JsonLd.astro';
+import Hero from '../components/sections/Hero.astro';
+import About from '../components/sections/About.astro';
+import Work from '../components/sections/Work.astro';
+import Writing from '../components/sections/Writing.astro';
+import Contact from '../components/sections/Contact.astro';
+---
+
+<BaseLayout
+  title="Dragan Balatinac"
+  description="Backend engineer building quiet, reliable systems with TYPO3, PHP, and the DevOps glue around them."
+>
+  <JsonLd schema={{
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Dragan Balatinac',
+    url: 'https://balatinac.dev',
+    jobTitle: 'Backend Engineer',
+    sameAs: [
+      'https://github.com/balatD',
+      'https://linkedin.com/in/balatinac',
+    ],
+  }} />
+  <JsonLd schema={{
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Dragan Balatinac',
+    url: 'https://balatinac.dev',
+  }} />
+
+  <meta name="i18n-title" content="title.home" />
+  <Hero />
+  <About />
+  <Work />
+  <Writing />
+  <Contact />
+</BaseLayout>

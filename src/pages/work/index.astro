@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
+import FilterBar from '../../components/ui/FilterBar.astro';
+import { getCollection } from 'astro:content';
+import { getEnEntries, getDeMap } from '../../lib/content-helpers';
+
+const all = await getCollection('projects');
+const sorted = getEnEntries(all).sort((a, b) => a.data.order - b.data.order);
+const deMap = getDeMap(all);
+const hasProjects = sorted.length > 0;
+---
+
+<BaseLayout
+  title="Selected Work"
+  description="Backend platforms, custom CMS work, and the DevOps glue that holds them together."
+  activeNav="work"
+>
+  <meta name="i18n-title" content="title.work" />
+  <Breadcrumbs items={[
+    { label: 'Home', href: '/', i18n: 'crumb.home' },
+    { label: 'Selected Work', i18n: 'workIndex.crumb' },
+  ]} />
+
+  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance" data-i18n-html="workIndex.heading">Things I've <span class="text-accent">built</span>, broken, and shipped.</h1>
+      <p class="text-[18px] leading-[1.6] text-muted m-0 max-w-[56ch] text-pretty" data-i18n="workIndex.sub">Backend platforms, custom CMS work, and the DevOps glue that holds them together.</p>
+    </div>
+  </header>
+
+  {hasProjects ? (
+    <>
+      <FilterBar tags={['TYPO3', 'PHP', 'DevOps', 'API']} total={sorted.length} />
+      <section class="py-10 md:py-10 pb-16 md:pb-20">
+        <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+          <ul id="list" class="list-none p-0 m-0 divide-y divide-rule">
+            {sorted.map((project) => {
+              const de = deMap.get(project.id);
+              return (
+                <li data-tags={project.data.tags.join(',')}>
+                  <a
+                    class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group"
+                    href={`/work/${project.id}/`}
+                  >
+                    <div>
+                      <div class="text-[18px] font-medium leading-snug text-balance" data-de={de?.data.title}>{project.data.title}</div>
+                      <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]" data-de={de?.data.description}>{project.data.description}</div>
+                    </div>
+                    <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">{project.data.year}</div>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    </>
+  ) : (
+    <section class="py-16 md:py-24 border-t border-rule">
+      <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 text-center">
+        <p class="text-[17px] text-muted" data-i18n="empty.work">Projects coming soon.</p>
+      </div>
+    </section>
+  )}
+</BaseLayout>

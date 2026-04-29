@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Surviving a TYPO3 v11 → v13 jump without downtime — Dragan Balatinac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="../site.css" />
+<style>
+  .post-meta {
+    padding: 12px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .post-meta .wrap { display: flex; flex-wrap: wrap; gap: 24px; }
+  .post-meta strong {
+    color: var(--fg);
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 500;
+    margin-left: 6px;
+  }
+  .post-meta .tags { margin-left: auto; display: flex; gap: 10px; }
+  .post-meta .tags span { color: var(--muted); }
+  .post-meta .tags span::before { content: "#"; color: var(--accent); }
+
+  article.post {
+    padding: 56px 0 80px;
+  }
+  article.post .wrap > * { max-width: 64ch; }
+  article.post .lede {
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0 0 32px;
+    text-wrap: pretty;
+  }
+  article.post h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    margin: 48px 0 16px;
+  }
+  article.post h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    margin: 28px 0 8px;
+  }
+  article.post p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--fg);
+    margin: 0 0 16px;
+    text-wrap: pretty;
+  }
+  article.post p code, article.post li code {
+    font-family: "Space Mono", monospace;
+    font-size: 14px;
+    background: var(--rule);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+  article.post ul, article.post ol {
+    margin: 0 0 22px;
+    padding: 0;
+    list-style: none;
+    counter-reset: ord;
+  }
+  article.post ul li, article.post ol li {
+    padding: 8px 0 8px 26px;
+    position: relative;
+    font-size: 17px;
+    line-height: 1.65;
+    border-bottom: 1px solid var(--rule);
+  }
+  article.post ul li:first-child, article.post ol li:first-child {
+    border-top: 1px solid var(--rule);
+  }
+  article.post ul li::before {
+    content: "—";
+    position: absolute; left: 0;
+    color: var(--accent);
+  }
+  article.post ol li {
+    counter-increment: ord;
+  }
+  article.post ol li::before {
+    content: counter(ord, decimal-leading-zero);
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    top: 10px;
+  }
+  article.post .pull {
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 18px;
+    margin: 28px 0;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--fg);
+    font-style: italic;
+  }
+  article.post pre {
+    background: transparent;
+    color: var(--fg);
+    padding: 18px 0;
+    margin: 0 0 24px;
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  article.post pre .c { color: var(--muted); }
+  article.post pre .a { color: var(--accent); }
+  article.post hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 56px 0;
+  }
+  article.post .signoff {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 40px;
+  }
+
+  .next-prev {
+    border-top: 1px solid var(--rule);
+  }
+  .next-prev .wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .next-prev a {
+    padding: 28px 0;
+    border: 0;
+    transition: color .15s;
+  }
+  .next-prev a:hover { color: var(--accent); }
+  .next-prev a.prev { padding-right: 16px; }
+  .next-prev a.next { padding-left: 16px; text-align: right; border-left: 1px solid var(--rule); }
+  .next-prev .label {
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .next-prev .ttl { font-size: 16px; font-weight: 500; line-height: 1.4; }
+
+  @media (max-width: 600px) {
+    .post-meta .tags { width: 100%; margin-left: 0; }
+    .next-prev .wrap { grid-template-columns: 1fr; }
+    .next-prev a.next { border-left: 0; border-top: 1px solid var(--rule); padding-left: 0; text-align: left; }
+  }
+</style>
+</head>
+<body data-screen-label="Post — TYPO3 v11 to v13">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<a class="corner-mark" href="../Portfolio.html" aria-label="Dragan Balatinac — home">
+  <span class="letters" aria-hidden="true"><span>D</span><span>r</span><span>a</span><span>g</span><span>a</span><span>n</span><span> </span><span>B</span><span>a</span><span>l</span><span>a</span><span>t</span><span>i</span><span>n</span><span>a</span><span>c</span></span>
+</a>
+
+<header class="nav" id="site-nav">
+  <div class="wrap">
+    <nav class="links" aria-label="Primary">
+      <a href="../Portfolio.html#about">About</a>
+      <a href="../work/index.html">Work</a>
+      <a href="index.html" class="active" aria-current="page">Writing</a>
+      <a href="../Portfolio.html#contact">Contact</a>
+    </nav>
+    <div class="controls">
+      <button id="lang-toggle" class="lang" aria-label="Switch language"><span class="now">EN</span></button>
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="display:none">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="wrap">
+    <a href="../Portfolio.html">Home</a>
+    <span class="sep">/</span>
+    <a href="index.html">Writing</a>
+    <span class="sep">/</span>
+    <span>TYPO3 v11 → v13</span>
+  </div>
+</div>
+
+<header class="page-header" id="main">
+  <div class="wrap">
+    <p class="label">Apr 18, 2026 · 9 min read</p>
+    <h1>Surviving a TYPO3 v11 → v13 jump <span class="accent">without downtime</span>.</h1>
+  </div>
+</header>
+
+<section class="post-meta">
+  <div class="wrap">
+    <span>Published<strong>Apr 18, 2026</strong></span>
+    <span>Read time<strong>~9 min</strong></span>
+    <span class="tags"><span>TYPO3</span><span>Upgrade</span><span>MariaDB</span><span>Docker</span></span>
+  </div>
+</section>
+
+<article class="post">
+  <div class="wrap">
+    <p class="lede">Skipping a TYPO3 LTS is the kind of decision your future self either thanks you for or quietly resents for two months. Here's the path that worked, in the order it actually happened — including the four hours I lost to a TCA quirk that didn't deserve them.</p>
+
+    <h2>Why we skipped v12</h2>
+    <p>The honest answer: budget. The slightly more honest answer: every TYPO3 upgrade costs roughly the same fixed amount of human attention, regardless of how many majors you cross. Going v11 → v12 → v13 in two passes meant doing the audit, the staging dance, and the editor retraining twice. Going straight to v13 meant doing it once.</p>
+    <p>The catch is that you lose the cushion of an intermediate step where you can test theories. So you replace it with paranoia, which is cheaper.</p>
+
+    <h2>The plan, in five lines</h2>
+    <ol>
+      <li>Freeze content writes on staging, snapshot the database, run an extension audit.</li>
+      <li>Spin up a parallel v13 stack against a copy of production data.</li>
+      <li>Replay the upgrade scripts until they're a single idempotent shell file.</li>
+      <li>Cut writes over to a buffer, run the real upgrade, validate, release writes.</li>
+      <li>Watch logs. Drink coffee. Don't touch anything for 48 hours.</li>
+    </ol>
+
+    <h2>The extension audit</h2>
+    <p>Before any code changed, we listed every installed extension across the four sites and graded each one. The grades were intentionally crude — I wanted decisions, not nuance:</p>
+    <ul>
+      <li><code>keep</code> — already v13-compatible, no action.</li>
+      <li><code>port</code> — small patch needed; we'd own it.</li>
+      <li><code>replace</code> — official replacement exists in core or a maintained alternative.</li>
+      <li><code>delete</code> — nobody could explain what it did. Out it goes.</li>
+    </ul>
+    <p>About 40% of installed extensions hit <code>delete</code> on the first pass. Roughly half of those got reinstated when an editor noticed something missing — but the audit forced the conversation, which was the point.</p>
+
+    <p class="pull">An upgrade is a great excuse to delete things you couldn't otherwise justify deleting.</p>
+
+    <h2>Blue/green database, not blue/green app</h2>
+    <p>Most "zero downtime" guides describe a blue/green app deploy and hand-wave the database. For TYPO3 the database <em>is</em> the migration: schema changes, content element renames, FAL references. The app side is comparatively easy.</p>
+    <p>So we inverted the usual setup. The new application stack ran against a replicated MariaDB; the old one stayed on the live primary. A small write-mirror service caught any new content during the cutover window and replayed it on the green side. When the parity report came back all-zeros for 48 hours, we flipped a single Nginx upstream:</p>
+
+<pre><span class="c"># cutover.sh</span>
+<span class="a">ssh</span> edge-01 "ln -sfn /etc/nginx/upstreams/v13 /etc/nginx/upstreams/active &amp;&amp; nginx -s reload"
+<span class="a">ssh</span> edge-02 "ln -sfn /etc/nginx/upstreams/v13 /etc/nginx/upstreams/active &amp;&amp; nginx -s reload"
+<span class="c"># total downtime: ~0.4s per edge</span></pre>
+
+    <p>No request was dropped. The writes that were in flight during the symlink swap got served by the v11 upstream and replayed forward by the mirror within 90 seconds.</p>
+
+    <h2>The four hours I'll never get back</h2>
+    <p>The bug was a custom TCA override on a content element that had been ported from v9 in 2020. In v13, a column type that used to be coerced silently now refuses to load if its <code>config.eval</code> contains a deprecated value. The error message did not mention TCA. It mentioned the cache.</p>
+    <p>I cleared every cache TYPO3 has — and TYPO3 has a lot of caches. I rebuilt Composer autoload. I bisected the database. I read the changelog twice. Eventually I diff'd the loaded TCA between v11 and v13, found one column with a different shape, deleted the override, and the whole platform booted in under a second.</p>
+    <p>The lesson is the lesson everyone learns: <code>tail -f var/log/*</code> is a habit, not a fallback.</p>
+
+    <h2>What I'd do differently</h2>
+    <ul>
+      <li>Run the extension audit a month earlier. Two weeks isn't enough for editors to push back on the <code>delete</code> column.</li>
+      <li>Wire the parity report into a chat channel from day one. Watching numbers tick down to zero is more reassuring than any postmortem.</li>
+      <li>Schedule the cutover for Tuesday morning, not Friday night. The sleep difference is real.</li>
+      <li>Write the cutover script before you need it, then run it on staging until it's boring.</li>
+    </ul>
+
+    <hr />
+
+    <h2>Closing</h2>
+    <p>The upgrade itself shipped without an incident, the editors barely noticed, and the platform has been on v13 for six months without anyone needing to think about it. That's the only metric I cared about.</p>
+    <p>If you're staring down a similar jump and want a second pair of eyes on the plan, <a href="mailto:hello@balatinac.dev">drop me a line</a>. The audit spreadsheet template is the only thing I'd send unprompted.</p>
+
+    <p class="signoff">— DB, written between two `composer update` runs.</p>
+  </div>
+</article>
+
+<nav class="next-prev">
+  <div class="wrap">
+    <a class="prev" href="index.html">
+      <div class="label">← Back to writing</div>
+      <div class="ttl">All posts</div>
+    </a>
+    <a class="next" href="#">
+      <div class="label">Next post</div>
+      <div class="ttl">Coolify on a single VPS →</div>
+    </a>
+  </div>
+</nav>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Dragan Balatinac</span>
+    <span>Hand-built. No tracking.</span>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  function setTheme(mode) {
+    root.setAttribute("data-theme", mode);
+    document.getElementById("icon-sun").style.display = mode === "dark" ? "block" : "none";
+    document.getElementById("icon-moon").style.display = mode === "dark" ? "none" : "block";
+    try { localStorage.setItem("theme", mode); } catch(e) {}
+  }
+  (function init() {
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch(e) {}
+    if (saved) { setTheme(saved); return; }
+    const prefDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(prefDark ? "dark" : "light");
+  })();
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+  document.getElementById("lang-toggle").addEventListener("click", (e) => {
+    const cur = e.currentTarget.querySelector(".now");
+    cur.textContent = cur.textContent === "EN" ? "DE" : "EN";
+  });
+  (function navScroll(){
+    const nav = document.getElementById("site-nav");
+    if (!nav) return;
+    const upd = () => nav.classList.toggle("scrolled", window.scrollY > 8);
+    upd();
+    window.addEventListener("scroll", upd, { passive: true });
+  })();
+</script>
+
+</body>
+</html>

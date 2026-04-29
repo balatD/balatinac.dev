@@ -1,0 +1,95 @@
+---
+interface Props {
+  activeNav?: 'about' | 'work' | 'writing' | 'contact';
+}
+
+const { activeNav } = Astro.props;
+
+const navLinks = [
+  { href: '/#about', label: 'About', id: 'about', i18n: 'nav.about' },
+  { href: '/work/', label: 'Work', id: 'work', i18n: 'nav.work' },
+  { href: '/blog/', label: 'Writing', id: 'writing', i18n: 'nav.writing' },
+  { href: '/#contact', label: 'Contact', id: 'contact', i18n: 'nav.contact' },
+];
+---
+
+<header id="site-nav" class="fixed top-0 left-0 right-0 z-50 md:top-[18px] md:left-1/2 md:right-auto md:-translate-x-1/2 md:max-w-[calc(100vw-16px)] md:w-auto">
+  <div
+    data-nav-bg
+    class="relative flex items-stretch p-[4px_6px] backdrop-blur-[18px] backdrop-saturate-150 transition-colors duration-200"
+    style="background: color-mix(in oklab, var(--bg) 55%, transparent);"
+  >
+    <!-- Mobile DB wordmark (inside nav bar) -->
+    <a
+      href="/"
+      aria-label="Dragan Balatinac — home"
+      class="corner-mark relative inline-flex items-center px-2.5 py-2.5 font-mono text-[11px] font-semibold tracking-wider leading-none text-fg overflow-hidden md:hidden"
+    >
+      <span class="letters inline-flex" aria-hidden="true">
+        <span>D</span><span>B</span>
+      </span>
+    </a>
+
+    <nav
+      id="nav-links"
+      class="flex flex-1 items-center justify-center font-mono text-[11px] md:text-[12px] uppercase tracking-[0.08em]"
+      aria-label="Primary"
+    >
+      {navLinks.map((link) => (
+        <a
+          class:list={[
+            'nav-link px-3 py-2.5 md:px-[18px] md:py-3 transition-colors duration-200',
+            activeNav === link.id ? 'text-fg active' : 'text-muted hover:text-fg',
+          ]}
+          href={link.href}
+          aria-current={activeNav === link.id ? 'page' : undefined}
+          data-i18n={link.i18n}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+    <div
+      class="flex items-stretch ml-1 border-l"
+      style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);"
+    >
+      <button
+        id="lang-toggle"
+        class="lang-btn relative w-[38px] min-w-[38px] md:w-11 md:min-w-[44px] px-2 md:px-3 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg cursor-pointer transition-colors"
+        aria-label="Switch language"
+      >
+        <span class="now">EN</span>
+      </button>
+      <button
+        id="theme-toggle"
+        class="px-2 md:px-3 min-w-[38px] md:min-w-[44px] inline-flex items-center justify-center text-muted hover:text-fg cursor-pointer transition-colors border-l"
+        style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);"
+        aria-label="Toggle theme"
+      >
+        <svg
+          id="icon-sun"
+          class="w-[15px] h-[15px] transition-transform duration-300 hover:rotate-[20deg] hidden"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg
+          id="icon-moon"
+          class="w-[15px] h-[15px] transition-transform duration-300 hover:rotate-[20deg]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

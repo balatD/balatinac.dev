@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
+import FilterBar from '../../components/ui/FilterBar.astro';
+import { getCollection } from 'astro:content';
+import { getEnEntries, getDeMap } from '../../lib/content-helpers';
+
+const all = await getCollection('blog');
+const sorted = getEnEntries(all).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const deMap = getDeMap(all);
+const hasPosts = sorted.length > 0;
+---
+
+<BaseLayout
+  title="Writing"
+  description="Short posts about TYPO3, PHP, and the DevOps choices I keep coming back to."
+  activeNav="writing"
+>
+  <meta name="i18n-title" content="title.blog" />
+  <Breadcrumbs items={[
+    { label: 'Home', href: '/', i18n: 'crumb.home' },
+    { label: 'Writing', i18n: 'blogIndex.crumb' },
+  ]} />
+
+  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance" data-i18n-html="blogIndex.heading">Things I learned the <span class="text-accent">hard</span> way.</h1>
+      <p class="text-[18px] leading-[1.6] text-muted m-0 max-w-[56ch] text-pretty" data-i18n="blogIndex.sub">Short posts about TYPO3, PHP, and the DevOps choices I keep coming back to. Mostly so future-me can stop solving the same problem twice.</p>
+    </div>
+  </header>
+
+  {hasPosts ? (
+    <>
+      <FilterBar tags={['TYPO3', 'PHP', 'DevOps', 'Tooling']} total={sorted.length} />
+      <section class="py-10 pb-16 md:pb-20">
+        <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+          <ul id="list" class="list-none p-0 m-0 divide-y divide-rule">
+            {sorted.map((post) => {
+              const de = deMap.get(post.id);
+              const dateStr = post.data.publishedAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+              return (
+                <li data-tags={post.data.tags.join(',')}>
+                  <a
+                    class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group"
+                    href={`/blog/${post.id}/`}
+                  >
+                    <div>
+                      <div class="text-[18px] font-medium leading-snug text-balance">
+                        <span data-de={de?.data.title}>{post.data.title}</span>
+                        {post.data.draft && <span class="font-mono text-[11px] text-accent ml-2 tracking-wider align-[2px] uppercase" data-i18n="blogIndex.draft">Draft</span>}
+                      </div>
+                      <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]" data-de={de?.data.description}>{post.data.description}</div>
+                    </div>
+                    <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">{dateStr}</div>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    </>
+  ) : (
+    <section class="py-16 md:py-24 border-t border-rule">
+      <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 text-center">
+        <p class="text-[17px] text-muted" data-i18n="empty.blog">Posts coming soon.</p>
+      </div>
+    </section>
+  )}
+</BaseLayout>

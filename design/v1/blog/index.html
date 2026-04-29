@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Writing — Dragan Balatinac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="../site.css" />
+</head>
+<body data-screen-label="Writing — Index">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../Portfolio.html"><span class="dot"></span><span>Dragan Balatinac</span></a>
+    <nav class="links">
+      <a href="../Portfolio.html#about">About</a>
+      <a href="../work/index.html">Work</a>
+      <a href="index.html" class="active">Writing</a>
+      <a href="../Portfolio.html#contact">Contact</a>
+    </nav>
+    <div class="controls">
+      <button id="lang-toggle"><span>EN</span></button>
+      <button id="theme-toggle" class="icon-btn">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="display:none">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="wrap">
+    <a href="../Portfolio.html">Home</a>
+    <span class="sep">/</span>
+    <span>Writing</span>
+  </div>
+</div>
+
+<header class="page-header">
+  <div class="wrap">
+    <p class="label">Writing · Notes from the server room</p>
+    <h1>Things I learned the <span class="accent">hard</span> way.</h1>
+    <p>Short posts about TYPO3, PHP, and the DevOps choices I keep coming back to. Mostly so future-me can stop solving the same problem twice.</p>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="wrap">
+    <span class="label">Filter</span>
+    <button class="on" data-tag="all">All</button>
+    <button data-tag="typo3">TYPO3</button>
+    <button data-tag="php">PHP</button>
+    <button data-tag="devops">DevOps</button>
+    <button data-tag="tooling">Tooling</button>
+    <span class="count" id="count">04 / 04</span>
+  </div>
+</div>
+
+<section class="list-section">
+  <div class="wrap">
+    <ul class="list" id="list">
+      <li data-tags="typo3,devops">
+        <a class="row" href="typo3-v11-to-v13.html">
+          <div>
+            <div class="ttl">Surviving a TYPO3 v11 → v13 jump without downtime</div>
+            <div class="desc">Notes on the upgrade path that actually worked: blue/green database, an extension audit spreadsheet, and the four hours I'll never get back.</div>
+          </div>
+          <div class="meta">Apr 2026</div>
+        </a>
+      </li>
+      <li data-tags="devops">
+        <a class="row" href="#">
+          <div>
+            <div class="ttl">Coolify on a single VPS: my home for ~30 services<span class="draft">Draft</span></div>
+            <div class="desc">Why I left managed PaaS, what broke first, and the GitLab CI snippet that quietly does 80% of my deployments.</div>
+          </div>
+          <div class="meta">Mar 2026</div>
+        </a>
+      </li>
+      <li data-tags="php">
+        <a class="row" href="#">
+          <div>
+            <div class="ttl">Boring PHP: when the framework is the bug<span class="draft">Draft</span></div>
+            <div class="desc">A short defense of plain classes, dependency containers I can read, and stack traces that point at my own code.</div>
+          </div>
+          <div class="meta">Feb 2026</div>
+        </a>
+      </li>
+      <li data-tags="tooling,php">
+        <a class="row" href="#">
+          <div>
+            <div class="ttl">PhpStorm + Xdebug in Docker, in 2026<span class="draft">Draft</span></div>
+            <div class="desc">An updated, no-magic config for breakpoints that actually break — including the one path-mapping line everyone forgets.</div>
+          </div>
+          <div class="meta">Jan 2026</div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Dragan Balatinac</span>
+    <span>Hand-built. No tracking.</span>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  function setTheme(mode) {
+    root.setAttribute("data-theme", mode);
+    document.getElementById("icon-sun").style.display = mode === "dark" ? "block" : "none";
+    document.getElementById("icon-moon").style.display = mode === "dark" ? "none" : "block";
+    try { localStorage.setItem("theme", mode); } catch(e) {}
+  }
+  (function init() {
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch(e) {}
+    if (saved) { setTheme(saved); return; }
+    const prefDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(prefDark ? "dark" : "light");
+  })();
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+  document.getElementById("lang-toggle").addEventListener("click", () => {
+    const span = document.querySelector("#lang-toggle span");
+    span.textContent = span.textContent === "EN" ? "DE" : "EN";
+  });
+
+  const items = [...document.querySelectorAll("#list li")];
+  const countEl = document.getElementById("count");
+  document.querySelectorAll(".filters button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filters button").forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      const tag = btn.dataset.tag;
+      let shown = 0;
+      items.forEach(li => {
+        const tags = (li.dataset.tags || "").split(",");
+        const visible = tag === "all" || tags.includes(tag);
+        li.style.display = visible ? "" : "none";
+        if (visible) shown++;
+      });
+      countEl.textContent = String(shown).padStart(2, "0") + " / " + String(items.length).padStart(2, "0");
+    });
+  });
+</script>
+
+</body>
+</html>

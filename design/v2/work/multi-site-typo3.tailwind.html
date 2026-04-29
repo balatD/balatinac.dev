@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Multi-site TYPO3 Platform — Case Study (Tailwind)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: ['class', '[data-theme="dark"]'],
+    theme: { extend: {
+      colors: { bg:'var(--bg)', fg:'var(--fg)', muted:'var(--muted)', rule:'var(--rule)', accent:'var(--accent)' },
+      fontFamily: { sans:['"Space Grotesk"','system-ui','sans-serif'], mono:['"Space Mono"','ui-monospace','monospace'] },
+      maxWidth: { wrap:'880px' },
+    }},
+  };
+</script>
+<link rel="stylesheet" href="../tailwind.shared.css" />
+</head>
+
+<body data-screen-label="Case Study — Multi-site TYPO3" class="bg-bg text-fg font-sans antialiased leading-relaxed text-[17px]">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<a class="corner-mark fixed top-4 left-4 md:top-6 md:left-7 z-[60] inline-block overflow-hidden py-1 font-mono text-[11px] md:text-[12px] font-semibold tracking-wider leading-none text-fg" href="../Portfolio.tailwind.html" aria-label="Dragan Balatinac — home">
+  <span class="letters inline-flex" aria-hidden="true">
+    <span>D</span><span>r</span><span>a</span><span>g</span><span>a</span><span>n</span><span>&nbsp;</span><span>B</span><span>a</span><span>l</span><span>a</span><span>t</span><span>i</span><span>n</span><span>a</span><span>c</span>
+  </span>
+</a>
+
+<header id="site-nav" class="fixed top-3 md:top-[18px] left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-16px)]">
+  <div data-nav-bg class="relative flex items-stretch p-[4px_6px] backdrop-blur-[18px] backdrop-saturate-150 transition-colors duration-200" style="background: color-mix(in oklab, var(--bg) 55%, transparent);">
+    <nav id="nav-links" class="flex items-center font-mono text-[11px] md:text-[12px] uppercase tracking-[0.08em]" aria-label="Primary">
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors" href="../Portfolio.tailwind.html#about">About</a>
+      <a class="nav-link active px-3 py-2.5 md:px-[18px] md:py-3 text-fg transition-colors" href="index.tailwind.html" aria-current="page">Work</a>
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors" href="../blog/index.tailwind.html">Writing</a>
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors" href="../Portfolio.tailwind.html#contact">Contact</a>
+    </nav>
+    <div class="flex items-stretch ml-1 border-l" style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);">
+      <button id="lang-toggle" class="lang-btn relative w-[38px] min-w-[38px] md:w-11 md:min-w-[44px] px-2 md:px-3 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg cursor-pointer transition-colors" aria-label="Switch language"><span class="now">EN</span></button>
+      <button id="theme-toggle" class="px-2 md:px-3 min-w-[38px] md:min-w-[44px] inline-flex items-center justify-center text-muted hover:text-fg cursor-pointer transition-colors border-l" style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);" aria-label="Toggle theme">
+        <svg id="icon-sun" class="w-[15px] h-[15px] transition-transform duration-300 hover:rotate-[20deg] hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+        <svg id="icon-moon" class="w-[15px] h-[15px] transition-transform duration-300 hover:rotate-[20deg]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="pt-[100px] md:pt-[110px] font-mono text-[13px] text-muted">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap gap-2">
+    <a class="text-muted hover:text-accent transition-colors" href="../Portfolio.tailwind.html">Home</a>
+    <span class="opacity-50">/</span>
+    <a class="text-muted hover:text-accent transition-colors" href="index.tailwind.html">Work</a>
+    <span class="opacity-50">/</span>
+    <span>Multi-site TYPO3</span>
+  </div>
+</div>
+
+<header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]" id="main">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+    <p class="font-mono text-[13px] text-muted m-0 mb-5">Case study · 01 / 04</p>
+    <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance">Four legacy sites, one <span class="text-accent">TYPO3</span> instance.</h1>
+    <p class="text-[18px] leading-[1.6] text-muted m-0 max-w-[56ch] text-pretty">A nine-month consolidation into a single TYPO3 v13 platform with shared content elements, role-based editorial flows, and a CI pipeline that quietly handles content sync between staging and production.</p>
+  </div>
+</header>
+
+<!-- Meta strip -->
+<section class="py-3 border-y border-rule font-mono text-[13px] text-muted">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap gap-x-6 gap-y-2">
+    <span>Year<strong class="text-fg font-sans font-medium ml-1.5">2025</strong></span>
+    <span>Duration<strong class="text-fg font-sans font-medium ml-1.5">9 months</strong></span>
+    <span>Role<strong class="text-fg font-sans font-medium ml-1.5">Lead Backend</strong></span>
+    <span>Team<strong class="text-fg font-sans font-medium ml-1.5">3 devs · 2 editors</strong></span>
+    <span>Status<strong class="text-fg font-sans font-medium ml-1.5">Live</strong></span>
+  </div>
+</section>
+
+<article class="py-12 sm:py-14 md:py-14 pb-16 md:pb-20">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 [&>*]:max-w-[60ch]">
+
+    <h2 class="font-medium text-[24px] sm:text-[26px] leading-[1.25] tracking-[-0.015em] mt-0 mb-[18px]"><span class="font-mono text-[13px] text-muted mr-3">01</span>Context</h2>
+    <p class="text-[17px] leading-[1.7] m-0 mb-4 text-pretty">The client ran four public-facing sites built between 2014 and 2019 — each on a different TYPO3 major, each with its own quirks and its own editor handbook. Three of the four shared more than 60% of their content by volume but had drifted to four slightly different shapes. Editorial cycles were duplicated, redirects were folklore, and security updates landed on whichever site had a developer paying attention that month.</p>
+    <p class="text-[17px] leading-[1.7] m-0 mb-4 text-pretty">The brief was simple. <span class="text-muted">One platform. One editorial workflow. No data loss. No downtime past office hours.</span></p>
+
+    <h2 class="font-medium text-[20px] sm:text-[26px] leading-[1.25] tracking-[-0.015em] mt-14 mb-[18px]"><span class="font-mono text-[13px] text-muted mr-3">02</span>The problem</h2>
+    <p class="text-[17px] leading-[1.7] m-0 mb-4 text-pretty">The hard part was never the engineering. It was the politics of four editorial teams who had each spent five years curating their own little fiefdom of templates and "we always do it this way" muscle memory.</p>
+    <ul class="dash-list list-none p-0 m-0 mb-6">
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule first:border-t">Four schemas to reconcile, three of which thought they were canonical.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule">~14,000 content elements with image references pointing at four different storage layouts.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule">A redirect graph nobody had a complete picture of.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule">Editors who, reasonably, did not want to learn a new tool while doing their day job.</li>
+    </ul>
+    <p class="border-l-2 border-accent pl-[18px] py-1 my-7 italic text-[19px] leading-[1.45] text-fg">The migration was 20% TYPO3, 80% spreadsheet diplomacy.</p>
+
+    <h2 class="font-medium text-[20px] sm:text-[26px] leading-[1.25] tracking-[-0.015em] mt-14 mb-[18px]"><span class="font-mono text-[13px] text-muted mr-3">03</span>Approach</h2>
+
+    <h3 class="font-medium text-[18px] mt-8 mb-2">Audit before code</h3>
+    <p class="text-[17px] leading-[1.7] m-0 mb-4 text-pretty">The first six weeks were spent not writing TYPO3 code. We built an extension audit spreadsheet — every plugin, every TypoScript include, every custom backend module — and graded each as <em>keep</em>, <em>port</em>, <em>replace</em>, or <em>delete on sight</em>. About 40% of installed extensions were "delete on sight."</p>
+
+    <h3 class="font-medium text-[18px] mt-8 mb-2">Shared content elements</h3>
+    <p class="text-[17px] leading-[1.7] m-0 mb-4 text-pretty">Instead of porting four sets of templates we collapsed them into one library of ~24 content elements. Each element accepted the same fields no matter which site it was rendered on, and per-site styling lived in a single SCSS partial keyed off the site root. Editors got one handbook.</p>
+
+    <h3 class="font-medium text-[18px] mt-8 mb-2">Blue/green database, one-line cutover</h3>
+    <p class="text-[17px] leading-[1.7] m-0 mb-4 text-pretty">We ran the new platform alongside the old ones for three weeks against a replicated database, mirrored writes through a thin shim, and flipped a single Nginx upstream when the parity report read all-zeros for 48 hours.</p>
+
+<pre class="font-mono text-[12px] sm:text-[13px] leading-[1.6] py-4 my-0 mb-[22px] border-y border-rule overflow-x-auto whitespace-pre"><span class="tok-c"># cutover.sh — what it actually came down to</span>
+<span class="tok-a">ssh</span> edge-01 "ln -sfn /etc/nginx/upstreams/v13 /etc/nginx/upstreams/active &amp;&amp; nginx -s reload"
+<span class="tok-a">ssh</span> edge-02 "ln -sfn /etc/nginx/upstreams/v13 /etc/nginx/upstreams/active &amp;&amp; nginx -s reload"
+<span class="tok-c"># total downtime: 0.4s per edge, no in-flight requests dropped</span></pre>
+
+    <h2 class="font-medium text-[20px] sm:text-[26px] leading-[1.25] tracking-[-0.015em] mt-14 mb-[18px]"><span class="font-mono text-[13px] text-muted mr-3">04</span>Stack &amp; decisions</h2>
+    <ul class="dash-list list-none p-0 m-0 mb-6">
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule first:border-t"><strong>TYPO3 v13</strong> over staying on v11 LTS. The upgrade window only gets harder.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule"><strong>PHP 8.3</strong> on FPM, behind Nginx. Boring.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule"><strong>MariaDB 10.11</strong> with read replicas for the public site, primary-only for the backend.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule"><strong>Docker + Coolify</strong> for staging — every merge request gets its own preview URL.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule"><strong>GitLab CI</strong> for build, test, and the content-sync pipeline that pushes editorial changes from staging to production on a 5-minute schedule.</li>
+    </ul>
+
+    <h3 class="font-medium text-[18px] mt-8 mb-2">Things we said no to</h3>
+    <p class="text-[17px] leading-[1.7] m-0 mb-4 text-pretty">No headless frontend. No microservices. No event bus. No "while we're at it, let's also rebuild search." The platform's job was to be the boring foundation everything else could rely on; it earns its keep by not being interesting.</p>
+
+    <h2 class="font-medium text-[20px] sm:text-[26px] leading-[1.25] tracking-[-0.015em] mt-14 mb-[18px]"><span class="font-mono text-[13px] text-muted mr-3">05</span>Results</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 py-6 border-y border-rule mb-6">
+      <div><div class="font-medium text-[28px] tracking-[-0.02em] text-accent leading-none">0</div><div class="font-mono text-[12px] text-muted mt-1.5">Incidents in launch week</div></div>
+      <div><div class="font-medium text-[28px] tracking-[-0.02em] text-accent leading-none">−68%</div><div class="font-mono text-[12px] text-muted mt-1.5">Editor time per update</div></div>
+      <div><div class="font-medium text-[28px] tracking-[-0.02em] text-accent leading-none">~0.4s</div><div class="font-mono text-[12px] text-muted mt-1.5">Total cutover downtime</div></div>
+    </div>
+
+    <p class="text-[17px] leading-[1.7] m-0 mb-4 text-pretty">Six months in, the platform handles all four properties on a single application instance with a quarter of the previous combined infrastructure cost. Editorial cycles that used to require three handoffs are a single ticket. The on-call rotation went from "rotating between four people who each knew one site" to "anyone can pick it up because it's the same system."</p>
+
+    <h2 class="font-medium text-[20px] sm:text-[26px] leading-[1.25] tracking-[-0.015em] mt-14 mb-[18px]"><span class="font-mono text-[13px] text-muted mr-3">06</span>Lessons</h2>
+    <ul class="dash-list list-none p-0 m-0 mb-6">
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule first:border-t"><strong>The boring choices compound.</strong> Picking the dull option at every fork meant we shipped on time and the runbook fit on one page.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule"><strong>Editors are users.</strong> The most valuable hour of the project was sitting next to two editors and watching them work.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule"><strong>The audit spreadsheet earned its keep.</strong> Every "wait, why is this here?" moment six months later had an answer in row 314.</li>
+      <li class="relative pl-6 py-2 text-[17px] leading-[1.6] border-b border-rule"><strong>Redirects deserve their own project.</strong> Treating them as a chore is how you ship a launch with broken Google results.</li>
+    </ul>
+  </div>
+</article>
+
+<nav class="border-t border-rule">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+    <a class="flex justify-between items-baseline py-7 hover:text-accent transition-colors group" href="#">
+      <div>
+        <div class="font-mono text-[13px] text-muted mb-1">Next · 02 / 04</div>
+        <div class="text-[18px] font-medium">Headless Content API</div>
+      </div>
+      <div class="font-mono text-[13px] text-muted group-hover:text-accent group-hover:translate-x-1 transition-all">→</div>
+    </a>
+  </div>
+</nav>
+
+<footer class="py-10 pb-14 border-t border-rule font-mono text-[12px] sm:text-[13px] text-muted">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex justify-between flex-wrap gap-3">
+    <span>© 2026 Dragan Balatinac</span>
+    <span>Hand-built with Tailwind. No tracking.</span>
+  </div>
+</footer>
+
+<script src="../tailwind.shared.js"></script>
+</body>
+</html>

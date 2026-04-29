@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import { getEnEntries, getDeMap } from '../../lib/content-helpers';
+
+const all = await getCollection('blog');
+const posts = getEnEntries(all)
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+  .slice(0, 4);
+const deMap = getDeMap(all);
+const hasPosts = posts.length > 0;
+---
+
+<section id="writing" class="py-14 sm:py-16 md:py-20 border-t border-rule">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+    <p class="font-mono text-[13px] text-muted m-0 mb-7 md:mb-8" data-i18n="writing.label">Writing</p>
+    {hasPosts ? (
+      <>
+        <ul class="list-none p-0 m-0 divide-y divide-rule">
+          {posts.map((post) => {
+            const de = deMap.get(post.id);
+            const dateStr = post.data.publishedAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            return (
+              <li>
+                <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group" href={`/blog/${post.id}/`}>
+                  <div>
+                    <div class="text-[17px] font-medium leading-snug text-balance" data-de={de?.data.title}>{post.data.title}</div>
+                    <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty" data-de={de?.data.description}>{post.data.description}</div>
+                  </div>
+                  <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">{dateStr}</div>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <p class="mt-7 font-mono text-[13px]">
+          <a class="text-muted hover:text-accent after:content-['_→']" href="/blog/" data-i18n="writing.all">All writing</a>
+        </p>
+      </>
+    ) : (
+      <p class="text-[17px] text-muted" data-i18n="empty.blog">Posts coming soon.</p>
+    )}
+  </div>
+</section>

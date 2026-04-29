@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Writing — Dragan Balatinac (Tailwind)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: ['class', '[data-theme="dark"]'],
+    theme: { extend: {
+      colors: { bg:'var(--bg)', fg:'var(--fg)', muted:'var(--muted)', rule:'var(--rule)', accent:'var(--accent)' },
+      fontFamily: { sans:['"Space Grotesk"','system-ui','sans-serif'], mono:['"Space Mono"','ui-monospace','monospace'] },
+      maxWidth: { wrap:'880px' },
+    }},
+  };
+</script>
+<link rel="stylesheet" href="../tailwind.shared.css" />
+</head>
+
+<body data-screen-label="Writing — Index" class="bg-bg text-fg font-sans antialiased leading-relaxed text-[17px]">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<a class="corner-mark fixed top-4 left-4 md:top-6 md:left-7 z-[60] inline-block overflow-hidden py-1 font-mono text-[11px] md:text-[12px] font-semibold tracking-wider leading-none text-fg" href="../Portfolio.tailwind.html" aria-label="Dragan Balatinac — home">
+  <span class="letters inline-flex" aria-hidden="true">
+    <span>D</span><span>r</span><span>a</span><span>g</span><span>a</span><span>n</span><span>&nbsp;</span><span>B</span><span>a</span><span>l</span><span>a</span><span>t</span><span>i</span><span>n</span><span>a</span><span>c</span>
+  </span>
+</a>
+
+<header id="site-nav" class="fixed top-3 md:top-[18px] left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-16px)]">
+  <div data-nav-bg class="relative flex items-stretch p-[4px_6px] backdrop-blur-[18px] backdrop-saturate-150 transition-colors duration-200" style="background: color-mix(in oklab, var(--bg) 55%, transparent);">
+    <nav id="nav-links" class="flex items-center font-mono text-[11px] md:text-[12px] uppercase tracking-[0.08em]" aria-label="Primary">
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors" href="../Portfolio.tailwind.html#about">About</a>
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors" href="../work/index.tailwind.html">Work</a>
+      <a class="nav-link active px-3 py-2.5 md:px-[18px] md:py-3 text-fg transition-colors" href="index.tailwind.html" aria-current="page">Writing</a>
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors" href="../Portfolio.tailwind.html#contact">Contact</a>
+    </nav>
+    <div class="flex items-stretch ml-1 border-l" style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);">
+      <button id="lang-toggle" class="lang-btn relative w-[38px] min-w-[38px] md:w-11 md:min-w-[44px] px-2 md:px-3 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg cursor-pointer transition-colors" aria-label="Switch language"><span class="now">EN</span></button>
+      <button id="theme-toggle" class="px-2 md:px-3 min-w-[38px] md:min-w-[44px] inline-flex items-center justify-center text-muted hover:text-fg cursor-pointer transition-colors border-l" style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);" aria-label="Toggle theme">
+        <svg id="icon-sun" class="w-[15px] h-[15px] transition-transform duration-300 hover:rotate-[20deg] hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+        <svg id="icon-moon" class="w-[15px] h-[15px] transition-transform duration-300 hover:rotate-[20deg]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="pt-[100px] md:pt-[110px] font-mono text-[13px] text-muted">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap gap-2">
+    <a class="text-muted hover:text-accent transition-colors" href="../Portfolio.tailwind.html">Home</a>
+    <span class="opacity-50">/</span>
+    <span aria-current="page">Writing</span>
+  </div>
+</div>
+
+<header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]" id="main">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+    <p class="font-mono text-[13px] text-muted m-0 mb-5">Writing · Notes from the server room</p>
+    <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance">Things I learned the <span class="text-accent">hard</span> way.</h1>
+    <p class="text-[18px] leading-[1.6] text-muted m-0 max-w-[56ch] text-pretty">Short posts about TYPO3, PHP, and the DevOps choices I keep coming back to. Mostly so future-me can stop solving the same problem twice.</p>
+  </div>
+</header>
+
+<div data-filters class="border-y border-rule font-mono text-[13px] py-4">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap items-center gap-4 sm:gap-[18px]">
+    <span class="text-muted">Filter</span>
+    <button data-tag="all" data-on="true" class="bg-transparent border-0 p-0 cursor-pointer text-accent transition-colors hover:text-fg">All</button>
+    <button data-tag="typo3" class="bg-transparent border-0 p-0 cursor-pointer text-muted transition-colors hover:text-fg">TYPO3</button>
+    <button data-tag="php" class="bg-transparent border-0 p-0 cursor-pointer text-muted transition-colors hover:text-fg">PHP</button>
+    <button data-tag="devops" class="bg-transparent border-0 p-0 cursor-pointer text-muted transition-colors hover:text-fg">DevOps</button>
+    <button data-tag="tooling" class="bg-transparent border-0 p-0 cursor-pointer text-muted transition-colors hover:text-fg">Tooling</button>
+    <span id="count" class="text-muted basis-full sm:basis-auto sm:ml-auto">04 / 04</span>
+  </div>
+</div>
+
+<section class="py-10 pb-16 md:pb-20">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+    <ul id="list" class="list-none p-0 m-0 divide-y divide-rule">
+      <li data-tags="typo3,devops">
+        <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group" href="typo3-v11-to-v13.tailwind.html">
+          <div>
+            <div class="text-[18px] font-medium leading-snug text-balance">Surviving a TYPO3 v11 → v13 jump without downtime</div>
+            <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">Notes on the upgrade path that actually worked: blue/green database, an extension audit spreadsheet, and the four hours I'll never get back.</div>
+          </div>
+          <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">Apr 2026</div>
+        </a>
+      </li>
+      <li data-tags="devops">
+        <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group" href="#">
+          <div>
+            <div class="text-[18px] font-medium leading-snug text-balance">Coolify on a single VPS: my home for ~30 services<span class="font-mono text-[11px] text-accent ml-2 tracking-wider align-[2px] uppercase">Draft</span></div>
+            <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">Why I left managed PaaS, what broke first, and the GitLab CI snippet that quietly does 80% of my deployments.</div>
+          </div>
+          <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">Mar 2026</div>
+        </a>
+      </li>
+      <li data-tags="php">
+        <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group" href="#">
+          <div>
+            <div class="text-[18px] font-medium leading-snug text-balance">Boring PHP: when the framework is the bug<span class="font-mono text-[11px] text-accent ml-2 tracking-wider align-[2px] uppercase">Draft</span></div>
+            <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">A short defense of plain classes, dependency containers I can read, and stack traces that point at my own code.</div>
+          </div>
+          <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">Feb 2026</div>
+        </a>
+      </li>
+      <li data-tags="tooling,php">
+        <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group" href="#">
+          <div>
+            <div class="text-[18px] font-medium leading-snug text-balance">PhpStorm + Xdebug in Docker, in 2026<span class="font-mono text-[11px] text-accent ml-2 tracking-wider align-[2px] uppercase">Draft</span></div>
+            <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">An updated, no-magic config for breakpoints that actually break — including the one path-mapping line everyone forgets.</div>
+          </div>
+          <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">Jan 2026</div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<footer class="py-10 pb-14 border-t border-rule font-mono text-[12px] sm:text-[13px] text-muted">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex justify-between flex-wrap gap-3">
+    <span>© 2026 Dragan Balatinac</span>
+    <span>Hand-built with Tailwind. No tracking.</span>
+  </div>
+</footer>
+
+<script src="../tailwind.shared.js"></script>
+</body>
+</html>

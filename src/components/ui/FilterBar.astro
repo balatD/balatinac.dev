@@ -1,0 +1,66 @@
+---
+interface Props {
+  tags: string[];
+  total: number;
+}
+
+const { tags, total } = Astro.props;
+const padded = String(total).padStart(2, '0');
+---
+
+<div data-filters class="border-y border-rule font-mono text-[13px] py-4">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap items-center gap-4 sm:gap-[18px]">
+    <span class="text-muted">Filter</span>
+    <button data-tag="all" data-on="true" class="bg-transparent border-0 p-0 cursor-pointer text-accent transition-colors hover:text-fg">All</button>
+    {tags.map((tag) => (
+      <button data-tag={tag.toLowerCase()} class="bg-transparent border-0 p-0 cursor-pointer text-muted transition-colors hover:text-fg">{tag}</button>
+    ))}
+    <span id="count" class="text-muted basis-full sm:basis-auto sm:ml-auto">{padded} / {padded}</span>
+  </div>
+</div>
+
+<script>
+  function initFilters() {
+    const filterRoot = document.querySelector('[data-filters]');
+    if (!filterRoot) return;
+    const list = document.getElementById('list');
+    const countEl = document.getElementById('count');
+    if (!list) return;
+    const items = [...list.querySelectorAll('li')];
+    const buttons = [...filterRoot.querySelectorAll('button[data-tag]')] as HTMLButtonElement[];
+
+    const total = items.length;
+    function setCount(shown: number) {
+      if (!countEl) return;
+      countEl.textContent =
+        String(shown).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        buttons.forEach((b) => {
+          b.classList.remove('text-accent');
+          b.classList.add('text-muted');
+          b.dataset.on = 'false';
+        });
+        btn.classList.remove('text-muted');
+        btn.classList.add('text-accent');
+        btn.dataset.on = 'true';
+
+        const tag = btn.dataset.tag;
+        let shown = 0;
+        items.forEach((li) => {
+          const tags = (li.dataset.tags || '').split(',');
+          const visible = tag === 'all' || tags.includes(tag!);
+          (li as HTMLElement).style.display = visible ? '' : 'none';
+          if (visible) shown++;
+        });
+        setCount(shown);
+      });
+    });
+
+    setCount(total);
+  }
+
+  document.addEventListener('astro:page-load', initFilters);
+</script>

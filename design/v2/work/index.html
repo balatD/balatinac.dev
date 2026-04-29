@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Selected Work — Dragan Balatinac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="../site.css" />
+</head>
+<body data-screen-label="Selected Work">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<a class="corner-mark" href="../Portfolio.html" aria-label="Dragan Balatinac — home">
+  <span class="letters" aria-hidden="true"><span>D</span><span>r</span><span>a</span><span>g</span><span>a</span><span>n</span><span>&nbsp;</span><span>B</span><span>a</span><span>l</span><span>a</span><span>t</span><span>i</span><span>n</span><span>a</span><span>c</span></span>
+</a>
+
+<header class="nav" id="site-nav">
+  <div class="wrap">
+    <nav class="links" aria-label="Primary">
+      <a href="../Portfolio.html#about">About</a>
+      <a href="index.html" class="active" aria-current="page">Work</a>
+      <a href="../blog/index.html">Writing</a>
+      <a href="../Portfolio.html#contact">Contact</a>
+    </nav>
+    <div class="controls">
+      <button id="lang-toggle" class="lang" aria-label="Switch language"><span class="now">EN</span></button>
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="display:none">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="wrap">
+    <a href="../Portfolio.html">Home</a>
+    <span class="sep">/</span>
+    <span aria-current="page">Selected Work</span>
+  </div>
+</div>
+
+<header class="page-header" id="main">
+  <div class="wrap">
+    <p class="label">Selected work · 2023 — 2026</p>
+    <h1>Things I've <span class="accent">built</span>, broken, and shipped.</h1>
+    <p>Backend platforms, custom CMS work, and the DevOps glue that holds them together.</p>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="wrap">
+    <span class="label">Filter</span>
+    <button class="on" data-tag="all">All</button>
+    <button data-tag="typo3">TYPO3</button>
+    <button data-tag="php">PHP</button>
+    <button data-tag="devops">DevOps</button>
+    <button data-tag="api">API</button>
+    <span class="count" id="count">04 / 04</span>
+  </div>
+</div>
+
+<section class="list-section">
+  <div class="wrap">
+    <ul class="list" id="list">
+      <li data-tags="typo3,php">
+        <a class="row" href="multi-site-typo3.html">
+          <div>
+            <div class="ttl">Multi-site TYPO3 Platform</div>
+            <div class="desc">Four legacy sites consolidated into a single TYPO3 v13 instance. Shared content elements, role-based editorial flows, zero-downtime cutover.</div>
+          </div>
+          <div class="meta">2025</div>
+        </a>
+      </li>
+      <li data-tags="typo3,api">
+        <a class="row" href="#">
+          <div>
+            <div class="ttl">Headless Content API</div>
+            <div class="desc">REST + GraphQL on top of TYPO3 powering a Next.js frontend. Edge caching, signed previews, sub-100&nbsp;ms reads on busy paths.</div>
+          </div>
+          <div class="meta">2024</div>
+        </a>
+      </li>
+      <li data-tags="devops,php">
+        <a class="row" href="#">
+          <div>
+            <div class="ttl">GitLab → Coolify Deploy Bridge</div>
+            <div class="desc">Self-built CI bridge that turns merge requests into reviewable preview deployments on Coolify, with auto-teardown and status pings.</div>
+          </div>
+          <div class="meta">2024</div>
+        </a>
+      </li>
+      <li data-tags="php,typo3">
+        <a class="row" href="#">
+          <div>
+            <div class="ttl">Scheduled Import Service</div>
+            <div class="desc">Long-running PHP worker that ingests partner XML feeds, normalises records, and writes deltas into TYPO3. Idempotent, observable, boring.</div>
+          </div>
+          <div class="meta">2023</div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Dragan Balatinac</span>
+    <span>Hand-built. No tracking.</span>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  function setTheme(mode) {
+    root.setAttribute("data-theme", mode);
+    document.getElementById("icon-sun").style.display = mode === "dark" ? "block" : "none";
+    document.getElementById("icon-moon").style.display = mode === "dark" ? "none" : "block";
+    try { localStorage.setItem("theme", mode); } catch(e) {}
+  }
+  (function init() {
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch(e) {}
+    if (saved) { setTheme(saved); return; }
+    const prefDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(prefDark ? "dark" : "light");
+  })();
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+  document.getElementById("lang-toggle").addEventListener("click", (e) => {
+    const btn = e.currentTarget;
+    const cur = btn.querySelector(".now");
+    cur.textContent = cur.textContent === "EN" ? "DE" : "EN";
+  });
+
+  /* Sticky-nav scrolled state */
+  (function navScroll(){
+    const nav = document.getElementById("site-nav");
+    if (!nav) return;
+    const upd = () => nav.classList.toggle("scrolled", window.scrollY > 8);
+    upd();
+    window.addEventListener("scroll", upd, { passive: true });
+  })();
+
+  const items = [...document.querySelectorAll("#list li")];
+  const countEl = document.getElementById("count");
+  document.querySelectorAll(".filters button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filters button").forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      const tag = btn.dataset.tag;
+      let shown = 0;
+      items.forEach(li => {
+        const tags = (li.dataset.tags || "").split(",");
+        const visible = tag === "all" || tags.includes(tag);
+        li.style.display = visible ? "" : "none";
+        if (visible) shown++;
+      });
+      countEl.textContent = String(shown).padStart(2, "0") + " / " + String(items.length).padStart(2, "0");
+    });
+  });
+</script>
+
+</body>
+</html>

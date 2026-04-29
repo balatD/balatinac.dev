@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dragan Balatinac — Backend Engineer (Tailwind)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+  tailwind.config = {
+    darkMode: ['class', '[data-theme="dark"]'],
+    theme: {
+      extend: {
+        colors: {
+          bg:     'var(--bg)',
+          fg:     'var(--fg)',
+          muted:  'var(--muted)',
+          rule:   'var(--rule)',
+          accent: 'var(--accent)',
+        },
+        fontFamily: {
+          sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+          mono: ['"Space Mono"', 'ui-monospace', 'monospace'],
+        },
+        maxWidth: { wrap: '880px' },
+      },
+    },
+  };
+</script>
+<link rel="stylesheet" href="tailwind.shared.css" />
+</head>
+
+<body class="bg-bg text-fg font-sans antialiased leading-relaxed text-[17px]">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- Ambient background blobs -->
+<div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden" aria-hidden="true">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" class="w-full h-full block">
+    <ellipse class="blob a" cx="260" cy="220" rx="320" ry="260"
+             style="fill: var(--accent); opacity: .06; filter: blur(40px);"></ellipse>
+    <ellipse class="blob b" cx="940" cy="320" rx="360" ry="280"
+             style="fill: var(--fg); opacity: .05; filter: blur(40px);"></ellipse>
+    <ellipse class="blob c" cx="640" cy="680" rx="420" ry="240"
+             style="fill: var(--accent); opacity: .04; filter: blur(40px);"></ellipse>
+  </svg>
+</div>
+
+<!-- Corner wordmark -->
+<a class="corner-mark fixed top-6 left-7 z-[60] inline-block overflow-hidden py-1 font-mono text-[12px] font-semibold tracking-wider leading-none text-fg sm:top-4 sm:left-4 sm:text-[11px] md:top-6 md:left-7 md:text-[12px]"
+   href="#" aria-label="Dragan Balatinac — home">
+  <span class="letters inline-flex" aria-hidden="true">
+    <span>D</span><span>r</span><span>a</span><span>g</span><span>a</span><span>n</span><span>&nbsp;</span><span>B</span><span>a</span><span>l</span><span>a</span><span>t</span><span>i</span><span>n</span><span>a</span><span>c</span>
+  </span>
+</a>
+
+<!-- Floating nav -->
+<header id="site-nav" class="fixed top-3 sm:top-3 md:top-[18px] left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-16px)]">
+  <div data-nav-bg
+       class="relative flex items-stretch p-[4px_6px] backdrop-blur-[18px] backdrop-saturate-150 transition-colors duration-200"
+       style="background: color-mix(in oklab, var(--bg) 55%, transparent);">
+    <nav id="nav-links" class="flex items-center font-mono text-[11px] sm:text-[11px] md:text-[12px] uppercase tracking-[0.08em]" aria-label="Primary">
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors duration-200" href="#about">About</a>
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors duration-200" href="#work">Work</a>
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors duration-200" href="#writing">Writing</a>
+      <a class="nav-link px-3 py-2.5 md:px-[18px] md:py-3 text-muted hover:text-fg transition-colors duration-200" href="#contact">Contact</a>
+    </nav>
+    <div class="flex items-stretch ml-1 border-l" style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);">
+      <button id="lang-toggle"
+              class="lang-btn relative w-[38px] min-w-[38px] md:w-11 md:min-w-[44px] px-2 md:px-3 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg cursor-pointer transition-colors"
+              aria-label="Switch language">
+        <span class="now">EN</span>
+      </button>
+      <button id="theme-toggle"
+              class="px-2 md:px-3 min-w-[38px] md:min-w-[44px] inline-flex items-center justify-center text-muted hover:text-fg cursor-pointer transition-colors border-l"
+              style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);"
+              aria-label="Toggle theme">
+        <svg id="icon-sun" class="w-[15px] h-[15px] transition-transform duration-300 hover:rotate-[20deg] hidden"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg id="icon-moon" class="w-[15px] h-[15px] transition-transform duration-300 hover:rotate-[20deg]"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="relative pt-[140px] pb-20 sm:pt-[160px] sm:pb-24 md:pt-[200px] md:pb-[140px]">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <p class="tick inline-flex items-center gap-2.5 m-0 mb-6 sm:mb-7 font-mono text-[13px] tracking-wide text-accent">
+        Hello — I'm Dragan.
+      </p>
+      <h1 class="h1-hero font-medium leading-[1.05] tracking-[-0.035em] m-0 mb-7 sm:mb-8 text-balance text-fg">
+        Backend engineer building <span class="text-accent">quiet, reliable</span> systems with TYPO3, PHP, <em class="not-italic text-muted">and the DevOps glue around them.</em>
+      </h1>
+      <p class="text-[18px] sm:text-[19px] leading-[1.55] text-muted m-0 mb-8 sm:mb-9 max-w-[56ch] text-pretty">
+        Based in Germany. This is where I keep my work, my notes, and the occasional opinion about why the boring choice is usually the right one.
+      </p>
+      <div class="flex flex-wrap gap-x-6 gap-y-4 font-mono text-[14px]">
+        <a class="cta-link inline-flex items-center gap-2 pb-1 text-fg border-b border-fg hover:text-accent hover:border-accent" href="#work">See the work →</a>
+        <a class="cta-link inline-flex items-center gap-2 pb-1 text-muted border-b border-rule hover:text-accent hover:border-accent" href="#writing">Read the notes</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-14 sm:py-16 md:py-20 border-t border-rule">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <p class="font-mono text-[13px] text-muted m-0 mb-7 md:mb-8">About</p>
+      <p class="text-[17px] leading-[1.7] text-fg max-w-[60ch] text-pretty m-0 mb-[18px]">
+        I've spent the last decade in the unglamorous middle of the web — schemas, editorial workflows, deployment pipelines, and the hundred small choices that decide whether a CMS is a tool or a tax.
+      </p>
+      <p class="text-[17px] leading-[1.7] text-muted max-w-[60ch] text-pretty m-0">
+        Currently leading backend on a multi-site TYPO3 v13 platform, self-hosting ~30 services on a single VPS with Coolify, and slowly migrating my opinions into writing.
+      </p>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="py-14 sm:py-16 md:py-20 border-t border-rule">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <p class="font-mono text-[13px] text-muted m-0 mb-7 md:mb-8">Selected work</p>
+      <ul class="list-none p-0 m-0 divide-y divide-rule" id="work-list">
+        <li>
+          <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group" href="work/multi-site-typo3.html">
+            <div>
+              <div class="text-[17px] font-medium leading-snug text-balance">Multi-site TYPO3 Platform</div>
+              <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">Four legacy sites consolidated into one TYPO3 v13 instance. Shared elements, role-based workflows, zero-downtime cutover.</div>
+            </div>
+            <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">2025</div>
+          </a>
+        </li>
+        <li>
+          <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group" href="work/index.html">
+            <div>
+              <div class="text-[17px] font-medium leading-snug text-balance">Headless Content API</div>
+              <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">REST + GraphQL on top of TYPO3 powering a Next.js frontend. Edge caching, signed previews, sub-100ms reads.</div>
+            </div>
+            <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">2024</div>
+          </a>
+        </li>
+        <li>
+          <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group" href="work/index.html">
+            <div>
+              <div class="text-[17px] font-medium leading-snug text-balance">GitLab → Coolify Deploy Bridge</div>
+              <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">Self-built CI bridge turning merge requests into reviewable preview deploys, with auto-teardown and status pings.</div>
+            </div>
+            <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">2024</div>
+          </a>
+        </li>
+        <li>
+          <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group" href="work/index.html">
+            <div>
+              <div class="text-[17px] font-medium leading-snug text-balance">Scheduled Import Service</div>
+              <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">PHP worker that ingests partner XML feeds, normalises records, and writes deltas into TYPO3. Idempotent. Boring.</div>
+            </div>
+            <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">2023</div>
+          </a>
+        </li>
+      </ul>
+      <p class="mt-7 font-mono text-[13px]">
+        <a class="text-muted hover:text-accent after:content-['_→']" href="work/index.html">All work</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section id="writing" class="py-14 sm:py-16 md:py-20 border-t border-rule">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <p class="font-mono text-[13px] text-muted m-0 mb-7 md:mb-8">Writing</p>
+      <ul class="list-none p-0 m-0 divide-y divide-rule">
+        <li>
+          <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group" href="blog/typo3-v11-to-v13.html">
+            <div>
+              <div class="text-[17px] font-medium leading-snug text-balance">Surviving a TYPO3 v11 → v13 jump without downtime</div>
+              <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">Notes on the upgrade path that actually worked: blue/green database, extension audit, and the four hours I'll never get back.</div>
+            </div>
+            <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">Apr 2026</div>
+          </a>
+        </li>
+        <li>
+          <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group" href="blog/index.html">
+            <div>
+              <div class="text-[17px] font-medium leading-snug text-balance">Coolify on a single VPS: my home for ~30 services</div>
+              <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">Why I left managed PaaS, what broke first, and the GitLab CI snippet that quietly does 80% of my deployments.</div>
+            </div>
+            <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">Mar 2026</div>
+          </a>
+        </li>
+        <li>
+          <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 hover:text-accent transition-colors group" href="blog/index.html">
+            <div>
+              <div class="text-[17px] font-medium leading-snug text-balance">Boring PHP: when the framework is the bug</div>
+              <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">A short defense of plain classes, dependency containers I can read, and stack traces that point at my own code.</div>
+            </div>
+            <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">Feb 2026</div>
+          </a>
+        </li>
+      </ul>
+      <p class="mt-7 font-mono text-[13px]">
+        <a class="text-muted hover:text-accent after:content-['_→']" href="blog/index.html">All writing</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="py-14 sm:py-16 md:py-20 border-t border-rule">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <p class="font-mono text-[13px] text-muted m-0 mb-7 md:mb-8">Contact</p>
+      <ul class="list-none p-0 m-0">
+        <li class="grid grid-cols-[70px_1fr] sm:grid-cols-[80px_1fr] gap-4 sm:gap-6 py-3 border-b border-rule text-[15px]">
+          <span class="font-mono text-[13px] text-muted">Email</span>
+          <a class="text-fg border-b border-muted hover:text-accent hover:border-accent transition-colors break-all sm:break-normal" href="mailto:hello@balatinac.dev">hello@balatinac.dev</a>
+        </li>
+        <li class="grid grid-cols-[70px_1fr] sm:grid-cols-[80px_1fr] gap-4 sm:gap-6 py-3 border-b border-rule text-[15px]">
+          <span class="font-mono text-[13px] text-muted">Code</span>
+          <a class="text-fg border-b border-muted hover:text-accent hover:border-accent transition-colors break-all sm:break-normal" href="https://github.com/balatD" target="_blank" rel="noopener">github.com/balatD</a>
+        </li>
+        <li class="grid grid-cols-[70px_1fr] sm:grid-cols-[80px_1fr] gap-4 sm:gap-6 py-3 text-[15px]">
+          <span class="font-mono text-[13px] text-muted">Network</span>
+          <a class="text-fg border-b border-muted hover:text-accent hover:border-accent transition-colors break-all sm:break-normal" href="#">linkedin.com/in/balatinac</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="py-10 pb-14 border-t border-rule font-mono text-[12px] sm:text-[13px] text-muted">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex justify-between flex-wrap gap-3">
+    <span>© 2026 Dragan Balatinac</span>
+    <span>Hand-built with Tailwind. No tracking.</span>
+  </div>
+</footer>
+
+<script src="tailwind.shared.js"></script>
+
+</body>
+</html>

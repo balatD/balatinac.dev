@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Multi-site TYPO3 Platform — Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="../site.css" />
+<style>
+  /* Article-specific styles */
+  .meta-strip {
+    padding: 12px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .meta-strip .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .meta-strip span strong {
+    color: var(--fg);
+    font-weight: 500;
+    font-family: "Space Grotesk", sans-serif;
+    margin-left: 6px;
+  }
+
+  article.case {
+    padding: 56px 0 80px;
+  }
+  article.case .wrap > * {
+    max-width: 60ch;
+  }
+  article.case h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin: 56px 0 18px;
+  }
+  article.case h2:first-child { margin-top: 0; }
+  article.case h2 .num {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-right: 12px;
+  }
+  article.case h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    margin: 32px 0 8px;
+    color: var(--fg);
+  }
+  article.case p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--fg);
+    margin: 0 0 16px;
+    text-wrap: pretty;
+  }
+  article.case p .muted, article.case p.muted { color: var(--muted); }
+  article.case ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+  }
+  article.case ul li {
+    padding: 8px 0 8px 22px;
+    position: relative;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--fg);
+    border-bottom: 1px solid var(--rule);
+  }
+  article.case ul li:first-child { border-top: 1px solid var(--rule); }
+  article.case ul li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  article.case .pull {
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 18px;
+    margin: 28px 0;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--fg);
+    font-style: italic;
+  }
+  article.case pre {
+    background: transparent;
+    color: var(--fg);
+    padding: 16px 0;
+    margin: 0 0 22px;
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  article.case pre .c { color: var(--muted); }
+  article.case pre .a { color: var(--accent); }
+
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 24px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin: 0 0 24px;
+  }
+  .figures .big {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .figures .lbl {
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .next {
+    border-top: 1px solid var(--rule);
+  }
+  .next a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 28px 0;
+    border: 0;
+    transition: color .15s;
+  }
+  .next a:hover { color: var(--accent); }
+  .next .label {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .next .ttl {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .next .arrow {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+    transition: transform .15s, color .15s;
+  }
+  .next a:hover .arrow { transform: translateX(4px); color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .figures { grid-template-columns: 1fr; gap: 16px; }
+    article.case h2 { font-size: 20px; }
+  }
+</style>
+</head>
+<body data-screen-label="Case Study — Multi-site TYPO3">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../Portfolio.html"><span class="dot"></span><span>Dragan Balatinac</span></a>
+    <nav class="links">
+      <a href="../Portfolio.html#about">About</a>
+      <a href="index.html" class="active">Work</a>
+      <a href="../blog/index.html">Writing</a>
+      <a href="../Portfolio.html#contact">Contact</a>
+    </nav>
+    <div class="controls">
+      <button id="lang-toggle"><span>EN</span></button>
+      <button id="theme-toggle" class="icon-btn">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="display:none">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="wrap">
+    <a href="../Portfolio.html">Home</a>
+    <span class="sep">/</span>
+    <a href="index.html">Work</a>
+    <span class="sep">/</span>
+    <span>Multi-site TYPO3</span>
+  </div>
+</div>
+
+<header class="page-header">
+  <div class="wrap">
+    <p class="label">Case study · 01 / 04</p>
+    <h1>Four legacy sites, one <span class="accent">TYPO3</span> instance.</h1>
+    <p>A nine-month consolidation into a single TYPO3 v13 platform with shared content elements, role-based editorial flows, and a CI pipeline that quietly handles content sync between staging and production.</p>
+  </div>
+</header>
+
+<section class="meta-strip">
+  <div class="wrap">
+    <span>Year<strong>2025</strong></span>
+    <span>Duration<strong>9 months</strong></span>
+    <span>Role<strong>Lead Backend</strong></span>
+    <span>Team<strong>3 devs · 2 editors</strong></span>
+    <span>Status<strong>Live</strong></span>
+  </div>
+</section>
+
+<article class="case">
+  <div class="wrap">
+    <h2><span class="num">01</span>Context</h2>
+    <p>The client ran four public-facing sites built between 2014 and 2019 — each on a different TYPO3 major, each with its own quirks and its own editor handbook. Three of the four shared more than 60% of their content by volume but had drifted to four slightly different shapes. Editorial cycles were duplicated, redirects were folklore, and security updates landed on whichever site had a developer paying attention that month.</p>
+    <p>The brief was simple. <span class="muted">One platform. One editorial workflow. No data loss. No downtime past office hours.</span></p>
+
+    <h2><span class="num">02</span>The problem</h2>
+    <p>The hard part was never the engineering. It was the politics of four editorial teams who had each spent five years curating their own little fiefdom of templates and "we always do it this way" muscle memory.</p>
+    <ul>
+      <li>Four schemas to reconcile, three of which thought they were canonical.</li>
+      <li>~14,000 content elements with image references pointing at four different storage layouts.</li>
+      <li>A redirect graph nobody had a complete picture of.</li>
+      <li>Editors who, reasonably, did not want to learn a new tool while doing their day job.</li>
+    </ul>
+    <p class="pull">The migration was 20% TYPO3, 80% spreadsheet diplomacy.</p>
+
+    <h2><span class="num">03</span>Approach</h2>
+
+    <h3>Audit before code</h3>
+    <p>The first six weeks were spent not writing TYPO3 code. We built an extension audit spreadsheet — every plugin, every TypoScript include, every custom backend module — and graded each as <em>keep</em>, <em>port</em>, <em>replace</em>, or <em>delete on sight</em>. About 40% of installed extensions were "delete on sight."</p>
+
+    <h3>Shared content elements</h3>
+    <p>Instead of porting four sets of templates we collapsed them into one library of ~24 content elements. Each element accepted the same fields no matter which site it was rendered on, and per-site styling lived in a single SCSS partial keyed off the site root. Editors got one handbook.</p>
+
+    <h3>Blue/green database, one-line cutover</h3>
+    <p>We ran the new platform alongside the old ones for three weeks against a replicated database, mirrored writes through a thin shim, and flipped a single Nginx upstream when the parity report read all-zeros for 48 hours.</p>
+
+<pre><span class="c"># cutover.sh — what it actually came down to</span>
+<span class="a">ssh</span> edge-01 "ln -sfn /etc/nginx/upstreams/v13 /etc/nginx/upstreams/active &amp;&amp; nginx -s reload"
+<span class="a">ssh</span> edge-02 "ln -sfn /etc/nginx/upstreams/v13 /etc/nginx/upstreams/active &amp;&amp; nginx -s reload"
+<span class="c"># total downtime: 0.4s per edge, no in-flight requests dropped</span></pre>
+
+    <h2><span class="num">04</span>Stack &amp; decisions</h2>
+    <ul>
+      <li><strong>TYPO3 v13</strong> over staying on v11 LTS. The upgrade window only gets harder.</li>
+      <li><strong>PHP 8.3</strong> on FPM, behind Nginx. Boring.</li>
+      <li><strong>MariaDB 10.11</strong> with read replicas for the public site, primary-only for the backend.</li>
+      <li><strong>Docker + Coolify</strong> for staging — every merge request gets its own preview URL.</li>
+      <li><strong>GitLab CI</strong> for build, test, and the content-sync pipeline that pushes editorial changes from staging to production on a 5-minute schedule.</li>
+    </ul>
+
+    <h3>Things we said no to</h3>
+    <p>No headless frontend. No microservices. No event bus. No "while we're at it, let's also rebuild search." The platform's job was to be the boring foundation everything else could rely on; it earns its keep by not being interesting.</p>
+
+    <h2><span class="num">05</span>Results</h2>
+
+    <div class="figures">
+      <div><div class="big">0</div><div class="lbl">Incidents in launch week</div></div>
+      <div><div class="big">−68%</div><div class="lbl">Editor time per update</div></div>
+      <div><div class="big">~0.4s</div><div class="lbl">Total cutover downtime</div></div>
+    </div>
+
+    <p>Six months in, the platform handles all four properties on a single application instance with a quarter of the previous combined infrastructure cost. Editorial cycles that used to require three handoffs are a single ticket. The on-call rotation went from "rotating between four people who each knew one site" to "anyone can pick it up because it's the same system."</p>
+
+    <h2><span class="num">06</span>Lessons</h2>
+    <ul>
+      <li><strong>The boring choices compound.</strong> Picking the dull option at every fork meant we shipped on time and the runbook fit on one page.</li>
+      <li><strong>Editors are users.</strong> The most valuable hour of the project was sitting next to two editors and watching them work.</li>
+      <li><strong>The audit spreadsheet earned its keep.</strong> Every "wait, why is this here?" moment six months later had an answer in row 314.</li>
+      <li><strong>Redirects deserve their own project.</strong> Treating them as a chore is how you ship a launch with broken Google results.</li>
+    </ul>
+  </div>
+</article>
+
+<nav class="next">
+  <div class="wrap">
+    <a href="#">
+      <div>
+        <div class="label">Next · 02 / 04</div>
+        <div class="ttl">Headless Content API</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+  </div>
+</nav>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Dragan Balatinac</span>
+    <span>Hand-built. No tracking.</span>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  function setTheme(mode) {
+    root.setAttribute("data-theme", mode);
+    document.getElementById("icon-sun").style.display = mode === "dark" ? "block" : "none";
+    document.getElementById("icon-moon").style.display = mode === "dark" ? "none" : "block";
+    try { localStorage.setItem("theme", mode); } catch(e) {}
+  }
+  (function init() {
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch(e) {}
+    if (saved) { setTheme(saved); return; }
+    const prefDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(prefDark ? "dark" : "light");
+  })();
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+  document.getElementById("lang-toggle").addEventListener("click", () => {
+    const span = document.querySelector("#lang-toggle span");
+    span.textContent = span.textContent === "EN" ? "DE" : "EN";
+  });
+</script>
+
+</body>
+</html>

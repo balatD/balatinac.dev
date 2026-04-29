@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dragan Balatinac — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+<style>
+  :root {
+    --bg: #f4f2ec;
+    --fg: #111;
+    --muted: #888580;
+    --rule: #e3e0d8;
+    --accent: #ff4500;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e0e0e;
+    --fg: #ececec;
+    --muted: #777570;
+    --rule: #1f1f1f;
+    --accent: #ff5a1a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: "Space Mono", ui-monospace, monospace; }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--muted);
+    transition: color .15s, border-color .15s;
+  }
+  a:hover { color: var(--accent); border-color: var(--accent); }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* CORNER WORDMARK (subtle, fixed top-left, with playful hover) */
+  .corner-mark {
+    position: fixed;
+    top: 24px;
+    left: 28px;
+    z-index: 60;
+    color: var(--fg);
+    border: 0;
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    display: inline-block;
+    overflow: hidden;
+    padding: 4px 0;
+  }
+  .corner-mark .letters {
+    display: inline-flex;
+  }
+  .corner-mark .letters span {
+    display: inline-block;
+    transition: transform .42s cubic-bezier(.34, 1.56, .64, 1), color .42s ease;
+    will-change: transform, color;
+  }
+  /* Wave bounce on hover, each letter slightly delayed */
+  .corner-mark:hover .letters span {
+    transform: translateY(-6px);
+    color: var(--accent);
+  }
+  .corner-mark .letters span:nth-child(1)  { transition-delay: 0ms;   }
+  .corner-mark .letters span:nth-child(2)  { transition-delay: 25ms;  }
+  .corner-mark .letters span:nth-child(3)  { transition-delay: 50ms;  }
+  .corner-mark .letters span:nth-child(4)  { transition-delay: 75ms;  }
+  .corner-mark .letters span:nth-child(5)  { transition-delay: 100ms; }
+  .corner-mark .letters span:nth-child(6)  { transition-delay: 125ms; }
+  .corner-mark .letters span:nth-child(7)  { transition-delay: 150ms; }
+  .corner-mark .letters span:nth-child(8)  { transition-delay: 175ms; }
+  .corner-mark .letters span:nth-child(9)  { transition-delay: 200ms; }
+  .corner-mark .letters span:nth-child(10) { transition-delay: 225ms; }
+  .corner-mark .letters span:nth-child(11) { transition-delay: 250ms; }
+  .corner-mark .letters span:nth-child(12) { transition-delay: 275ms; }
+  .corner-mark .letters span:nth-child(13) { transition-delay: 300ms; }
+  .corner-mark .letters span:nth-child(14) { transition-delay: 325ms; }
+  .corner-mark .letters span:nth-child(15) { transition-delay: 350ms; }
+  .corner-mark .letters span:nth-child(16) { transition-delay: 375ms; }
+  /* an underline that swipes in left→right on hover */
+  .corner-mark::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform .45s cubic-bezier(.7,0,.2,1);
+  }
+  .corner-mark:hover::after { transform: scaleX(1); }
+
+  /* NAV — no shape, just blurred backdrop behind links */
+  .nav {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    padding: 0;
+    width: auto;
+  }
+  .nav .wrap {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    padding: 4px 6px;
+    border: 0;
+    border-radius: 0;
+    background: color-mix(in oklab, var(--bg) 55%, transparent);
+    backdrop-filter: saturate(160%) blur(18px);
+    -webkit-backdrop-filter: saturate(160%) blur(18px);
+    box-shadow: none;
+    clip-path: none;
+    overflow: visible;
+    transition: background .25s ease;
+  }
+  .nav.scrolled .wrap {
+    background: color-mix(in oklab, var(--bg) 70%, transparent);
+  }
+  .nav .wrap::before { display: none; }
+
+  .nav .brand { display: none; }
+
+  .nav .links {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0;
+  }
+  .nav .links a {
+    position: relative;
+    border: 0;
+    color: var(--muted);
+    padding: 12px 18px;
+    z-index: 1;
+    transition: color .25s ease;
+    overflow: hidden;
+  }
+  /* sliding text — the word translates up slightly on hover, accent dot animates in */
+  .nav .links a::before {
+    content: "•";
+    position: absolute;
+    left: 50%;
+    bottom: 4px;
+    transform: translate(-50%, 8px);
+    color: var(--accent);
+    font-size: 12px;
+    line-height: 1;
+    opacity: 0;
+    transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .25s ease;
+    pointer-events: none;
+  }
+  .nav .links a:hover { color: var(--fg); }
+  .nav .links a:hover::before,
+  .nav .links a.active::before {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  .nav .links a.active { color: var(--fg); }
+
+  /* keep the indicator hidden — we replaced it with the dot animation above */
+  .nav .links .indicator { display: none; }
+
+  .nav .controls {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    padding: 0;
+    margin: 0 0 0 4px;
+    border-left: 1px solid color-mix(in oklab, var(--fg) 12%, transparent);
+  }
+  .nav .controls button {
+    appearance: none;
+    background: transparent;
+    color: var(--muted);
+    border: 0;
+    padding: 0 14px;
+    height: auto;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Space Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 0;
+    transition: color .15s, background .15s;
+  }
+  .nav .controls button + button {
+    border-left: 1px solid color-mix(in oklab, var(--fg) 12%, transparent);
+  }
+  .nav .controls button:hover {
+    color: var(--fg);
+    background: color-mix(in oklab, var(--fg) 6%, transparent);
+  }
+  .nav .controls .icon-btn { padding: 0 12px; }
+  .nav .controls .icon-btn svg { width: 15px; height: 15px; display: block; transition: transform .4s cubic-bezier(.2,.85,.2,1); }
+  .nav .controls .icon-btn:hover svg { transform: rotate(20deg); }
+
+  .nav .lang {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    width: 44px;
+  }
+  .nav .lang span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition: transform .35s cubic-bezier(.2,.85,.2,1), opacity .25s;
+  }
+  .nav .lang span.out { transform: translateY(-100%); opacity: 0; }
+  .nav .lang span.in  { transform: translateY(100%);  opacity: 0; }
+
+  /* AMBIENT BACKGROUND */
+  .ambient {
+    position: fixed; inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .ambient svg { width: 100%; height: 100%; display: block; }
+  .ambient .blob {
+    fill: var(--accent);
+    opacity: 0.06;
+    filter: blur(40px);
+    transform-origin: center;
+    animation: drift 28s ease-in-out infinite alternate;
+  }
+  .ambient .blob.b {
+    opacity: 0.05;
+    fill: var(--fg);
+    animation-duration: 38s;
+    animation-delay: -8s;
+  }
+  .ambient .blob.c {
+    opacity: 0.04;
+    animation-duration: 46s;
+    animation-delay: -16s;
+  }
+  @keyframes drift {
+    0%   { transform: translate(0,    0)    scale(1);    }
+    25%  { transform: translate(6%,  -4%)   scale(1.08); }
+    50%  { transform: translate(-4%,  6%)   scale(0.95); }
+    75%  { transform: translate(-7%, -3%)   scale(1.05); }
+    100% { transform: translate(5%,   5%)   scale(1.02); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ambient .blob { animation: none; }
+  }
+
+  /* HERO */
+  .hero {
+    padding: 200px 0 140px;
+    position: relative;
+  }
+  .hero .greeting {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--accent);
+    margin: 0 0 28px;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero .greeting::before {
+    content: "";
+    width: 28px; height: 1px;
+    background: var(--accent);
+  }
+  .hero h1 {
+    font-weight: 500;
+    font-size: clamp(40px, 7vw, 76px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    margin: 0 0 32px;
+    text-wrap: balance;
+    color: var(--fg);
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero h1 em { font-style: normal; color: var(--muted); }
+  .hero .lede {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0 0 36px;
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+  .hero .cta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: "Space Mono", monospace;
+    font-size: 14px;
+  }
+  .hero .cta a {
+    border: 0;
+    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--fg);
+    transition: color .15s, border-color .15s, gap .15s;
+  }
+  .hero .cta a:hover { color: var(--accent); border-color: var(--accent); gap: 14px; }
+  .hero .cta a.ghost { color: var(--muted); border-color: var(--rule); }
+  .hero .cta a.ghost:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* SECTION */
+  section {
+    padding: 80px 0;
+  }
+  section + section {
+    border-top: 1px solid var(--rule);
+  }
+  .section-label {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 32px;
+  }
+
+  /* ABOUT */
+  .about p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--fg);
+    margin: 0 0 18px;
+    max-width: 60ch;
+    text-wrap: pretty;
+  }
+  .about p:last-child { margin-bottom: 0; }
+  .about .muted { color: var(--muted); }
+
+  /* LIST (work + writing) */
+  .list { list-style: none; padding: 0; margin: 0; }
+  .list li + li { border-top: 1px solid var(--rule); }
+  .list a.row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    padding: 20px 0;
+    border: 0;
+    transition: color .15s;
+  }
+  .list a.row:hover { color: var(--accent); }
+  .list a.row:hover .meta { color: var(--accent); }
+  .list .ttl {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+  .list .desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-wrap: pretty;
+  }
+  .list .meta {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: color .15s;
+  }
+
+  .more {
+    margin-top: 28px;
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+  }
+  .more a {
+    border: 0;
+    color: var(--muted);
+  }
+  .more a:hover { color: var(--accent); }
+  .more a::after { content: " →"; }
+
+  /* CONTACT */
+  .contact .lines {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .contact .lines li {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 15px;
+  }
+  .contact .lines li:last-child { border-bottom: 0; }
+  .contact .lines .k {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 0 60px;
+    border-top: 1px solid var(--rule);
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  footer .wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  @media (max-width: 720px) {
+    .corner-mark { top: 16px; left: 16px; font-size: 11px; }
+  }
+  @media (max-width: 600px) {
+    .nav { top: 10px; }
+    .nav .links a { padding: 10px 12px; font-size: 11px; }
+    .nav .controls button { padding: 0 10px; font-size: 10.5px; min-width: 38px; }
+    .nav .lang { width: 38px; }
+    .hero { padding: 80px 0; }
+    .hero h1 { font-size: 26px; }
+    .list a.row { grid-template-columns: 1fr; gap: 4px; }
+    .list .meta { font-size: 12px; }
+    .contact .lines li { grid-template-columns: 70px 1fr; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <ellipse class="blob a" cx="260" cy="220" rx="320" ry="260"></ellipse>
+    <ellipse class="blob b" cx="940" cy="320" rx="360" ry="280"></ellipse>
+    <ellipse class="blob c" cx="640" cy="680" rx="420" ry="240"></ellipse>
+  </svg>
+</div>
+
+<a class="corner-mark" href="#" aria-label="Dragan Balatinac — home">
+  <span class="letters" aria-hidden="true"><span>D</span><span>r</span><span>a</span><span>g</span><span>a</span><span>n</span><span> </span><span>B</span><span>a</span><span>l</span><span>a</span><span>t</span><span>i</span><span>n</span><span>a</span><span>c</span></span>
+</a>
+
+<header class="nav" id="site-nav">
+  <div class="wrap">
+    <nav class="links" id="nav-links">
+      <span class="indicator" aria-hidden="true"></span>
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#writing">Writing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="controls">
+      <button id="lang-toggle" class="lang" title="Switch language" aria-label="Switch language">
+        <span class="now">EN</span>
+      </button>
+      <button id="theme-toggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="display:none">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="greeting">Hello — I'm Dragan.</p>
+      <h1>Backend engineer building <span class="accent">quiet, reliable</span> systems with TYPO3, PHP, <em>and the DevOps glue around them.</em></h1>
+      <p class="lede">Based in Germany. This is where I keep my work, my notes, and the occasional opinion about why the boring choice is usually the right one.</p>
+      <div class="cta">
+        <a href="#work">See the work →</a>
+        <a class="ghost" href="#writing">Read the notes</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="wrap">
+      <p class="section-label">About</p>
+      <p>I've spent the last decade in the unglamorous middle of the web — schemas, editorial workflows, deployment pipelines, and the hundred small choices that decide whether a CMS is a tool or a tax.</p>
+      <p class="muted">Currently leading backend on a multi-site TYPO3 v13 platform, self-hosting ~30 services on a single VPS with Coolify, and slowly migrating my opinions into writing.</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <p class="section-label">Selected work</p>
+      <ul class="list">
+        <li>
+          <a class="row" href="work/multi-site-typo3.html">
+            <div>
+              <div class="ttl">Multi-site TYPO3 Platform</div>
+              <div class="desc">Four legacy sites consolidated into one TYPO3 v13 instance. Shared elements, role-based workflows, zero-downtime cutover.</div>
+            </div>
+            <div class="meta">2025</div>
+          </a>
+        </li>
+        <li>
+          <a class="row" href="work/index.html">
+            <div>
+              <div class="ttl">Headless Content API</div>
+              <div class="desc">REST + GraphQL on top of TYPO3 powering a Next.js frontend. Edge caching, signed previews, sub-100ms reads.</div>
+            </div>
+            <div class="meta">2024</div>
+          </a>
+        </li>
+        <li>
+          <a class="row" href="work/index.html">
+            <div>
+              <div class="ttl">GitLab → Coolify Deploy Bridge</div>
+              <div class="desc">Self-built CI bridge turning merge requests into reviewable preview deploys, with auto-teardown and status pings.</div>
+            </div>
+            <div class="meta">2024</div>
+          </a>
+        </li>
+        <li>
+          <a class="row" href="work/index.html">
+            <div>
+              <div class="ttl">Scheduled Import Service</div>
+              <div class="desc">PHP worker that ingests partner XML feeds, normalises records, and writes deltas into TYPO3. Idempotent. Boring.</div>
+            </div>
+            <div class="meta">2023</div>
+          </a>
+        </li>
+      </ul>
+      <p class="more"><a href="work/index.html">All work</a></p>
+    </div>
+  </section>
+
+  <section id="writing">
+    <div class="wrap">
+      <p class="section-label">Writing</p>
+      <ul class="list">
+        <li>
+          <a class="row" href="blog/typo3-v11-to-v13.html">
+            <div>
+              <div class="ttl">Surviving a TYPO3 v11 → v13 jump without downtime</div>
+              <div class="desc">Notes on the upgrade path that actually worked: blue/green database, extension audit, and the four hours I'll never get back.</div>
+            </div>
+            <div class="meta">Apr 2026</div>
+          </a>
+        </li>
+        <li>
+          <a class="row" href="blog/index.html">
+            <div>
+              <div class="ttl">Coolify on a single VPS: my home for ~30 services</div>
+              <div class="desc">Why I left managed PaaS, what broke first, and the GitLab CI snippet that quietly does 80% of my deployments.</div>
+            </div>
+            <div class="meta">Mar 2026</div>
+          </a>
+        </li>
+        <li>
+          <a class="row" href="blog/index.html">
+            <div>
+              <div class="ttl">Boring PHP: when the framework is the bug</div>
+              <div class="desc">A short defense of plain classes, dependency containers I can read, and stack traces that point at my own code.</div>
+            </div>
+            <div class="meta">Feb 2026</div>
+          </a>
+        </li>
+      </ul>
+      <p class="more"><a href="blog/index.html">All writing</a></p>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <p class="section-label">Contact</p>
+      <ul class="lines">
+        <li><span class="k">Email</span><a href="mailto:hello@balatinac.dev">hello@balatinac.dev</a></li>
+        <li><span class="k">Code</span><a href="https://github.com/balatD" target="_blank" rel="noopener">github.com/balatD</a></li>
+        <li><span class="k">Network</span><a href="#">linkedin.com/in/balatinac</a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Dragan Balatinac</span>
+    <span>Hand-built. No tracking.</span>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  function setTheme(mode) {
+    root.setAttribute("data-theme", mode);
+    document.getElementById("icon-sun").style.display = mode === "dark" ? "block" : "none";
+    document.getElementById("icon-moon").style.display = mode === "dark" ? "none" : "block";
+    try { localStorage.setItem("theme", mode); } catch(e) {}
+  }
+  (function init() {
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch(e) {}
+    if (saved) { setTheme(saved); return; }
+    const prefDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(prefDark ? "dark" : "light");
+  })();
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+  document.getElementById("lang-toggle").addEventListener("click", (e) => {
+    const btn = e.currentTarget;
+    const cur = btn.querySelector(".now");
+    const nextText = cur.textContent === "EN" ? "DE" : "EN";
+    const next = document.createElement("span");
+    next.className = "in";
+    next.textContent = nextText;
+    btn.appendChild(next);
+    requestAnimationFrame(() => {
+      cur.classList.remove("now"); cur.classList.add("out");
+      requestAnimationFrame(() => {
+        next.classList.remove("in"); next.classList.add("now");
+      });
+    });
+    setTimeout(() => cur.remove(), 500);
+  });
+
+  /* Sticky-nav scrolled state */
+  (function navScroll(){
+    const nav = document.getElementById("site-nav");
+    if (!nav) return;
+    const upd = () => nav.classList.toggle("scrolled", window.scrollY > 8);
+    upd();
+    window.addEventListener("scroll", upd, { passive: true });
+  })();
+
+  /* Sliding indicator pill on nav links + scroll-spy */
+  (function navIndicator(){
+    const wrap = document.getElementById("nav-links");
+    if (!wrap) return;
+    const ind = wrap.querySelector(".indicator");
+    const links = [...wrap.querySelectorAll("a")];
+    let active = null;
+
+    function moveTo(el) {
+      if (!el) return;
+      const wr = wrap.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      ind.style.width = r.width + "px";
+      ind.style.transform = `translateX(${r.left - wr.left}px)`;
+    }
+    function showHover(el) {
+      wrap.classList.add("has-hover");
+      moveTo(el);
+    }
+    function clearHover() {
+      wrap.classList.remove("has-hover");
+      if (active) moveTo(active);
+      else ind.style.opacity = 0;
+    }
+
+    links.forEach(a => {
+      a.addEventListener("mouseenter", () => showHover(a));
+      a.addEventListener("focus",      () => showHover(a));
+    });
+    wrap.addEventListener("mouseleave", clearHover);
+    wrap.addEventListener("focusout",   clearHover);
+
+    const sectionFor = (a) => {
+      const href = a.getAttribute("href") || "";
+      if (!href.startsWith("#") || href === "#") return null;
+      return document.querySelector(href);
+    };
+    const map = links.map(a => ({ a, sec: sectionFor(a) })).filter(x => x.sec);
+
+    function spy() {
+      const y = window.scrollY + 140;
+      let cur = null;
+      for (const {a, sec} of map) {
+        if (sec.offsetTop <= y) cur = a;
+      }
+      if (cur !== active) {
+        if (active) active.classList.remove("active");
+        active = cur;
+        if (active) {
+          active.classList.add("active");
+          wrap.classList.add("has-active");
+          if (!wrap.classList.contains("has-hover")) moveTo(active);
+        } else {
+          wrap.classList.remove("has-active");
+          if (!wrap.classList.contains("has-hover")) ind.style.opacity = 0;
+        }
+      }
+    }
+    window.addEventListener("scroll", spy, { passive: true });
+    window.addEventListener("resize", () => { if (active) moveTo(active); });
+    spy();
+  })();
+</script>
+
+</body>
+</html>
