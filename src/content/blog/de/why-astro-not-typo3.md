@@ -1,6 +1,7 @@
 ---
 title: "Warum ich mein Portfolio mit Astro statt TYPO3 gebaut habe"
 description: "Ein TYPO3-Entwickler erklärt, warum er für seine eigene Seite einen Static Site Generator gewählt hat — und warum das kein Widerspruch ist."
+urlSlug: "warum-astro-statt-typo3"
 tags: ["astro", "portfolio", "typo3", "cms"]
 publishedAt: 2026-04-29
 readTime: "~8 Min."

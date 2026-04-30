@@ -1,54 +1,35 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
-import JsonLd from '../../components/layout/JsonLd.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/ui/Breadcrumbs.astro';
+import JsonLd from '../../../components/layout/JsonLd.astro';
 import { getCollection, render } from 'astro:content';
-import { getEnEntries, getDeMap } from '../../lib/content-helpers';
+import { buildDeMap, getDeSlug } from '../../../lib/content-helpers';
+import { t } from '../../../lib/i18n';
+
+const lang = 'en';
+export const prerender = true;
 
 export async function getStaticPaths() {
-  const all = await getCollection('blog');
-  const en = all.filter((p) => !p.id.startsWith('de/'));
-  return en.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const en = await getCollection('blog');
+  return en.map((post) => ({ params: { post: post.id }, props: { post } }));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-const all = await getCollection('blog');
-const allEn = getEnEntries(all).sort(
-  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()
-);
-const deMap = getDeMap(all);
-const de = deMap.get(post.id);
-
-let DeContent: any = null;
-if (de) {
-  const rendered = await render(de);
-  DeContent = rendered.Content;
-}
+const allEn = (await getCollection('blog')).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const dePosts = await getCollection('blogDe');
+const deMap = buildDeMap(dePosts);
+const deSlug = getDeSlug(post, deMap);
 
 const currentIndex = allEn.findIndex((p) => p.id === post.id);
 const nextPost = allEn[currentIndex + 1] || null;
-const nextDe = nextPost ? deMap.get(nextPost.id) : undefined;
 
-const pubDate = post.data.publishedAt;
-const dateStr = pubDate.toLocaleDateString('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
+const dateStr = post.data.publishedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const altLangUrl = `/blog/${deSlug}/`;
 ---
 
-<BaseLayout
-  title={post.data.title}
-  description={post.data.description}
-  activeNav="writing"
-  ogType="article"
-  publishedAt={post.data.publishedAt}
->
+<BaseLayout title={`${post.data.title} — Dragan Balatinac`} description={post.data.description} activeNav="writing" ogType="article" publishedAt={post.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
   <JsonLd schema={{
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -59,25 +40,23 @@ const dateStr = pubDate.toLocaleDateString('en-US', {
     url: new URL(Astro.url.pathname, Astro.site).toString(),
   }} />
 
-  <meta name="i18n-title" content="__de-direct__" data-de={de ? `${de.data.title} — Dragan Balatinac` : undefined} data-en={`${post.data.title} — Dragan Balatinac`} />
-
   <Breadcrumbs items={[
-    { label: 'Home', href: '/', i18n: 'crumb.home' },
-    { label: 'Writing', href: '/blog/', i18n: 'crumb.writing' },
+    { label: t('crumb.home', lang), href: '/en/' },
+    { label: t('crumb.writing', lang), href: '/en/blog/' },
     { label: post.data.title },
   ]} />
 
   <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]">
     <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
       <p class="font-mono text-[13px] text-muted m-0 mb-5">{dateStr} · {post.data.readTime || '~5 min read'}</p>
-      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance" data-de={de?.data.title}>{post.data.title}</h1>
+      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance">{post.data.title}</h1>
     </div>
   </header>
 
   <section class="py-3 border-y border-rule font-mono text-[13px] text-muted">
     <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap gap-x-6 gap-y-2">
-      <span><span data-i18n="meta.published">Published</span><strong class="text-fg font-sans font-medium ml-1.5">{dateStr}</strong></span>
-      <span><span data-i18n="meta.readTime">Read time</span><strong class="text-fg font-sans font-medium ml-1.5" data-de={de?.data.readTime}>{post.data.readTime || '~5 min'}</strong></span>
+      <span>{t('meta.published', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{dateStr}</strong></span>
+      <span>{t('meta.readTime', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{post.data.readTime || '~5 min'}</strong></span>
       <span class="flex gap-2.5 sm:ml-auto">
         {post.data.tags.map((tag) => (
           <span class="text-muted before:content-['#'] before:text-accent">{tag}</span>
@@ -87,26 +66,21 @@ const dateStr = pubDate.toLocaleDateString('en-US', {
   </section>
 
   <article class="py-12 sm:py-14 md:py-14 pb-16 md:pb-20">
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 [&>*]:max-w-[64ch] prose-article" data-lang-content="en">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 [&>*]:max-w-[64ch] prose-article">
       <Content />
     </div>
-    {DeContent && (
-      <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 [&>*]:max-w-[64ch] prose-article hidden" data-lang-content="de">
-        <DeContent />
-      </div>
-    )}
   </article>
 
   <nav class="border-t border-rule">
     <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 grid grid-cols-1 sm:grid-cols-2">
-      <a class="py-7 pr-4 hover:text-accent transition-colors" href="/blog/">
-        <div class="font-mono text-[12px] text-muted mb-1.5" data-i18n="blog.backToWriting">← Back to writing</div>
-        <div class="text-[16px] font-medium" data-i18n="blog.allPosts">All posts</div>
+      <a class="py-7 pr-4 hover:text-accent transition-colors" href="/en/blog/">
+        <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.backToWriting', lang)}</div>
+        <div class="text-[16px] font-medium">{t('blog.allPosts', lang)}</div>
       </a>
       {nextPost && (
-        <a class="py-7 pl-4 text-right border-t sm:border-t-0 sm:border-l border-rule hover:text-accent transition-colors" href={`/blog/${nextPost.id}/`}>
-          <div class="font-mono text-[12px] text-muted mb-1.5" data-i18n="blog.nextPost">Next post</div>
-          <div class="text-[16px] font-medium" data-de={nextDe ? `${nextDe.data.title} →` : undefined}>{nextPost.data.title} →</div>
+        <a class="py-7 pl-4 text-right border-t sm:border-t-0 sm:border-l border-rule hover:text-accent transition-colors" href={`/en/blog/${nextPost.id}/`}>
+          <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.nextPost', lang)}</div>
+          <div class="text-[16px] font-medium">{nextPost.data.title} →</div>
         </a>
       )}
     </div>

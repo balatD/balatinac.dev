@@ -1,9 +1,6 @@
-/**
- * UI string translations only.
- * Content translations (project/blog titles, descriptions) come from
- * German .md files in de/ subdirectories and are embedded as data-de attributes.
- */
-export const translations: Record<string, Record<string, string>> = {
+export type Lang = 'de' | 'en';
+
+const translations: Record<string, Record<Lang, string>> = {
   // === Nav ===
   'nav.about': { en: 'About', de: 'Über mich' },
   'nav.work': { en: 'Work', de: 'Projekte' },
@@ -61,10 +58,7 @@ export const translations: Record<string, Record<string, string>> = {
   'contact.network': { en: 'Network', de: 'Netzwerk' },
 
   // === Footer ===
-  'footer.built': {
-    en: 'No tracking.',
-    de: 'Kein Tracking.',
-  },
+  'footer.built': { en: 'No tracking.', de: 'Kein Tracking.' },
 
   // === Empty states ===
   'empty.work': { en: 'Projects coming soon.', de: 'Projekte folgen in Kürze.' },
@@ -126,3 +120,23 @@ export const translations: Record<string, Record<string, string>> = {
   '404.work': { en: 'Work', de: 'Projekte' },
   '404.writing': { en: 'Writing', de: 'Texte' },
 };
+
+/** Get a translated string by key and language. */
+export function t(key: string, lang: Lang): string {
+  return translations[key]?.[lang] ?? translations[key]?.['de'] ?? key;
+}
+
+/** Build the URL prefix for a given language. DE = root, EN = /en */
+export function langPrefix(lang: Lang): string {
+  return lang === 'en' ? '/en' : '';
+}
+
+/** Convert a path to the other language's URL. */
+export function langSwitchUrl(currentPath: string, currentLang: Lang): string {
+  if (currentLang === 'de') {
+    // DE → EN: prepend /en
+    return `/en${currentPath}`;
+  }
+  // EN → DE: strip /en prefix
+  return currentPath.replace(/^\/en/, '') || '/';
+}

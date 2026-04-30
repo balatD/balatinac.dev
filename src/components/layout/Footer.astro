@@ -1,9 +1,17 @@
 ---
+import type { Lang } from '../../lib/i18n';
+import { t } from '../../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'de' } = Astro.props;
 ---
 
 <footer class="py-10 pb-14 border-t border-rule font-mono text-[12px] sm:text-[13px] text-muted">
   <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex justify-between flex-wrap gap-3">
     <span>&copy; {new Date().getFullYear()} Dragan Balatinac</span>
-    <span data-i18n="footer.built">No tracking.</span>
+    <span>{t('footer.built', lang)}</span>
   </div>
 </footer>

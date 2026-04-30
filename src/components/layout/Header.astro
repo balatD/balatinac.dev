@@ -1,15 +1,23 @@
 ---
+import type { Lang } from '../../lib/i18n';
+import { t, langPrefix, langSwitchUrl } from '../../lib/i18n';
+
 interface Props {
   activeNav?: 'about' | 'work' | 'writing' | 'contact';
+  lang?: Lang;
+  altLangUrl?: string;
 }
 
-const { activeNav } = Astro.props;
+const { activeNav, lang = 'de', altLangUrl } = Astro.props;
+const prefix = langPrefix(lang);
+const altLang = lang === 'de' ? 'en' : 'de';
+const altUrl = altLangUrl || langSwitchUrl(Astro.url.pathname, lang);
 
 const navLinks = [
-  { href: '/#about', label: 'About', id: 'about', i18n: 'nav.about' },
-  { href: '/work/', label: 'Work', id: 'work', i18n: 'nav.work' },
-  { href: '/blog/', label: 'Writing', id: 'writing', i18n: 'nav.writing' },
-  { href: '/#contact', label: 'Contact', id: 'contact', i18n: 'nav.contact' },
+  { href: `${prefix}/#about`, label: t('nav.about', lang), id: 'about' },
+  { href: `${prefix}/work/`, label: t('nav.work', lang), id: 'work' },
+  { href: `${prefix}/blog/`, label: t('nav.writing', lang), id: 'writing' },
+  { href: `${prefix}/#contact`, label: t('nav.contact', lang), id: 'contact' },
 ];
 ---
 
@@ -19,9 +27,9 @@ const navLinks = [
     class="relative flex items-stretch p-[4px_6px] backdrop-blur-[18px] backdrop-saturate-150 transition-colors duration-200"
     style="background: color-mix(in oklab, var(--bg) 55%, transparent);"
   >
-    <!-- Mobile DB wordmark (inside nav bar) -->
+    <!-- Mobile DB wordmark -->
     <a
-      href="/"
+      href={`${prefix}/`}
       aria-label="Dragan Balatinac — home"
       class="corner-mark relative inline-flex items-center px-2.5 py-2.5 font-mono text-[11px] font-semibold tracking-wider leading-none text-fg overflow-hidden md:hidden"
     >
@@ -43,7 +51,6 @@ const navLinks = [
           ]}
           href={link.href}
           aria-current={activeNav === link.id ? 'page' : undefined}
-          data-i18n={link.i18n}
         >
           {link.label}
         </a>
@@ -53,13 +60,14 @@ const navLinks = [
       class="flex items-stretch ml-1 border-l"
       style="border-color: color-mix(in oklab, var(--fg) 12%, transparent);"
     >
-      <button
-        id="lang-toggle"
-        class="lang-btn relative w-[38px] min-w-[38px] md:w-11 md:min-w-[44px] px-2 md:px-3 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg cursor-pointer transition-colors"
-        aria-label="Switch language"
+      <!-- Language switch as a link -->
+      <a
+        href={altUrl}
+        class="relative inline-flex items-center justify-center w-[38px] min-w-[38px] md:w-11 md:min-w-[44px] px-2 md:px-3 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg transition-colors"
+        aria-label={altLang === 'en' ? 'Switch to English' : 'Auf Deutsch wechseln'}
       >
-        <span class="now">EN</span>
-      </button>
+        {altLang.toUpperCase()}
+      </a>
       <button
         id="theme-toggle"
         class="px-2 md:px-3 min-w-[38px] md:min-w-[44px] inline-flex items-center justify-center text-muted hover:text-fg cursor-pointer transition-colors border-l"

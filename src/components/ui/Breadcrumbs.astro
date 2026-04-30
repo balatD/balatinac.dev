@@ -2,7 +2,6 @@
 interface BreadcrumbItem {
   label: string;
   href?: string;
-  i18n?: string;
 }
 
 interface Props {
@@ -18,9 +17,9 @@ const { items } = Astro.props;
       <>
         {i > 0 && <span class="opacity-50">/</span>}
         {item.href ? (
-          <a class="text-muted hover:text-accent transition-colors" href={item.href} data-i18n={item.i18n}>{item.label}</a>
+          <a class="text-muted hover:text-accent transition-colors" href={item.href}>{item.label}</a>
         ) : (
-          <span aria-current="page" data-i18n={item.i18n}>{item.label}</span>
+          <span aria-current="page">{item.label}</span>
         )}
       </>
     ))}

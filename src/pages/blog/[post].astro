@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
+import JsonLd from '../../components/layout/JsonLd.astro';
+import { getCollection, render } from 'astro:content';
+import { buildDeMap, getDeSlug } from '../../lib/content-helpers';
+import { t } from '../../lib/i18n';
+
+const lang = 'de';
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const en = await getCollection('blog');
+  const deEntries = await getCollection('blogDe');
+  const deMap = buildDeMap(deEntries);
+  return en.map((post) => {
+    const de = deMap.get(post.id);
+    const deSlug = de?.data.urlSlug || post.id;
+    return { params: { post: deSlug }, props: { post, deSlug } };
+  });
+}
+
+const { post, deSlug } = Astro.props;
+
+const allEn = (await getCollection('blog')).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const dePosts = await getCollection('blogDe');
+const deMap = buildDeMap(dePosts);
+const de = deMap.get(post.id);
+
+const contentEntry = de || post;
+const { Content } = await render(contentEntry);
+const displayTitle = de?.data.title || post.data.title;
+const displayDesc = de?.data.description || post.data.description;
+const displayReadTime = de?.data.readTime || post.data.readTime || '~5 Min.';
+
+const currentIndex = allEn.findIndex((p) => p.id === post.id);
+const nextPost = allEn[currentIndex + 1] || null;
+const nextDe = nextPost ? deMap.get(nextPost.id) : undefined;
+const nextSlug = nextDe?.data.urlSlug || nextPost?.id;
+
+const dateStr = post.data.publishedAt.toLocaleDateString('de-DE', { day: 'numeric', month: 'short', year: 'numeric' });
+const altLangUrl = `/en/blog/${post.id}/`;
+---
+
+<BaseLayout title={`${displayTitle} — Dragan Balatinac`} description={displayDesc} activeNav="writing" ogType="article" publishedAt={post.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
+  <JsonLd schema={{
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: displayTitle,
+    description: displayDesc,
+    datePublished: post.data.publishedAt.toISOString(),
+    author: { '@type': 'Person', name: 'Dragan Balatinac' },
+    url: new URL(Astro.url.pathname, Astro.site).toString(),
+  }} />
+
+  <Breadcrumbs items={[
+    { label: t('crumb.home', lang), href: '/' },
+    { label: t('crumb.writing', lang), href: '/blog/' },
+    { label: displayTitle },
+  ]} />
+
+  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <p class="font-mono text-[13px] text-muted m-0 mb-5">{dateStr} · {displayReadTime}</p>
+      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance">{displayTitle}</h1>
+    </div>
+  </header>
+
+  <section class="py-3 border-y border-rule font-mono text-[13px] text-muted">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap gap-x-6 gap-y-2">
+      <span>{t('meta.published', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{dateStr}</strong></span>
+      <span>{t('meta.readTime', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{displayReadTime}</strong></span>
+      <span class="flex gap-2.5 sm:ml-auto">
+        {post.data.tags.map((tag) => (
+          <span class="text-muted before:content-['#'] before:text-accent">{tag}</span>
+        ))}
+      </span>
+    </div>
+  </section>
+
+  <article class="py-12 sm:py-14 md:py-14 pb-16 md:pb-20">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 [&>*]:max-w-[64ch] prose-article">
+      <Content />
+    </div>
+  </article>
+
+  <nav class="border-t border-rule">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 grid grid-cols-1 sm:grid-cols-2">
+      <a class="py-7 pr-4 hover:text-accent transition-colors" href="/blog/">
+        <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.backToWriting', lang)}</div>
+        <div class="text-[16px] font-medium">{t('blog.allPosts', lang)}</div>
+      </a>
+      {nextPost && (
+        <a class="py-7 pl-4 text-right border-t sm:border-t-0 sm:border-l border-rule hover:text-accent transition-colors" href={`/blog/${nextSlug}/`}>
+          <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.nextPost', lang)}</div>
+          <div class="text-[16px] font-medium">{nextDe?.data.title || nextPost.data.title} →</div>
+        </a>
+      )}
+    </div>
+  </nav>
+</BaseLayout>
+
+<style>
+  .prose-article :global(h2) { font-weight: 500; font-size: 26px; line-height: 1.25; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 16px; }
+  .prose-article :global(h3) { font-weight: 500; font-size: 18px; margin-top: 28px; margin-bottom: 8px; }
+  .prose-article :global(p) { font-size: 17px; line-height: 1.75; margin: 0 0 16px; text-wrap: pretty; }
+  .prose-article :global(ul), .prose-article :global(ol) { list-style: none; padding: 0; margin: 0 0 22px; counter-reset: ord; }
+  .prose-article :global(li) { position: relative; padding: 8px 0 8px 26px; font-size: 17px; line-height: 1.65; border-bottom: 1px solid var(--rule); }
+  .prose-article :global(li:first-child) { border-top: 1px solid var(--rule); }
+  .prose-article :global(ul li::before) { content: "—"; position: absolute; left: 0; color: var(--accent); }
+  .prose-article :global(ol li) { counter-increment: ord; }
+  .prose-article :global(ol li::before) { content: counter(ord, decimal-leading-zero); position: absolute; left: 0; color: var(--accent); font-family: "Space Mono", monospace; font-size: 13px; top: 10px; }
+  .prose-article :global(blockquote) { border-left: 2px solid var(--accent); padding: 4px 0 4px 18px; margin: 28px 0; font-size: 19px; line-height: 1.45; font-style: italic; }
+  .prose-article :global(blockquote p) { font-size: inherit; line-height: inherit; margin: 0; }
+  .prose-article :global(pre) { padding: 20px 24px; margin: 0 0 24px; font-size: 13px; line-height: 1.65; border-radius: 6px; overflow-x: auto; white-space: pre; }
+  .prose-article :global(pre code) { font-family: "Space Mono", monospace; background: none; padding: 0; font-size: inherit; }
+  .prose-article :global(hr) { border: 0; border-top: 1px solid var(--rule); margin: 56px 0; }
+  .prose-article :global(a) { color: var(--fg); border-bottom: 1px solid var(--muted); transition: color 0.15s, border-color 0.15s; }
+  .prose-article :global(a:hover) { color: var(--accent); border-color: var(--accent); }
+  .prose-article :global(em:last-child) { display: block; font-family: "Space Mono", monospace; font-size: 13px; color: var(--muted); margin-top: 40px; font-style: normal; }
+</style>

@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/ui/Breadcrumbs.astro';
+import JsonLd from '../../../components/layout/JsonLd.astro';
+import { getCollection, render } from 'astro:content';
+import { buildDeMap, getDeSlug } from '../../../lib/content-helpers';
+import { t } from '../../../lib/i18n';
+
+const lang = 'en';
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const en = await getCollection('projects');
+  return en.map((project) => ({ params: { post: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const allEn = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const deProjects = await getCollection('projectsDe');
+const deMap = buildDeMap(deProjects);
+const deSlug = getDeSlug(project, deMap);
+
+const currentIndex = allEn.findIndex((p) => p.id === project.id);
+const nextProject = allEn[currentIndex + 1] || null;
+const total = allEn.length;
+const orderStr = String(project.data.order).padStart(2, '0');
+const totalStr = String(total).padStart(2, '0');
+const altLangUrl = `/work/${deSlug}/`;
+---
+
+<BaseLayout title={`${project.data.title} — Dragan Balatinac`} description={project.data.description} activeNav="work" ogType="article" publishedAt={project.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
+  <JsonLd schema={{
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.data.title,
+    description: project.data.description,
+    datePublished: project.data.publishedAt.toISOString(),
+    author: { '@type': 'Person', name: 'Dragan Balatinac' },
+    url: new URL(Astro.url.pathname, Astro.site).toString(),
+  }} />
+
+  <Breadcrumbs items={[
+    { label: t('crumb.home', lang), href: '/en/' },
+    { label: t('crumb.work', lang), href: '/en/work/' },
+    { label: project.data.title },
+  ]} />
+
+  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+      <p class="font-mono text-[13px] text-muted m-0 mb-5">{t('meta.caseStudy', lang)} · {orderStr} / {totalStr}</p>
+      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance">{project.data.title}</h1>
+      <p class="text-[18px] leading-[1.6] text-muted m-0 max-w-[56ch] text-pretty">{project.data.description}</p>
+    </div>
+  </header>
+
+  {project.data.meta && (
+    <section class="py-3 border-y border-rule font-mono text-[13px] text-muted">
+      <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap gap-x-6 gap-y-2">
+        <span>{t('meta.year', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{project.data.year}</strong></span>
+        {project.data.meta.duration && <span>{t('meta.duration', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{project.data.meta.duration}</strong></span>}
+        {project.data.meta.role && <span>{t('meta.role', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{project.data.meta.role}</strong></span>}
+        {project.data.meta.team && <span>{t('meta.team', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{project.data.meta.team}</strong></span>}
+        {project.data.meta.status && <span>{t('meta.status', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{project.data.meta.status}</strong></span>}
+      </div>
+    </section>
+  )}
+
+  <article class="py-12 sm:py-14 md:py-14 pb-16 md:pb-20">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 [&>*]:max-w-[60ch] prose-article">
+      <Content />
+    </div>
+  </article>
+
+  {nextProject && (
+    <nav class="border-t border-rule">
+      <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+        <a class="flex justify-between items-baseline py-7 hover:text-accent transition-colors group" href={`/en/work/${nextProject.id}/`}>
+          <div>
+            <div class="font-mono text-[13px] text-muted mb-1">{t('meta.next', lang)} · {String(nextProject.data.order).padStart(2, '0')} / {totalStr}</div>
+            <div class="text-[18px] font-medium">{nextProject.data.title}</div>
+          </div>
+          <div class="font-mono text-[13px] text-muted group-hover:text-accent group-hover:translate-x-1 transition-all">→</div>
+        </a>
+      </div>
+    </nav>
+  )}
+</BaseLayout>
+
+<style>
+  .prose-article :global(h2) { font-weight: 500; font-size: clamp(20px, 3vw, 26px); line-height: 1.25; letter-spacing: -0.015em; margin-top: 56px; margin-bottom: 18px; }
+  .prose-article :global(h3) { font-weight: 500; font-size: 18px; margin-top: 32px; margin-bottom: 8px; }
+  .prose-article :global(p) { font-size: 17px; line-height: 1.7; margin: 0 0 16px; text-wrap: pretty; }
+  .prose-article :global(ul), .prose-article :global(ol) { list-style: none; padding: 0; margin: 0 0 24px; }
+  .prose-article :global(li) { position: relative; padding: 8px 0 8px 26px; font-size: 17px; line-height: 1.6; border-bottom: 1px solid var(--rule); }
+  .prose-article :global(li:first-child) { border-top: 1px solid var(--rule); }
+  .prose-article :global(ul li::before) { content: "—"; position: absolute; left: 0; color: var(--accent); }
+  .prose-article :global(blockquote) { border-left: 2px solid var(--accent); padding: 4px 0 4px 18px; margin: 28px 0; font-size: 19px; line-height: 1.45; font-style: italic; }
+  .prose-article :global(blockquote p) { font-size: inherit; line-height: inherit; margin: 0; }
+  .prose-article :global(pre) { padding: 20px 24px; margin: 0 0 24px; font-size: 13px; line-height: 1.65; border-radius: 6px; overflow-x: auto; white-space: pre; }
+  .prose-article :global(pre code) { font-family: "Space Mono", monospace; background: none; padding: 0; font-size: inherit; }
+  .prose-article :global(hr) { border: 0; border-top: 1px solid var(--rule); margin: 56px 0; }
+  .prose-article :global(strong) { font-weight: 600; }
+</style>

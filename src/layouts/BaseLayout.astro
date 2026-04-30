@@ -6,6 +6,8 @@ import Wordmark from '../components/layout/Wordmark.astro';
 import AmbientBlobs from '../components/layout/AmbientBlobs.astro';
 import SEO from '../components/layout/SEO.astro';
 import { ClientRouter } from 'astro:transitions';
+import type { Lang } from '../lib/i18n';
+import { t, langPrefix, langSwitchUrl } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -15,6 +17,8 @@ interface Props {
   publishedAt?: Date;
   noindex?: boolean;
   activeNav?: 'about' | 'work' | 'writing' | 'contact';
+  lang?: Lang;
+  altLangUrl?: string;
 }
 
 const {
@@ -25,11 +29,17 @@ const {
   publishedAt,
   noindex,
   activeNav,
+  lang = 'de',
+  altLangUrl,
 } = Astro.props;
+
+const prefix = langPrefix(lang);
+const altUrl = altLangUrl || langSwitchUrl(Astro.url.pathname, lang);
+const altLang = lang === 'de' ? 'en' : 'de';
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,6 +54,11 @@ const {
       noindex={noindex}
     />
 
+    <!-- hreflang for SEO -->
+    <link rel="alternate" hreflang={lang} href={new URL(Astro.url.pathname, Astro.site).toString()} />
+    <link rel="alternate" hreflang={altLang} href={new URL(altUrl, Astro.site).toString()} />
+    <link rel="alternate" hreflang="x-default" href={new URL(lang === 'de' ? Astro.url.pathname : altUrl, Astro.site).toString()} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -57,7 +72,7 @@ const {
 
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Inline: restore theme + lang before paint (runs on every navigation) -->
+    <!-- Theme init to prevent FOUC -->
     <script is:inline>
       (function () {
         var theme = null;
@@ -70,30 +85,22 @@ const {
     </script>
   </head>
   <body class="bg-bg text-fg font-sans antialiased leading-relaxed text-[17px]">
-    <a
-      href="#main"
-      class="skip-link"
-      data-i18n="skip"
-    >
-      Skip to content
+    <a href="#main" class="skip-link">
+      {t('skip', lang)}
     </a>
 
     <AmbientBlobs />
 
-    <Wordmark />
-    <Header activeNav={activeNav} />
+    <Wordmark href={`${prefix}/`} />
+    <Header activeNav={activeNav} lang={lang} altLangUrl={altUrl} />
 
     <main id="main" tabindex="-1">
       <slot />
     </main>
 
-    <Footer />
+    <Footer lang={lang} />
 
-    <!-- Main interactive script: uses astro:page-load to re-bind after each navigation -->
     <script>
-      import { translations } from '../lib/i18n';
-
-      // ── Theme ──────────────────────────────────────────────
       function syncThemeIcons() {
         const theme = document.documentElement.getAttribute('data-theme') || 'light';
         const sun = document.getElementById('icon-sun');
@@ -108,153 +115,13 @@ const {
         syncThemeIcons();
       }
 
-      // ── i18n ───────────────────────────────────────────────
-      function getLang(): string {
-        try { return localStorage.getItem('lang') || 'en'; } catch (e) { return 'en'; }
-      }
-
-      function setLang(lang: string) {
-        try { localStorage.setItem('lang', lang); } catch (e) {}
-        document.documentElement.setAttribute('lang', lang === 'de' ? 'de' : 'en');
-        applyTranslations(lang);
-        syncLangButton(lang);
-      }
-
-      function applyTranslations(lang: string) {
-        // data-i18n: UI strings via key lookup (textContent)
-        document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
-          const key = el.dataset.i18n!;
-          const entry = translations[key];
-          if (entry && entry[lang]) {
-            el.textContent = entry[lang];
-          }
-        });
-        // data-i18n-html: UI strings via key lookup (innerHTML)
-        document.querySelectorAll<HTMLElement>('[data-i18n-html]').forEach((el) => {
-          const key = el.dataset.i18nHtml!;
-          const entry = translations[key];
-          if (entry && entry[lang]) {
-            el.innerHTML = entry[lang];
-          }
-        });
-        // data-de: content translations from MD files (textContent)
-        document.querySelectorAll<HTMLElement>('[data-de]').forEach((el) => {
-          if (!el.dataset.en) el.dataset.en = el.textContent || '';
-          el.textContent = lang === 'de' ? (el.dataset.de || el.dataset.en || '') : (el.dataset.en || '');
-        });
-        // data-lang-content: swap full article body between EN and DE
-        document.querySelectorAll<HTMLElement>('[data-lang-content]').forEach((el) => {
-          const contentLang = el.dataset.langContent;
-          if (contentLang === lang) {
-            el.classList.remove('hidden');
-          } else {
-            el.classList.add('hidden');
-          }
-        });
-        // Translate document.title
-        const titleMeta = document.querySelector<HTMLMetaElement>('meta[name="i18n-title"]');
-        if (titleMeta) {
-          const key = titleMeta.content;
-          if (key === '__de-direct__') {
-            // Title comes directly from data-de/data-en attributes (detail pages)
-            if (!titleMeta.dataset.enSaved) titleMeta.dataset.enSaved = titleMeta.dataset.en || document.title;
-            document.title = lang === 'de'
-              ? (titleMeta.dataset.de || titleMeta.dataset.enSaved || document.title)
-              : (titleMeta.dataset.enSaved || document.title);
-          } else {
-            // Title comes from i18n translations object (index pages)
-            const entry = translations[key];
-            if (entry && entry[lang]) {
-              document.title = entry[lang];
-            }
-          }
-        }
-      }
-
-      function syncLangButton(lang: string) {
-        const btn = document.getElementById('lang-toggle');
-        if (!btn) return;
-        const label = lang === 'de' ? 'DE' : 'EN';
-        // Clear any leftover transition spans and set the current one
-        const existing = btn.querySelector('.now');
-        if (existing) {
-          existing.textContent = label;
-        }
-      }
-
-      // ── Nav scroll background ──────────────────────────────
       let scrollHandler: (() => void) | null = null;
 
-      function initNavScroll() {
-        const nav = document.querySelector('[data-nav-bg]') as HTMLElement | null;
-        if (!nav) return;
-
-        // Remove previous listener if exists (avoid stacking)
-        if (scrollHandler) {
-          window.removeEventListener('scroll', scrollHandler);
-        }
-
-        scrollHandler = () => {
-          const scrolled = window.scrollY > 8;
-          nav.style.background = scrolled
-            ? 'color-mix(in oklab, var(--bg) 70%, transparent)'
-            : 'color-mix(in oklab, var(--bg) 55%, transparent)';
-        };
-        scrollHandler();
-        window.addEventListener('scroll', scrollHandler, { passive: true });
-      }
-
-      // ── Scroll spy ─────────────────────────────────────────
-      let spyHandler: (() => void) | null = null;
-
-      function initScrollSpy() {
-        if (spyHandler) {
-          window.removeEventListener('scroll', spyHandler);
-          spyHandler = null;
-        }
-
-        const wrap = document.getElementById('nav-links');
-        if (!wrap) return;
-        const links = [...wrap.querySelectorAll('a')];
-        const map = links
-          .map((a) => {
-            const href = a.getAttribute('href') || '';
-            if (!href.includes('#')) return null;
-            const hash = '#' + href.split('#')[1];
-            if (hash === '#') return null;
-            const sec = document.querySelector(hash);
-            if (!sec) return null;
-            return { a, sec: sec as HTMLElement };
-          })
-          .filter(Boolean) as { a: HTMLAnchorElement; sec: HTMLElement }[];
-        if (!map.length) return;
-
-        let active: HTMLAnchorElement | null = null;
-        spyHandler = () => {
-          const y = window.scrollY + 140;
-          let cur: HTMLAnchorElement | null = null;
-          for (const { a, sec } of map) {
-            if (sec.offsetTop <= y) cur = a;
-          }
-          if (cur !== active) {
-            if (active) active.classList.remove('active');
-            active = cur;
-            if (active) active.classList.add('active');
-          }
-        };
-        window.addEventListener('scroll', spyHandler, { passive: true });
-        spyHandler();
-      }
-
-      // ── Page init (runs on first load AND after every view transition) ──
       function initPage() {
-        // Theme: sync icons to current data-theme
         syncThemeIcons();
 
-        // Theme toggle button
         const themeBtn = document.getElementById('theme-toggle');
         if (themeBtn) {
-          // Replace to remove old listeners
           const fresh = themeBtn.cloneNode(true) as HTMLElement;
           themeBtn.parentNode!.replaceChild(fresh, themeBtn);
           fresh.addEventListener('click', () => {
@@ -263,55 +130,22 @@ const {
           });
         }
 
-        // Lang toggle button
-        const langBtn = document.getElementById('lang-toggle');
-        if (langBtn) {
-          const fresh = langBtn.cloneNode(true) as HTMLElement;
-          langBtn.parentNode!.replaceChild(fresh, langBtn);
-          fresh.addEventListener('click', () => {
-            const current = getLang();
-            const next = current === 'en' ? 'de' : 'en';
-
-            // Slide animation
-            const cur = fresh.querySelector('.now');
-            if (cur) {
-              const nextLabel = next === 'de' ? 'DE' : 'EN';
-              const span = document.createElement('span');
-              span.className = 'in';
-              span.textContent = nextLabel;
-              fresh.appendChild(span);
-              requestAnimationFrame(() => {
-                cur.classList.remove('now');
-                cur.classList.add('out');
-                requestAnimationFrame(() => {
-                  span.classList.remove('in');
-                  span.classList.add('now');
-                });
-              });
-              setTimeout(() => cur.remove(), 500);
-            }
-
-            setLang(next);
-          });
+        // Nav scroll background
+        const nav = document.querySelector('[data-nav-bg]') as HTMLElement | null;
+        if (nav) {
+          if (scrollHandler) window.removeEventListener('scroll', scrollHandler);
+          scrollHandler = () => {
+            nav.style.background = window.scrollY > 8
+              ? 'color-mix(in oklab, var(--bg) 70%, transparent)'
+              : 'color-mix(in oklab, var(--bg) 55%, transparent)';
+          };
+          scrollHandler();
+          window.addEventListener('scroll', scrollHandler, { passive: true });
         }
-
-        // Apply saved language
-        const lang = getLang();
-        if (lang !== 'en') {
-          applyTranslations(lang);
-          syncLangButton(lang);
-          document.documentElement.setAttribute('lang', 'de');
-        }
-
-        // Nav scroll + spy
-        initNavScroll();
-        initScrollSpy();
       }
 
-      // Astro's lifecycle: fires on initial load and after every client-side navigation
       document.addEventListener('astro:page-load', initPage);
 
-      // Also restore theme immediately after DOM swap (before paint)
       document.addEventListener('astro:after-swap', () => {
         const theme = document.documentElement.getAttribute('data-theme')
           || (() => { try { return localStorage.getItem('theme'); } catch (e) { return null; } })()

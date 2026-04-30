@@ -1,20 +1,17 @@
 ---
+import type { Lang } from '../../lib/i18n';
+import { t } from '../../lib/i18n';
+
+interface Props { lang?: Lang; }
+const { lang = 'de' } = Astro.props;
 ---
 
 <section id="about" class="py-14 sm:py-16 md:py-20 border-t border-rule">
   <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-    <p class="font-mono text-[13px] text-muted m-0 mb-7 md:mb-8" data-i18n="about.label">About</p>
-    <p class="text-[17px] leading-[1.7] text-fg max-w-[60ch] text-pretty m-0 mb-[18px]" data-i18n-html="about.p1">
-      I've been at home on the web for a while — working professionally as a web developer since 2018. Most of that time in the unglamorous middle: schemas, editorial workflows, deployment pipelines, and the hundred small choices that decide whether a CMS is a tool or a tax.
-    </p>
-    <p class="text-[17px] leading-[1.7] text-fg max-w-[60ch] text-pretty m-0 mb-[18px]" data-i18n-html="about.p2">
-      My home is <span class="text-accent">TYPO3</span>, but I like to look beyond the horizon: with <span class="text-accent">Astro</span> and <span class="text-accent">Payload CMS</span> I work on headless setups — a different perspective on the same questions, often with surprisingly similar answers. What works well, I learn from. What doesn't work, I learn from even more.
-    </p>
-    <p class="text-[17px] leading-[1.7] text-fg max-w-[60ch] text-pretty m-0 mb-[18px]" data-i18n-html="about.p3">
-      Over time I've led and delivered several larger <span class="text-accent">TYPO3</span> and web projects — from the first architecture sketch to go-live and beyond. Today I'm responsible for the backend team at a mid-sized agency in Essen. On top of that, I hold a certified trainer qualification, because I believe good backend work and good mentoring need the same foundation: patience, clear structures, and the willingness to explain things twice.
-    </p>
-    <p class="text-[17px] leading-[1.7] text-muted max-w-[60ch] text-pretty m-0" data-i18n-html="about.p4">
-      Currently responsible for multiple <span class="text-accent">TYPO3</span> instances, the associated infrastructure, server management, and everything else that falls in between — and on the side, slowly turning my opinions into writing.
-    </p>
+    <p class="font-mono text-[13px] text-muted m-0 mb-7 md:mb-8">{t('about.label', lang)}</p>
+    <p class="text-[17px] leading-[1.7] text-fg max-w-[60ch] text-pretty m-0 mb-[18px]" set:html={t('about.p1', lang)} />
+    <p class="text-[17px] leading-[1.7] text-fg max-w-[60ch] text-pretty m-0 mb-[18px]" set:html={t('about.p2', lang)} />
+    <p class="text-[17px] leading-[1.7] text-fg max-w-[60ch] text-pretty m-0 mb-[18px]" set:html={t('about.p3', lang)} />
+    <p class="text-[17px] leading-[1.7] text-muted max-w-[60ch] text-pretty m-0" set:html={t('about.p4', lang)} />
   </div>
 </section>

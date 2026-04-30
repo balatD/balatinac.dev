@@ -6,11 +6,17 @@ import About from '../components/sections/About.astro';
 import Work from '../components/sections/Work.astro';
 import Writing from '../components/sections/Writing.astro';
 import Contact from '../components/sections/Contact.astro';
+import { t } from '../lib/i18n';
+
+const lang = 'de';
+
+export const prerender = true;
 ---
 
 <BaseLayout
-  title="Dragan Balatinac"
-  description="Backend engineer building quiet, reliable systems with TYPO3, PHP, and the DevOps glue around them."
+  title={t('title.home', lang)}
+  description="Backend-Entwickler aus NRW. Ruhige, zuverlässige Systeme mit TYPO3, PHP und dem DevOps-Klebstoff drumherum."
+  lang={lang}
 >
   <JsonLd schema={{
     '@context': 'https://schema.org',
@@ -30,10 +36,9 @@ import Contact from '../components/sections/Contact.astro';
     url: 'https://balatinac.dev',
   }} />
 
-  <meta name="i18n-title" content="title.home" />
-  <Hero />
-  <About />
-  <Work />
-  <Writing />
-  <Contact />
+  <Hero lang={lang} />
+  <About lang={lang} />
+  <Work lang={lang} />
+  <Writing lang={lang} />
+  <Contact lang={lang} />
 </BaseLayout>
