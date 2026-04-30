@@ -14,14 +14,13 @@ const translations: Record<string, Record<Lang, string>> = {
   'title.404': { en: '404 — Not found — Dragan Balatinac', de: '404 — Nicht gefunden — Dragan Balatinac' },
 
   // === Homepage — Hero ===
-  'hero.greeting': { en: 'Hello — I\'m Dragan.', de: 'Hallo — ich bin Dragan.' },
   'hero.heading': {
-    en: 'Backend developer from NRW. I build <span class="text-accent">quiet, reliable</span> systems with <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span>, <em class="not-italic text-muted">and the DevOps glue around them.</em>',
-    de: 'Backend-Entwickler aus NRW. Ich baue <span class="text-accent">ruhige, zuverlässige</span> Systeme mit <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span> <em class="not-italic text-muted">und dem DevOps-Klebstoff drumherum.</em>',
+    en: 'Building <span class="text-accent">quiet</span> systems<span class="text-accent">.</span>',
+    de: 'Ich baue <span class="text-accent">ruhige</span> Systeme<span class="text-accent">.</span>',
   },
   'hero.sub': {
-    en: 'This is where I keep my work, my notes, and the occasional opinion about why the boring choice is usually the right one.',
-    de: 'Hier sammle ich meine Arbeit, meine Notizen und gelegentlich die Meinung, warum die langweilige Lösung meist die richtige ist.',
+    en: 'Backend developer from NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span>, and the DevOps glue around them. This is where I keep my work, my notes, and the occasional opinion about why the boring choice is usually the right one.',
+    de: 'Backend-Entwickler aus NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span> und der DevOps-Klebstoff drumherum. Hier sammle ich meine Arbeit, meine Notizen und gelegentlich die Meinung, warum die langweilige Lösung meist die richtige ist.',
   },
   'hero.cta.work': { en: 'See the work →', de: 'Zur Arbeit →' },
   'hero.cta.notes': { en: 'Read the notes', de: 'Notizen lesen' },

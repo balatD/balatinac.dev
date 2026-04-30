@@ -99,10 +99,8 @@ const altLang = lang === 'de' ? 'en' : 'de';
     <script>
       function syncThemeIcons() {
         const theme = document.documentElement.getAttribute('data-theme') || 'light';
-        const sun = document.getElementById('icon-sun');
-        const moon = document.getElementById('icon-moon');
-        if (sun) sun.style.display = theme === 'dark' ? 'block' : 'none';
-        if (moon) moon.style.display = theme === 'dark' ? 'none' : 'block';
+        document.querySelectorAll<HTMLElement>('.icon-sun, #icon-sun').forEach(el => el.style.display = theme === 'dark' ? 'block' : 'none');
+        document.querySelectorAll<HTMLElement>('.icon-moon, #icon-moon').forEach(el => el.style.display = theme === 'dark' ? 'none' : 'block');
       }
 
       function setTheme(mode: string) {
@@ -111,33 +109,17 @@ const altLang = lang === 'de' ? 'en' : 'de';
         syncThemeIcons();
       }
 
-      let scrollHandler: (() => void) | null = null;
-
       function initPage() {
         syncThemeIcons();
 
-        const themeBtn = document.getElementById('theme-toggle');
-        if (themeBtn) {
-          const fresh = themeBtn.cloneNode(true) as HTMLElement;
-          themeBtn.parentNode!.replaceChild(fresh, themeBtn);
+        document.querySelectorAll<HTMLElement>('#theme-toggle, #theme-toggle-desktop').forEach(btn => {
+          const fresh = btn.cloneNode(true) as HTMLElement;
+          btn.parentNode!.replaceChild(fresh, btn);
           fresh.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
             setTheme(current === 'dark' ? 'light' : 'dark');
           });
-        }
-
-        // Nav scroll background
-        const nav = document.querySelector('[data-nav-bg]') as HTMLElement | null;
-        if (nav) {
-          if (scrollHandler) window.removeEventListener('scroll', scrollHandler);
-          scrollHandler = () => {
-            nav.style.background = window.scrollY > 8
-              ? 'color-mix(in oklab, var(--bg) 70%, transparent)'
-              : 'color-mix(in oklab, var(--bg) 55%, transparent)';
-          };
-          scrollHandler();
-          window.addEventListener('scroll', scrollHandler, { passive: true });
-        }
+        });
       }
 
       document.addEventListener('astro:page-load', initPage);
@@ -149,6 +131,7 @@ const altLang = lang === 'de' ? 'en' : 'de';
         document.documentElement.setAttribute('data-theme', theme);
         syncThemeIcons();
       });
+
     </script>
   </body>
 </html>

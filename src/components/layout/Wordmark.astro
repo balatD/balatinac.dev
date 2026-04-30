@@ -5,12 +5,4 @@ interface Props {
 const { href = '/' } = Astro.props;
 ---
 
-<a
-  class="corner-mark fixed top-6 left-7 z-[60] overflow-hidden py-1 font-mono text-[12px] font-semibold tracking-wider leading-none text-fg hidden md:inline-block"
-  href={href}
-  aria-label="Dragan Balatinac — home"
->
-  <span class="letters inline-flex" aria-hidden="true">
-    <span>D</span><span>r</span><span>a</span><span>g</span><span>a</span><span>n</span><span>&nbsp;</span><span>B</span><span>a</span><span>l</span><span>a</span><span>t</span><span>i</span><span>n</span><span>a</span><span>c</span>
-  </span>
-</a>
+<!-- Desktop wordmark is now inside the Header component -->
