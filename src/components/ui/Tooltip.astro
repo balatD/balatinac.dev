@@ -1,0 +1,18 @@
+---
+import type { Lang } from '../../lib/i18n';
+
+interface Props {
+  de: string;
+  en: string;
+  lang: Lang;
+  class?: string;
+}
+
+const { de, en, lang, class: className = '' } = Astro.props;
+const tip = lang === 'de' ? de : en;
+---
+
+<span class:list={['tooltip-trigger', className]} data-tooltip={tip} tabindex="0">
+  <slot />
+  <span class="tooltip-bubble" role="tooltip" aria-hidden="true">{tip}</span>
+</span>

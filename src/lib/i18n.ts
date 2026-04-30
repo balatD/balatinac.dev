@@ -15,8 +15,8 @@ const translations: Record<string, Record<Lang, string>> = {
 
   // === Homepage — Hero ===
   'hero.heading': {
-    en: 'Building <span class="text-accent">quiet</span> systems<span class="text-accent">.</span>',
-    de: 'Ich baue <span class="text-accent">ruhige</span> Systeme<span class="text-accent">.</span>',
+    en: 'Building <span class="tooltip-trigger text-accent" tabindex="0">quiet<span class="tooltip-bubble" role="tooltip" aria-hidden="true">No drama. No hype. Systems that just work.</span></span> systems<span class="text-accent">.</span>',
+    de: 'Ich baue <span class="tooltip-trigger text-accent" tabindex="0">ruhige<span class="tooltip-bubble" role="tooltip" aria-hidden="true">Kein Drama. Kein Hype. Systeme, die einfach laufen.</span></span> Systeme<span class="text-accent">.</span>',
   },
   'hero.sub': {
     en: 'Backend developer from NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span>, and the DevOps glue around them. This is where I keep my work, my notes, and the occasional opinion about why the boring choice is usually the right one.',

@@ -39,32 +39,34 @@ const navLinks = [
     </div>
   </div>
 
-  <!-- Desktop: wordmark outside content, nav starts at content edge -->
-  <div class="hidden md:block h-14 relative">
-    <!-- Wordmark: pinned to viewport left -->
-    <a
-      href={`${prefix}/`}
-      aria-label="Dragan Balatinac — home"
-      class="wordmark absolute left-8 top-1/2 -translate-y-1/2 font-sans text-[17px] font-medium tracking-[-0.02em] leading-none text-fg"
-    >dragan<span class="wordmark-dot">.</span></a>
-
-    <!-- Nav + controls: aligned to content column -->
+  <!-- Desktop -->
+  <div class="hidden md:block h-14">
     <div class="mx-auto max-w-wrap px-8 h-full flex items-center justify-between">
-      <nav id="nav-links-desktop" class="flex items-center font-mono text-[12px] uppercase tracking-[0.08em] -ml-4" aria-label="Primary">
-        {navLinks.map((link) => (
-          <a
-            class:list={[
-              'nav-link px-4 py-2 transition-colors duration-200',
-              activeNav === link.id ? 'text-fg active' : 'text-muted hover:text-fg',
-            ]}
-            href={link.href}
-            aria-current={activeNav === link.id ? 'page' : undefined}
-          >
-            {link.label}
-          </a>
-        ))}
-      </nav>
+      <!-- Wordmark + nav together -->
+      <div class="flex items-center">
+        <a
+          href={`${prefix}/`}
+          aria-label="Dragan Balatinac — home"
+          class="wordmark font-sans text-[17px] font-medium tracking-[-0.02em] leading-none text-fg mr-8"
+        >dragan<span class="wordmark-dot">.</span></a>
 
+        <nav id="nav-links-desktop" class="flex items-center font-mono text-[12px] uppercase tracking-[0.08em]" aria-label="Primary">
+          {navLinks.map((link) => (
+            <a
+              class:list={[
+                'nav-link px-4 py-2 transition-colors duration-200',
+                activeNav === link.id ? 'text-fg active' : 'text-muted hover:text-fg',
+              ]}
+              href={link.href}
+              aria-current={activeNav === link.id ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- Controls -->
       <div class="flex items-center">
         <a href={altUrl} class="inline-flex items-center justify-center w-8 h-8 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg transition-colors" aria-label={altLang === 'en' ? 'Switch to English' : 'Auf Deutsch wechseln'}>{altLang.toUpperCase()}</a>
         <button id="theme-toggle-desktop" class="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-fg cursor-pointer transition-colors" aria-label="Toggle theme">
