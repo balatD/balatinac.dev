@@ -104,5 +104,5 @@ const altLangUrl = `/blog/${deSlug}/`;
   .prose-article :global(hr) { border: 0; border-top: 1px solid var(--rule); margin: 56px 0; }
   .prose-article :global(a) { color: var(--fg); border-bottom: 1px solid var(--muted); transition: color 0.15s, border-color 0.15s; }
   .prose-article :global(a:hover) { color: var(--accent); border-color: var(--accent); }
-  .prose-article :global(em:last-child) { display: block; font-family: "Space Mono", monospace; font-size: 13px; color: var(--muted); margin-top: 40px; font-style: normal; }
+  .prose-article :global(p:last-child > em:only-child) { font-family: "Space Mono", monospace; font-size: 13px; color: var(--muted); font-style: normal; }
 </style>
