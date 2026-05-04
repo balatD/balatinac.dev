@@ -63,6 +63,10 @@
   --max-width-wrap: 880px;
 }
 
+html, body {
+  overflow-x: clip;
+}
+
 :root {
   --bg: #f4f2ec;
   --fg: #111;
@@ -126,10 +130,11 @@
   text-underline-offset: 4px;
 }
 .tooltip-bubble {
+  --tip-shift: 0px;
   position: absolute;
   bottom: calc(100% + 10px);
   left: 50%;
-  transform: translateX(-50%) translateY(4px);
+  transform: translateX(calc(-50% + var(--tip-shift))) translateY(4px);
   padding: 6px 12px;
   background: var(--fg);
   color: var(--bg);
@@ -139,18 +144,21 @@
   letter-spacing: 0;
   text-transform: none;
   line-height: 1.5;
-  white-space: nowrap;
+  white-space: normal;
+  width: max-content;
+  max-width: min(260px, calc(100vw - 32px));
+  text-align: center;
   border-radius: 4px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s ease, transform 0.15s ease;
-  z-index: 100;
+  z-index: 40;
 }
 .tooltip-bubble::after {
   content: "";
   position: absolute;
   top: 100%;
-  left: 50%;
+  left: calc(50% - var(--tip-shift));
   transform: translateX(-50%);
   border: 5px solid transparent;
   border-top-color: var(--fg);
@@ -158,7 +166,7 @@
 .tooltip-trigger:hover .tooltip-bubble,
 .tooltip-trigger:focus-visible .tooltip-bubble {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(calc(-50% + var(--tip-shift))) translateY(0);
   pointer-events: auto;
 }
 
@@ -174,6 +182,15 @@
   color: var(--accent);
 }
 
+/* Mobile menu dropdown */
+.mobile-menu {
+  max-height: 0;
+  transition: max-height 0.28s ease-out;
+}
+.mobile-menu[data-open="true"] {
+  max-height: 320px;
+}
+
 /* Nav link: trailing accent dot on hover/active — matches dragan. wordmark */
 .nav-link {
   margin-right: -2px;
@@ -183,8 +200,10 @@
   font-family: "Space Grotesk", system-ui, sans-serif;
   font-size: 20px;
   font-weight: 600;
+  line-height: 0;
   letter-spacing: normal;
   text-transform: none;
+  vertical-align: baseline;
   color: var(--accent);
   margin-left: -2px;
   opacity: 0;

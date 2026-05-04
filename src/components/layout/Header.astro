@@ -21,22 +21,32 @@ const navLinks = [
 ];
 ---
 
-<header id="site-nav" class="fixed top-0 left-0 right-0 z-50 backdrop-blur-[16px]" style="background: color-mix(in oklab, var(--bg) 75%, transparent);">
+<header id="site-nav" class="fixed top-0 left-0 right-0 z-50 backdrop-blur-[16px]" style="background: color-mix(in oklab, var(--bg) 75%, transparent); padding-top: env(safe-area-inset-top); transform: translateZ(0); will-change: transform;">
   <!-- Mobile -->
-  <div class="flex md:hidden items-center justify-between h-12 px-5 sm:px-7">
-    <a href={`${prefix}/`} aria-label="Dragan Balatinac — home" class="wordmark font-sans text-[15px] font-medium tracking-[-0.02em] leading-none text-fg">d<span class="wordmark-dot">.</span></a>
-    <div class="flex items-center">
-      <nav id="nav-links" class="flex items-center font-mono text-[11px] uppercase tracking-[0.08em]" aria-label="Primary">
-        {navLinks.map((link) => (
-          <a class:list={['nav-link px-2.5 py-2 transition-colors duration-200', activeNav === link.id ? 'text-fg active' : 'text-muted hover:text-fg']} href={link.href} aria-current={activeNav === link.id ? 'page' : undefined}>{link.label}</a>
-        ))}
-      </nav>
-      <a href={altUrl} class="inline-flex items-center justify-center w-8 h-8 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg transition-colors" aria-label={altLang === 'en' ? 'Switch to English' : 'Auf Deutsch wechseln'}>{altLang.toUpperCase()}</a>
-      <button id="theme-toggle" class="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-fg cursor-pointer transition-colors" aria-label="Toggle theme">
-        <svg id="icon-sun" class="w-[14px] h-[14px] hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
-        <svg id="icon-moon" class="w-[14px] h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-      </button>
+  <div class="md:hidden">
+    <div class="flex items-center justify-between h-12 px-5 sm:px-7">
+      <a href={`${prefix}/`} aria-label="Dragan Balatinac — home" class="wordmark font-sans text-[15px] font-medium tracking-[-0.02em] leading-none text-fg">dragan<span class="wordmark-dot">.</span></a>
+      <div class="flex items-center">
+        <a href={altUrl} class="inline-flex items-center justify-center w-8 h-8 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg transition-colors" aria-label={altLang === 'en' ? 'Switch to English' : 'Auf Deutsch wechseln'}>{altLang.toUpperCase()}</a>
+        <button id="theme-toggle" class="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-fg cursor-pointer transition-colors" aria-label="Toggle theme">
+          <svg id="icon-sun" class="w-[14px] h-[14px] hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+          <svg id="icon-moon" class="w-[14px] h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <button id="mobile-menu-toggle" class="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-fg cursor-pointer transition-colors" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+          <svg class="menu-icon-closed w-[16px] h-[16px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+          <svg class="menu-icon-open w-[16px] h-[16px] hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </div>
     </div>
+    <nav id="mobile-menu" class="mobile-menu overflow-hidden" aria-label="Primary mobile">
+      <ul class="flex flex-col font-mono text-[12px] uppercase tracking-[0.08em] px-5 sm:px-7 py-2 border-t border-rule">
+        {navLinks.map((link) => (
+          <li>
+            <a class:list={['nav-link block py-3 transition-colors duration-200', activeNav === link.id ? 'text-fg active' : 'text-muted hover:text-fg']} href={link.href} aria-current={activeNav === link.id ? 'page' : undefined}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </div>
 
   <!-- Desktop -->
@@ -50,7 +60,7 @@ const navLinks = [
           class="wordmark font-sans text-[17px] font-medium tracking-[-0.02em] leading-none text-fg mr-8"
         >dragan<span class="wordmark-dot">.</span></a>
 
-        <nav id="nav-links-desktop" class="flex items-center font-mono text-[12px] uppercase tracking-[0.08em]" aria-label="Primary">
+        <nav id="nav-links-desktop" class="flex items-baseline font-mono text-[12px] uppercase tracking-[0.08em]" aria-label="Primary">
           {navLinks.map((link) => (
             <a
               class:list={[
@@ -59,9 +69,7 @@ const navLinks = [
               ]}
               href={link.href}
               aria-current={activeNav === link.id ? 'page' : undefined}
-            >
-              {link.label}
-            </a>
+            >{link.label}</a>
           ))}
         </nav>
       </div>

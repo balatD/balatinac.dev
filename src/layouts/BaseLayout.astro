@@ -109,6 +109,32 @@ const altLang = lang === 'de' ? 'en' : 'de';
         syncThemeIcons();
       }
 
+      function clampTooltip(trigger: HTMLElement) {
+        const bubble = trigger.querySelector<HTMLElement>('.tooltip-bubble');
+        if (!bubble) return;
+        bubble.style.setProperty('--tip-shift', '0px');
+        const margin = 12;
+        const triggerRect = trigger.getBoundingClientRect();
+        const bubbleRect = bubble.getBoundingClientRect();
+        const center = triggerRect.left + triggerRect.width / 2;
+        const half = bubbleRect.width / 2;
+        const vw = document.documentElement.clientWidth;
+        let shift = 0;
+        if (center - half < margin) shift = margin - (center - half);
+        else if (center + half > vw - margin) shift = (vw - margin) - (center + half);
+        bubble.style.setProperty('--tip-shift', shift + 'px');
+      }
+
+      function setMenuOpen(open: boolean) {
+        const menu = document.getElementById('mobile-menu');
+        const toggle = document.getElementById('mobile-menu-toggle');
+        if (!menu || !toggle) return;
+        menu.setAttribute('data-open', String(open));
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.querySelector<HTMLElement>('.menu-icon-closed')?.classList.toggle('hidden', open);
+        toggle.querySelector<HTMLElement>('.menu-icon-open')?.classList.toggle('hidden', !open);
+      }
+
       function initPage() {
         syncThemeIcons();
 
@@ -119,6 +145,35 @@ const altLang = lang === 'de' ? 'en' : 'de';
             const current = document.documentElement.getAttribute('data-theme');
             setTheme(current === 'dark' ? 'light' : 'dark');
           });
+        });
+
+        const menuToggle = document.getElementById('mobile-menu-toggle');
+        if (menuToggle) {
+          const fresh = menuToggle.cloneNode(true) as HTMLElement;
+          menuToggle.parentNode!.replaceChild(fresh, menuToggle);
+          fresh.addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            const isOpen = menu?.getAttribute('data-open') === 'true';
+            setMenuOpen(!isOpen);
+          });
+        }
+
+        document.querySelectorAll<HTMLAnchorElement>('#mobile-menu a').forEach(link => {
+          link.addEventListener('click', () => setMenuOpen(false));
+        });
+
+        document.querySelectorAll<HTMLElement>('.tooltip-trigger').forEach(trigger => {
+          const handler = () => clampTooltip(trigger);
+          trigger.addEventListener('pointerenter', handler);
+          trigger.addEventListener('focusin', handler);
+          trigger.addEventListener('touchstart', handler, { passive: true });
+        });
+      }
+
+      if (!(window as any).__menuEscBound) {
+        (window as any).__menuEscBound = true;
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') setMenuOpen(false);
         });
       }
 
