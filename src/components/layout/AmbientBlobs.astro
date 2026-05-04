@@ -1,21 +1,54 @@
 ---
 ---
 
-<div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden" aria-hidden="true">
-  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" class="w-full h-full block">
-    <defs>
-      <filter id="blob-blur" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
-        <feGaussianBlur stdDeviation="40" />
-      </filter>
-    </defs>
-    <ellipse class="blob a" cx="260" cy="220" rx="320" ry="260"
-             filter="url(#blob-blur)"
-             style="fill: var(--accent); opacity: .06;"></ellipse>
-    <ellipse class="blob b" cx="940" cy="320" rx="360" ry="280"
-             filter="url(#blob-blur)"
-             style="fill: var(--fg); opacity: .05;"></ellipse>
-    <ellipse class="blob c" cx="640" cy="680" rx="420" ry="240"
-             filter="url(#blob-blur)"
-             style="fill: var(--accent); opacity: .04;"></ellipse>
-  </svg>
+<div class="ambient-blobs" aria-hidden="true">
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+  <div class="blob c"></div>
 </div>
+
+<style>
+  .ambient-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .blob.a {
+    width: 53vmax;
+    height: 43vmax;
+    left: -8vmax;
+    top: -8vmax;
+    background: var(--accent);
+    opacity: 0.06;
+  }
+
+  .blob.b {
+    width: 60vmax;
+    height: 47vmax;
+    right: -10vmax;
+    top: 10vmax;
+    background: var(--fg);
+    opacity: 0.05;
+  }
+
+  .blob.c {
+    width: 70vmax;
+    height: 40vmax;
+    left: 18vmax;
+    bottom: -12vmax;
+    background: var(--accent);
+    opacity: 0.04;
+  }
+</style>

@@ -279,11 +279,11 @@ html, body {
   animation-delay: -16s;
 }
 @keyframes drift {
-  0% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(6%, -4%) scale(1.08); }
-  50% { transform: translate(-4%, 6%) scale(0.95); }
-  75% { transform: translate(-7%, -3%) scale(1.05); }
-  100% { transform: translate(5%, 5%) scale(1.02); }
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  25% { transform: translate3d(6%, -4%, 0) scale(1.08); }
+  50% { transform: translate3d(-4%, 6%, 0) scale(0.95); }
+  75% { transform: translate3d(-7%, -3%, 0) scale(1.05); }
+  100% { transform: translate3d(5%, 5%, 0) scale(1.02); }
 }
 
 /* Dash-bullet list */
