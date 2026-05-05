@@ -19,6 +19,8 @@
 | Package Manager | pnpm (recommended) / npm | latest | Dependency management |
 | Runtime | Node.js | ≥ 20.x LTS | Build environment |
 
+> **Shell setup required:** The default shell (zsh) doesn't have Node/npm on PATH. Before running `npm` or `pnpm` commands, switch to fish shell and activate Node: `fish && nvm use latest`. Alternatively, prefix commands: `fish -c 'nvm use latest && npm run build'`.
+
 ---
 
 ## 1. Project Setup

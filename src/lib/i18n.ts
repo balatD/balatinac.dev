@@ -109,6 +109,10 @@ const translations: Record<string, Record<Lang, string>> = {
   // === Skip link ===
   'skip': { en: 'Skip to content', de: 'Zum Inhalt springen' },
 
+  // === Lightbox ===
+  'lightbox.close': { en: 'Close', de: 'Schließen' },
+  'lightbox.caption': { en: 'Image description', de: 'Bildbeschreibung' },
+
   // === 404 ===
   '404.heading': { en: 'Page not found.', de: 'Seite nicht gefunden.' },
   '404.sub': {

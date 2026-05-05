@@ -96,6 +96,16 @@ const altLang = lang === 'de' ? 'en' : 'de';
 
     <Footer lang={lang} />
 
+    <dialog id="lightbox" class="lightbox-dialog" aria-label={t('lightbox.caption', lang)}>
+      <button class="lightbox-close" aria-label={t('lightbox.close', lang)} type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
+      </button>
+      <div class="lightbox-inner">
+        <img class="lightbox-img" src="" alt="" aria-describedby="lightbox-caption" />
+        <p id="lightbox-caption" class="lightbox-caption"></p>
+      </div>
+    </dialog>
+
     <script>
       function syncThemeIcons() {
         const theme = document.documentElement.getAttribute('data-theme') || 'light';
@@ -103,10 +113,55 @@ const altLang = lang === 'de' ? 'en' : 'de';
         document.querySelectorAll<HTMLElement>('.icon-moon, #icon-moon').forEach(el => el.style.display = theme === 'dark' ? 'none' : 'block');
       }
 
-      function setTheme(mode: string) {
-        document.documentElement.setAttribute('data-theme', mode);
-        try { localStorage.setItem('theme', mode); } catch (e) {}
-        syncThemeIcons();
+      function setTheme(mode: string, toggleEl?: HTMLElement) {
+        const html = document.documentElement;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Fallback: instant switch if no View Transition API or reduced motion preferred
+        if (!document.startViewTransition || prefersReducedMotion) {
+          html.setAttribute('data-theme', mode);
+          try { localStorage.setItem('theme', mode); } catch (e) {}
+          syncThemeIcons();
+          return;
+        }
+
+        // Calculate circle origin from toggle button position
+        const rect = toggleEl?.getBoundingClientRect();
+        const x = rect ? rect.left + rect.width / 2 : innerWidth / 2;
+        const y = rect ? rect.top + rect.height / 2 : innerHeight / 2;
+        const endRadius = Math.hypot(
+          Math.max(x, innerWidth - x),
+          Math.max(y, innerHeight - y)
+        );
+
+        // Override view transition styles for circular reveal
+        html.classList.add('theme-transition');
+
+        const transition = document.startViewTransition(async () => {
+          html.setAttribute('data-theme', mode);
+          try { localStorage.setItem('theme', mode); } catch (e) {}
+          syncThemeIcons();
+        });
+
+        transition.ready.then(() => {
+          html.animate(
+            {
+              clipPath: [
+                `circle(0px at ${x}px ${y}px)`,
+                `circle(${endRadius}px at ${x}px ${y}px)`,
+              ],
+            },
+            {
+              duration: 500,
+              easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              pseudoElement: '::view-transition-new(root)',
+            }
+          );
+        });
+
+        transition.finished.then(() => {
+          html.classList.remove('theme-transition');
+        });
       }
 
       function clampTooltip(trigger: HTMLElement) {
@@ -143,7 +198,7 @@ const altLang = lang === 'de' ? 'en' : 'de';
           btn.parentNode!.replaceChild(fresh, btn);
           fresh.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
-            setTheme(current === 'dark' ? 'light' : 'dark');
+            setTheme(current === 'dark' ? 'light' : 'dark', fresh);
           });
         });
 
@@ -178,6 +233,101 @@ const altLang = lang === 'de' ? 'en' : 'de';
       }
 
       document.addEventListener('astro:page-load', initPage);
+
+      // ─── Lightbox ───
+      function initLightbox() {
+        const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+        if (!dialog) return;
+        const lightboxImg = dialog.querySelector<HTMLImageElement>('.lightbox-img');
+        const lightboxCaption = dialog.querySelector<HTMLParagraphElement>('.lightbox-caption');
+        const closeBtn = dialog.querySelector<HTMLButtonElement>('.lightbox-close');
+        if (!lightboxImg || !lightboxCaption || !closeBtn) return;
+
+        let previouslyFocused: HTMLElement | null = null;
+        let scrollY = 0;
+
+        function openLightbox(img: HTMLImageElement) {
+          previouslyFocused = img;
+          lightboxImg!.src = img.src;
+          lightboxImg!.alt = img.alt || '';
+          lightboxCaption!.textContent = img.alt || '';
+
+          // Lock background scroll
+          scrollY = window.scrollY;
+          document.body.classList.add('lightbox-open');
+          document.body.style.top = `-${scrollY}px`;
+
+          dialog.showModal();
+          closeBtn!.focus();
+        }
+
+        function closeLightbox() {
+          dialog.close();
+          lightboxImg!.src = '';
+          lightboxImg!.alt = '';
+          lightboxCaption!.textContent = '';
+
+          // Unlock background scroll
+          document.body.classList.remove('lightbox-open');
+          document.body.style.top = '';
+          window.scrollTo(0, scrollY);
+
+          if (previouslyFocused) {
+            previouslyFocused.focus();
+            previouslyFocused = null;
+          }
+        }
+
+        // Close button
+        closeBtn.addEventListener('click', closeLightbox);
+
+        // Click backdrop (outside inner content) to close
+        dialog.addEventListener('click', (e) => {
+          if (e.target === dialog) closeLightbox();
+        });
+
+        // Click the image itself to close
+        lightboxImg.addEventListener('click', closeLightbox);
+
+        // Trap Tab focus within the dialog
+        dialog.addEventListener('keydown', (e) => {
+          if (e.key !== 'Tab') return;
+          const focusable = dialog.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          if (focusable.length === 0) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            }
+          } else {
+            if (document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        });
+
+        // Make prose images clickable
+        document.querySelectorAll<HTMLImageElement>('.prose-article img').forEach((img) => {
+          // Skip images already wrapped in links
+          if (img.closest('a')) return;
+          img.style.cursor = 'zoom-in';
+          img.setAttribute('role', 'button');
+          img.setAttribute('tabindex', '0');
+          img.setAttribute('aria-label', img.alt || 'Enlarge image');
+          img.addEventListener('click', () => openLightbox(img));
+          img.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openLightbox(img);
+            }
+          });
+        });
+      }
+
+      document.addEventListener('astro:page-load', initLightbox);
 
       document.addEventListener('astro:after-swap', () => {
         const theme = document.documentElement.getAttribute('data-theme')
