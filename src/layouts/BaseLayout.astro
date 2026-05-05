@@ -125,6 +125,10 @@ const altLang = lang === 'de' ? 'en' : 'de';
           return;
         }
 
+        // Safari's clip-path animation on view-transition pseudo-elements is janky —
+        // use a fast crossfade instead.
+        const isSafari = /Safari\//.test(navigator.userAgent) && !/Chrome\//.test(navigator.userAgent) && !/Edg\//.test(navigator.userAgent);
+
         // Calculate circle origin from toggle button position
         const rect = toggleEl?.getBoundingClientRect();
         const x = rect ? rect.left + rect.width / 2 : innerWidth / 2;
@@ -144,19 +148,28 @@ const altLang = lang === 'de' ? 'en' : 'de';
         });
 
         transition.ready.then(() => {
-          html.animate(
-            {
-              clipPath: [
-                `circle(0px at ${x}px ${y}px)`,
-                `circle(${endRadius}px at ${x}px ${y}px)`,
-              ],
-            },
-            {
-              duration: 500,
-              easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-              pseudoElement: '::view-transition-new(root)',
-            }
-          );
+          if (isSafari) {
+            // Fast crossfade — lightweight, no clip-path compositing
+            html.animate(
+              { opacity: [0, 1] },
+              { duration: 200, easing: 'ease-out', pseudoElement: '::view-transition-new(root)' }
+            );
+          } else {
+            // Circular reveal — smooth on Chromium/Firefox
+            html.animate(
+              {
+                clipPath: [
+                  `circle(0px at ${x}px ${y}px)`,
+                  `circle(${endRadius}px at ${x}px ${y}px)`,
+                ],
+              },
+              {
+                duration: 500,
+                easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                pseudoElement: '::view-transition-new(root)',
+              }
+            );
+          }
         });
 
         transition.finished.then(() => {
