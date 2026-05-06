@@ -14,6 +14,7 @@ export async function GET(context: APIContext) {
       description: post.data.description,
       pubDate: post.data.publishedAt,
       link: `/blog/${post.id}/`,
+      categories: post.data.tags,
     }));
 
   const projectItems = projects
@@ -23,6 +24,7 @@ export async function GET(context: APIContext) {
       description: p.data.description,
       pubDate: p.data.publishedAt,
       link: `/work/${p.id}/`,
+      categories: p.data.tags,
     }));
 
   const items = [...blogItems, ...projectItems].sort(
@@ -34,6 +36,6 @@ export async function GET(context: APIContext) {
     description: 'Latest work and writing from Dragan Balatinac.',
     site: context.site!,
     items,
-    customData: `<language>en-us</language>`,
+    customData: `<language>de</language>`,
   });
 }

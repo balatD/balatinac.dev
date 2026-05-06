@@ -24,6 +24,7 @@ export const prerender = true;
     name: 'Dragan Balatinac',
     url: 'https://balatinac.dev',
     jobTitle: 'Backend Engineer',
+    knowsAbout: ['TYPO3', 'PHP', 'Backend Development', 'DevOps', 'Docker', 'Astro'],
     sameAs: [
       'https://github.com/balatD',
       'https://linkedin.com/in/balatinac',
@@ -34,6 +35,12 @@ export const prerender = true;
     '@type': 'WebSite',
     name: 'Dragan Balatinac',
     url: 'https://balatinac.dev',
+    inLanguage: 'de',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://balatinac.dev/?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
   }} />
 
   <Hero lang={lang} />
