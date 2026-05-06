@@ -1,19 +1,23 @@
 ---
+import { t } from '../../lib/i18n';
+import type { Lang } from '../../lib/i18n';
+
 interface Props {
   tags: string[];
   total: number;
+  lang: Lang;
 }
 
-const { tags, total } = Astro.props;
+const { tags, total, lang } = Astro.props;
 const padded = String(total).padStart(2, '0');
 ---
 
 <div data-filters class="border-y border-rule font-mono text-[13px] py-4">
   <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap items-center gap-4 sm:gap-[18px]">
-    <span class="text-muted">Filter</span>
-    <button data-tag="all" data-on="true" class="bg-transparent border-0 p-0 cursor-pointer text-accent transition-colors hover:text-fg">All</button>
+    <span class="text-muted">{t('filter.label', lang)}</span>
+    <button data-tag="all" data-on="true" class="bg-transparent border-0 p-0 cursor-pointer text-accent transition-colors hover:text-fg">{t('filter.all', lang)}</button>
     {tags.map((tag) => (
-      <button data-tag={tag.toLowerCase()} class="bg-transparent border-0 p-0 cursor-pointer text-muted transition-colors hover:text-fg">{tag}</button>
+      <button data-tag={tag.toLowerCase()} class="bg-transparent border-0 p-0 cursor-pointer text-muted transition-colors hover:text-fg"><span class="text-accent">#</span>{tag}</button>
     ))}
     <span id="count" class="text-muted basis-full sm:basis-auto sm:ml-auto">{padded} / {padded}</span>
   </div>
@@ -62,5 +66,16 @@ const padded = String(total).padStart(2, '0');
     setCount(total);
   }
 
-  document.addEventListener('astro:page-load', initFilters);
+  function activateTagFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const tag = params.get('tag');
+    if (!tag) return;
+    const btn = document.querySelector(`button[data-tag="${tag}"]`) as HTMLButtonElement | null;
+    if (btn) btn.click();
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    initFilters();
+    activateTagFromURL();
+  });
 </script>

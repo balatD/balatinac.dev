@@ -473,3 +473,24 @@ body.lightbox-open {
   display: block;
   margin: 32px auto;
 }
+
+/* ─── Heading anchor links ─── */
+.prose-article h2[id],
+.prose-article h3[id] {
+  scroll-margin-top: 5rem;
+}
+.prose-article h2[id] .heading-link,
+.prose-article h3[id] .heading-link {
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  text-decoration: none;
+  border-bottom: none;
+  margin-left: 0.3em;
+}
+.prose-article h2[id]:hover .heading-link,
+.prose-article h3[id]:hover .heading-link,
+.prose-article h2[id] .heading-link:focus-visible,
+.prose-article h3[id] .heading-link:focus-visible {
+  opacity: 1;
+}

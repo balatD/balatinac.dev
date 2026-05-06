@@ -40,6 +40,11 @@ const nextSlug = nextDe?.data.urlSlug || nextPost?.id;
 
 const dateStr = post.data.publishedAt.toLocaleDateString('de-DE', { day: 'numeric', month: 'short', year: 'numeric' });
 const altLangUrl = `/en/blog/${post.id}/`;
+const relatedPosts = allEn
+  .filter((p) => p.id !== post.id && p.data.tags.some((tag) => post.data.tags.includes(tag)))
+  .slice(0, 3);
+const relatedDe = relatedPosts.map((p) => deMap.get(p.id));
+const relatedSlugs = relatedPosts.map((p, i) => relatedDe[i]?.data.urlSlug || p.id);
 ---
 
 <BaseLayout title={`${displayTitle} — Dragan Balatinac`} description={displayDesc} activeNav="writing" ogType="article" publishedAt={post.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
@@ -83,7 +88,7 @@ const altLangUrl = `/en/blog/${post.id}/`;
       <span>{t('meta.readTime', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{displayReadTime}</strong></span>
       <span class="flex gap-2.5 sm:ml-auto">
         {post.data.tags.map((tag) => (
-          <span class="text-muted before:content-['#'] before:text-accent">{tag}</span>
+          <a href={`/blog/?tag=${tag.toLowerCase()}`} class="text-muted before:content-['#'] before:text-accent hover:text-fg transition-colors">{tag}</a>
         ))}
       </span>
     </div>
@@ -95,20 +100,47 @@ const altLangUrl = `/en/blog/${post.id}/`;
     </div>
   </article>
 
-  <nav class="border-t border-rule">
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 grid grid-cols-1 sm:grid-cols-2">
-      <a class="py-7 pr-4 hover:text-accent transition-colors" href="/blog/">
-        <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.backToWriting', lang)}</div>
-        <div class="text-[16px] font-medium">{t('blog.allPosts', lang)}</div>
-      </a>
-      {nextPost && (
-        <a class="py-7 pl-4 text-right border-t sm:border-t-0 sm:border-l border-rule hover:text-accent transition-colors" href={`/blog/${nextSlug}/`}>
-          <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.nextPost', lang)}</div>
-          <div class="text-[16px] font-medium">{nextDe?.data.title || nextPost.data.title} →</div>
-        </a>
-      )}
+{relatedPosts.length > 0 && (
+  <section class="border-t border-rule">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 py-10 md:py-14">
+      <h2 class="font-mono text-[12px] uppercase tracking-[0.08em] text-muted mb-6">{t('blog.relatedPosts', lang)}</h2>
+      <ul class="list-none p-0 m-0 divide-y divide-rule">
+        {relatedPosts.map((rp, i) => {
+          const rpDe = relatedDe[i];
+          const rpTitle = rpDe?.data.title || rp.data.title;
+          const rpDesc = rpDe?.data.description || rp.data.description;
+          const rpDate = rp.data.publishedAt.toLocaleDateString('de-DE', { month: 'short', year: 'numeric' });
+          return (
+            <li>
+              <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group" href={`/blog/${relatedSlugs[i]}/`}>
+                <div>
+                  <div class="text-[18px] font-medium leading-snug text-balance">{rpTitle}</div>
+                  <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">{rpDesc}</div>
+                </div>
+                <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">{rpDate}</div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </div>
-  </nav>
+  </section>
+)}
+
+<nav class="border-t border-rule">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 grid grid-cols-1 sm:grid-cols-2">
+    <a class="py-7 pr-4 hover:text-accent transition-colors" href="/blog/">
+      <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.backToWriting', lang)}</div>
+      <div class="text-[16px] font-medium">{t('blog.allPosts', lang)}</div>
+    </a>
+    {nextPost && (
+      <a class="py-7 pl-4 text-right border-t sm:border-t-0 sm:border-l border-rule hover:text-accent transition-colors" href={`/blog/${nextSlug}/`}>
+        <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.nextPost', lang)}</div>
+        <div class="text-[16px] font-medium">{nextDe?.data.title || nextPost.data.title} →</div>
+      </a>
+    )}
+  </div>
+</nav>
 </BaseLayout>
 
 <style>

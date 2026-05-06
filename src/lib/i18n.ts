@@ -100,6 +100,11 @@ const translations: Record<string, Record<Lang, string>> = {
   'blog.backToWriting': { en: '← Back to writing', de: '← Zurück zu Texte' },
   'blog.allPosts': { en: 'All posts', de: 'Alle Beiträge' },
   'blog.nextPost': { en: 'Next post', de: 'Nächster Beitrag' },
+  'blog.relatedPosts': { en: 'Related', de: 'Weiterlesen' },
+
+  // === Filter ===
+  'filter.label': { en: 'Filter', de: 'Filter' },
+  'filter.all': { en: 'all', de: 'alle' },
 
   // === Breadcrumbs ===
   'crumb.home': { en: 'Home', de: 'Start' },

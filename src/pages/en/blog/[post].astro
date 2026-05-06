@@ -27,6 +27,9 @@ const nextPost = allEn[currentIndex + 1] || null;
 
 const dateStr = post.data.publishedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 const altLangUrl = `/blog/${deSlug}/`;
+const relatedPosts = allEn
+  .filter((p) => p.id !== post.id && p.data.tags.some((tag) => post.data.tags.includes(tag)))
+  .slice(0, 3);
 ---
 
 <BaseLayout title={`${post.data.title} — Dragan Balatinac`} description={post.data.description} activeNav="writing" ogType="article" publishedAt={post.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
@@ -70,7 +73,7 @@ const altLangUrl = `/blog/${deSlug}/`;
       <span>{t('meta.readTime', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{post.data.readTime || '~5 min'}</strong></span>
       <span class="flex gap-2.5 sm:ml-auto">
         {post.data.tags.map((tag) => (
-          <span class="text-muted before:content-['#'] before:text-accent">{tag}</span>
+          <a href={`/en/blog/?tag=${tag.toLowerCase()}`} class="text-muted before:content-['#'] before:text-accent hover:text-fg transition-colors">{tag}</a>
         ))}
       </span>
     </div>
@@ -82,20 +85,44 @@ const altLangUrl = `/blog/${deSlug}/`;
     </div>
   </article>
 
-  <nav class="border-t border-rule">
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 grid grid-cols-1 sm:grid-cols-2">
-      <a class="py-7 pr-4 hover:text-accent transition-colors" href="/en/blog/">
-        <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.backToWriting', lang)}</div>
-        <div class="text-[16px] font-medium">{t('blog.allPosts', lang)}</div>
-      </a>
-      {nextPost && (
-        <a class="py-7 pl-4 text-right border-t sm:border-t-0 sm:border-l border-rule hover:text-accent transition-colors" href={`/en/blog/${nextPost.id}/`}>
-          <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.nextPost', lang)}</div>
-          <div class="text-[16px] font-medium">{nextPost.data.title} →</div>
-        </a>
-      )}
+{relatedPosts.length > 0 && (
+  <section class="border-t border-rule">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 py-10 md:py-14">
+      <h2 class="font-mono text-[12px] uppercase tracking-[0.08em] text-muted mb-6">{t('blog.relatedPosts', lang)}</h2>
+      <ul class="list-none p-0 m-0 divide-y divide-rule">
+        {relatedPosts.map((rp) => {
+          const rpDate = rp.data.publishedAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+          return (
+            <li>
+              <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group" href={`/en/blog/${rp.id}/`}>
+                <div>
+                  <div class="text-[18px] font-medium leading-snug text-balance">{rp.data.title}</div>
+                  <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">{rp.data.description}</div>
+                </div>
+                <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">{rpDate}</div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </div>
-  </nav>
+  </section>
+)}
+
+<nav class="border-t border-rule">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 grid grid-cols-1 sm:grid-cols-2">
+    <a class="py-7 pr-4 hover:text-accent transition-colors" href="/en/blog/">
+      <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.backToWriting', lang)}</div>
+      <div class="text-[16px] font-medium">{t('blog.allPosts', lang)}</div>
+    </a>
+    {nextPost && (
+      <a class="py-7 pl-4 text-right border-t sm:border-t-0 sm:border-l border-rule hover:text-accent transition-colors" href={`/en/blog/${nextPost.id}/`}>
+        <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.nextPost', lang)}</div>
+        <div class="text-[16px] font-medium">{nextPost.data.title} →</div>
+      </a>
+    )}
+  </div>
+</nav>
 </BaseLayout>
 
 <style>
