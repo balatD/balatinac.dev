@@ -38,12 +38,10 @@ This is the big structural change. Since the Form Framework was introduced in TY
 The adapter supports a chain of storage backends, including extension-based sources that are mounted read-only. To keep the migration from turning into YAML surgery, the core ships with a new CLI command:
 
 ```bash
-vendor/bin/typo3 form:definition:transfer
+vendor/bin/typo3 form:formdefinition:transfer
 ```
 
 It moves form definitions between storages — cleanly and traceably.
-
-There's also `form:cleanup:uploads` for cleaning up orphaned upload folders. Sounds unremarkable, but it saves real disk space over time.
 
 ### ICU message format and better date handling
 
@@ -114,7 +112,8 @@ Extbase now supports SQL function expressions in `ORDER BY` clauses through a fl
 Access control, declarative and directly on the controller action: logged-in frontend user, group membership, custom voters. Clean, readable, maintainable — and finally an end to permission checks scattered across every action method.
 
 ```php
-#[Authorize(roles: ['ROLE_USER'], groups: [42])]
+#[Authorize(requireLogin: true)]
+#[Authorize(requireGroups: [42])]
 public function showAction(): ResponseInterface
 {
     // …

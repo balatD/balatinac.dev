@@ -39,12 +39,10 @@ Das ist die große strukturelle Änderung. Seit das Form Framework in TYPO3 v8 e
 Der Adapter unterstützt eine Kette von Storage-Backends, einschließlich extension-basierter Quellen, die schreibgeschützt eingebunden werden. Damit die Migration nicht in YAML-Chirurgie ausartet, bringt der Core einen neuen CLI-Befehl mit:
 
 ```bash
-vendor/bin/typo3 form:definition:transfer
+vendor/bin/typo3 form:formdefinition:transfer
 ```
 
 Er verschiebt Form-Definitionen zwischen Storages — sauber und nachvollziehbar.
-
-Ergänzend gibt es `form:cleanup:uploads` zum Aufräumen verwaister Upload-Ordner. Klingt unspektakulär, spart über die Zeit aber echten Speicherplatz.
 
 ### ICU-Message-Format und bessere Datumsverarbeitung
 
@@ -115,7 +113,8 @@ Extbase erlaubt jetzt SQL-Funktionsausdrücke in `ORDER BY`-Klauseln über eine 
 Zugriffskontrolle deklarativ direkt an der Controller-Action: eingeloggter Frontend-User, Gruppenmitgliedschaft, eigene Voter. Sauber, lesbar, wartbar — und endlich Schluss mit über alle Actions verstreuten Berechtigungs-Checks.
 
 ```php
-#[Authorize(roles: ['ROLE_USER'], groups: [42])]
+#[Authorize(requireLogin: true)]
+#[Authorize(requireGroups: [42])]
 public function showAction(): ResponseInterface
 {
     // …
