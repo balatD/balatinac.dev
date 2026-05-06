@@ -39,7 +39,7 @@ Das ist die große strukturelle Änderung. Seit das Form Framework in TYPO3 v8 e
 Der Adapter unterstützt eine Kette von Storage-Backends, einschließlich extension-basierter Quellen, die schreibgeschützt eingebunden werden. Damit die Migration nicht in YAML-Chirurgie ausartet, bringt der Core einen neuen CLI-Befehl mit:
 
 ```bash
-vendor/bin/typo3 form:formdefinition:transfer
+vendor/bin/typo3 form:definition:transfer
 ```
 
 Er verschiebt Form-Definitionen zwischen Storages — sauber und nachvollziehbar.

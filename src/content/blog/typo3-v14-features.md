@@ -38,7 +38,7 @@ This is the big structural change. Since the Form Framework was introduced in TY
 The adapter supports a chain of storage backends, including extension-based sources that are mounted read-only. To keep the migration from turning into YAML surgery, the core ships with a new CLI command:
 
 ```bash
-vendor/bin/typo3 form:formdefinition:transfer
+vendor/bin/typo3 form:definition:transfer
 ```
 
 It moves form definitions between storages — cleanly and traceably.
