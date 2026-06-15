@@ -23,10 +23,10 @@ const allTags = [...new Set(sorted.flatMap((p) => p.data.tags))].sort();
     { label: t('workIndex.crumb', lang) },
   ]} />
 
-  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]">
+  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]" data-reveal-group>
     <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance" set:html={t('workIndex.heading', lang)} />
-      <p class="text-[18px] leading-[1.6] text-muted m-0 max-w-[56ch] text-pretty">{t('workIndex.sub', lang)}</p>
+      <h1 class="h1-page leading-[1.1] m-0 mb-5 text-balance" data-reveal set:html={t('workIndex.heading', lang)} />
+      <p class="text-[18px] leading-[1.6] text-muted m-0 text-pretty" data-reveal>{t('workIndex.sub', lang)}</p>
     </div>
   </header>
 
@@ -35,17 +35,17 @@ const allTags = [...new Set(sorted.flatMap((p) => p.data.tags))].sort();
       <FilterBar tags={allTags} total={sorted.length} lang={lang} />
       <section class="py-10 md:py-10 pb-16 md:pb-20">
         <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-          <ul id="list" class="list-none p-0 m-0 divide-y divide-rule">
+          <ul id="list" class="list-none p-0 m-0" data-reveal-group>
             {sorted.map((project) => {
               const { title, description, slug } = getLocalizedEntry(project, deMap, lang);
               return (
-                <li data-tags={project.data.tags.join(',')}>
-                  <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group" href={`/work/${slug}/`}>
-                    <div>
-                      <div class="text-[18px] font-medium leading-snug text-balance">{title}</div>
+                <li data-tags={project.data.tags.join(',')} data-reveal>
+                  <a class="row-link group grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] transition-colors" href={`/work/${slug}/`}>
+                    <div class="min-w-0">
+                      <div class="font-display text-[20px] font-semibold leading-snug text-balance text-fg group-hover:text-accent transition-colors">{title}</div>
                       <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">{description}</div>
                     </div>
-                    <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">{project.data.year}</div>
+                    <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap">{project.data.year}</div>
                   </a>
                 </li>
               );

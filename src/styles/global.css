@@ -1,50 +1,55 @@
 @import "tailwindcss";
 
-/* Self-hosted fonts — Space Grotesk (variable weight) + Space Mono */
+/* ─── Self-hosted variable fonts ─── */
+/* Display — Bricolage Grotesque */
 @font-face {
-  font-family: "Space Grotesk";
-  src: url("/fonts/space-grotesk-latin-ext.woff2") format("woff2");
-  font-weight: 300 700;
+  font-family: "Bricolage Grotesque";
+  src: url("/fonts/bricolage-grotesque-latin-ext.woff2") format("woff2");
+  font-weight: 400 800;
+  font-stretch: 100%;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: "Space Grotesk";
-  src: url("/fonts/space-grotesk-latin-400-500-700.woff2") format("woff2");
-  font-weight: 300 700;
+  font-family: "Bricolage Grotesque";
+  src: url("/fonts/bricolage-grotesque-latin.woff2") format("woff2");
+  font-weight: 400 800;
+  font-stretch: 100%;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* Body — Hanken Grotesk */
 @font-face {
-  font-family: "Space Mono";
-  src: url("/fonts/space-mono-latin-ext-400.woff2") format("woff2");
-  font-weight: 400;
+  font-family: "Hanken Grotesk";
+  src: url("/fonts/hanken-grotesk-latin-ext.woff2") format("woff2");
+  font-weight: 400 700;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: "Space Mono";
-  src: url("/fonts/space-mono-latin-400.woff2") format("woff2");
-  font-weight: 400;
+  font-family: "Hanken Grotesk";
+  src: url("/fonts/hanken-grotesk-latin.woff2") format("woff2");
+  font-weight: 400 700;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* Mono — Spline Sans Mono */
 @font-face {
-  font-family: "Space Mono";
-  src: url("/fonts/space-mono-latin-ext-700.woff2") format("woff2");
-  font-weight: 700;
+  font-family: "Spline Sans Mono";
+  src: url("/fonts/spline-sans-mono-latin-ext.woff2") format("woff2");
+  font-weight: 400 600;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: "Space Mono";
-  src: url("/fonts/space-mono-latin-700.woff2") format("woff2");
-  font-weight: 700;
+  font-family: "Spline Sans Mono";
+  src: url("/fonts/spline-sans-mono-latin.woff2") format("woff2");
+  font-weight: 400 600;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -52,41 +57,73 @@
 
 @theme {
   --color-bg: var(--bg);
+  --color-surface: var(--surface);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-rule: var(--rule);
   --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
 
-  --font-sans: "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "Space Mono", ui-monospace, monospace;
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+  --font-mono: "Spline Sans Mono", ui-monospace, monospace;
 
-  --max-width-wrap: 880px;
+  --max-width-wrap: 920px;
+
+  /* shared easing — exponential ease-out, no bounce */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html, body {
   overflow-x: clip;
 }
 
+/* Warm Mechanical — light "paper" */
 :root {
-  --bg: #f4f2ec;
-  --fg: #111;
-  --muted: #6f6c66;
-  --rule: #e3e0d8;
-  --accent: #ff4500;
+  --bg: oklch(0.955 0.010 75);
+  --surface: oklch(0.925 0.012 75);
+  --fg: oklch(0.235 0.012 60);
+  --muted: oklch(0.520 0.016 62);
+  --rule: oklch(0.875 0.013 72);
+  --accent: oklch(0.560 0.150 48);
+  --accent-ink: oklch(0.985 0.004 75);
 }
 
+/* Warm Mechanical — dark "charcoal" */
 :root[data-theme="dark"] {
-  --bg: #0e0e0e;
-  --fg: #ececec;
-  --muted: #9a9892;
-  --rule: #1f1f1f;
-  --accent: #ff5a1a;
+  --bg: oklch(0.180 0.008 62);
+  --surface: oklch(0.225 0.009 62);
+  --fg: oklch(0.920 0.008 75);
+  --muted: oklch(0.640 0.013 66);
+  --rule: oklch(0.310 0.009 62);
+  --accent: oklch(0.660 0.150 52);
+  --accent-ink: oklch(0.160 0.010 60);
 }
 
 ::selection {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
 }
+
+/* ─── Structural rails — vertical lines framing the content column (zed-style) ─── */
+.frame-lines {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.frame-lines::before,
+.frame-lines::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+}
+/* aligned to the max-w-wrap (920px) content column edges; clamp to viewport on small screens */
+.frame-lines::before { left: max(0px, calc(50% - 460px)); }
+.frame-lines::after { right: max(0px, calc(50% - 460px)); }
 
 /* Shiki dual-theme: swap light/dark CSS variables based on data-theme */
 :root[data-theme="dark"] .astro-code,
@@ -111,7 +148,7 @@ html, body {
   background: var(--fg);
   color: var(--bg);
   padding: 8px 14px;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   border: 0;
 }
@@ -138,7 +175,7 @@ html, body {
   padding: 6px 12px;
   background: var(--fg);
   color: var(--bg);
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0;
@@ -170,7 +207,7 @@ html, body {
   pointer-events: auto;
 }
 
-/* Wordmark */
+/* Wordmark — [DB] monogram + name */
 .wordmark {
   text-decoration: none;
   transition: opacity 0.2s ease;
@@ -182,6 +219,26 @@ html, body {
   color: var(--accent);
 }
 
+/* Oversized footer wordmark — full-bleed brand graphic (laravel.com-style) */
+.footer-wordmark-wrap {
+  overflow: hidden;
+  line-height: 0;
+}
+.footer-wordmark {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(64px, 26vw, 460px);
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--fg);
+  opacity: 0.07; /* subtle tone-on-tone watermark */
+  user-select: none;
+  margin-bottom: -0.08em; /* let the baseline bleed off the bottom edge */
+}
+
 /* Mobile menu dropdown */
 .mobile-menu {
   max-height: 0;
@@ -191,59 +248,152 @@ html, body {
   max-height: 320px;
 }
 
-/* Nav link: trailing accent dot on hover/active — matches dragan. wordmark */
+/* Nav link: accent underline wipe on hover/active */
 .nav-link {
-  margin-right: -2px;
+  position: relative;
 }
 .nav-link::after {
-  content: ".";
-  font-family: "Space Grotesk", system-ui, sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 0;
-  letter-spacing: normal;
-  text-transform: none;
-  vertical-align: baseline;
-  color: var(--accent);
-  margin-left: -2px;
-  opacity: 0;
-  transition: opacity 0.12s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s var(--ease-out-expo);
 }
 .nav-link:hover::after,
 .nav-link.active::after {
-  opacity: 1;
+  transform: scaleX(1);
 }
 
-/* Greeting tick — accent dot */
-.tick::before {
-  content: ".";
-  color: var(--accent);
-  font-size: 1.4em;
-  font-weight: 700;
-  line-height: 0;
-  margin-right: 2px;
+/* ─── Warm Mechanical motif ─── */
+/* Mono spec label */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
-
-/* Section label — trailing accent dot */
+/* Section label — mono kicker with trailing accent dot (matches dragan. wordmark) */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
 .section-label::after {
   content: ".";
   color: var(--accent);
 }
 
+/* Section heading — large display title (Über mich, Arbeiten, Texte, Kontakt) */
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(28px, 4.5vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+.section-title::after {
+  content: ".";
+  color: var(--accent);
+}
+/* Double-rule under a heading */
+.rule-double {
+  border: 0;
+  height: 0;
+  border-top: 1px solid var(--fg);
+  border-bottom: 1px solid var(--fg);
+  padding-top: 3px;
+}
+/* Greeting tick — mechanical caret */
+.tick::before {
+  content: "▸";
+  color: var(--accent);
+  font-size: 0.7em;
+  margin-right: 6px;
+  vertical-align: 0.12em;
+}
+
+/* Accent fill button */
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 10px 18px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: transform 0.2s var(--ease-out-expo), filter 0.2s ease;
+  will-change: transform;
+}
+.btn-accent:hover {
+  filter: brightness(1.07);
+  box-shadow: 0 8px 24px -10px var(--accent);
+}
+
+
 /* CTA arrow widens its gap on hover */
 .cta-link {
-  transition: color 0.15s, border-color 0.15s, gap 0.15s;
+  transition: color 0.15s, border-color 0.15s, gap 0.18s var(--ease-out-expo);
 }
 .cta-link:hover {
   gap: 14px;
 }
 
-/* Fluid headlines */
+/* Fluid display headlines — Bricolage Grotesque */
 .h1-hero {
-  font-size: clamp(40px, 7vw, 76px);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(46px, 9vw, 104px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
 }
 .h1-page {
-  font-size: clamp(34px, 5vw, 44px);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(36px, 6vw, 56px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+/* ─── Motion: reveal primitives ─── */
+/* Hidden resting state applies ONLY when motion is enabled (html.has-motion, set
+   synchronously in <head>). No JS or prefers-reduced-motion → content stays visible. */
+html.has-motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+}
+html.has-motion [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Tactile spec-row slide on hover */
+.row-link {
+  transition: transform 0.32s var(--ease-out-expo);
+}
+.row-link:hover {
+  transform: translateX(8px);
 }
 
 /* Lang button: stack swap-in spans */
@@ -309,7 +459,7 @@ html, body {
   position: absolute;
   left: 0;
   color: var(--accent);
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   top: 10px;
 }
@@ -320,7 +470,7 @@ html, body {
 
 /* Inline code */
 code:not(pre code) {
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 0.875em;
   background: var(--rule);
   padding: 1px 6px;
@@ -410,7 +560,7 @@ body.lightbox-open {
 }
 .lightbox-caption {
   margin-top: 16px;
-  font-family: "Space Mono", ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: #999;
   text-align: center;
@@ -459,7 +609,7 @@ body.lightbox-open {
 }
 .prose-article :global(figcaption) {
   margin-top: 8px;
-  font-family: "Space Mono", ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--muted);
   line-height: 1.5;

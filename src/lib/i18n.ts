@@ -22,7 +22,7 @@ const translations: Record<string, Record<Lang, string>> = {
     en: 'Backend developer from NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span>, and the DevOps glue around them. This is where I keep my work, my notes, and the occasional opinion about why the boring choice is usually the right one.',
     de: 'Backend-Entwickler aus NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span> und der DevOps-Klebstoff drumherum. Hier sammle ich meine Arbeit, meine Notizen und gelegentlich die Meinung, warum die langweilige Lösung meist die richtige ist.',
   },
-  'hero.cta.work': { en: 'See the work →', de: 'Zur Arbeit →' },
+  'hero.cta.work': { en: 'See the work', de: 'Zur Arbeit' },
   'hero.cta.notes': { en: 'Read the notes', de: 'Notizen lesen' },
 
   // === Homepage — About ===

@@ -59,8 +59,8 @@ const altLang = lang === 'de' ? 'en' : 'de';
     <link rel="alternate" hreflang={altLang} href={new URL(altUrl, Astro.site).toString()} />
     <link rel="alternate" hreflang="x-default" href={new URL(lang === 'de' ? Astro.url.pathname : altUrl, Astro.site).toString()} />
 
-    <link rel="preload" href="/fonts/space-grotesk-latin-400-500-700.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/space-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="alternate" type="application/rss+xml" title="Dragan Balatinac RSS" href="/rss.xml" />
 
@@ -68,7 +68,7 @@ const altLang = lang === 'de' ? 'en' : 'de';
 
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Theme init to prevent FOUC -->
+    <!-- Theme + motion init to prevent FOUC / FOUC-free reveals -->
     <script is:inline>
       (function () {
         var theme = null;
@@ -77,6 +77,10 @@ const altLang = lang === 'de' ? 'en' : 'de';
           theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
         document.documentElement.setAttribute('data-theme', theme);
+        // Enable reveal motion only when allowed — gates the hidden resting state in CSS.
+        // No JS / reduced-motion → class never added → content renders visible.
+        var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduced) document.documentElement.classList.add('has-motion');
       })();
     </script>
   </head>
@@ -86,6 +90,9 @@ const altLang = lang === 'de' ? 'en' : 'de';
     </a>
 
     <AmbientBlobs />
+
+    <!-- zed-style structural rails framing the content column -->
+    <div class="frame-lines" aria-hidden="true"></div>
 
     <Wordmark href={`${prefix}/`} />
     <Header activeNav={activeNav} lang={lang} altLangUrl={altUrl} />
@@ -350,6 +357,85 @@ const altLang = lang === 'de' ? 'en' : 'de';
         syncThemeIcons();
       });
 
+    </script>
+
+    <!-- ─── Motion: dramatic entrances, scroll choreography & micro-interactions (motion.dev) ─── -->
+    <script>
+      import { animate, inView, stagger } from 'motion';
+
+      const EASE = [0.16, 1, 0.3, 1];
+      const motionOn = () => document.documentElement.classList.contains('has-motion');
+
+      // Cleanups for scroll/inView observers — cleared between SPA navigations so they don't stack.
+      let cleanups: Array<() => void> = [];
+      const track = (stop: unknown) => { if (typeof stop === 'function') cleanups.push(stop as () => void); };
+      function clearFX() { cleanups.forEach((fn) => { try { fn(); } catch (e) {} }); cleanups = []; }
+
+      function show(el: Element) {
+        el.classList.add('is-visible');
+        (el as HTMLElement).dataset.revealed = '1';
+      }
+
+      function revealIn(items: HTMLElement[], opts: { y?: number; blur?: number; dur?: number; gap?: number; start?: number } = {}) {
+        const { y = 26, blur = 8, dur = 0.7, gap = 0.08, start = 0 } = opts;
+        animate(
+          items,
+          { opacity: [0, 1], y: [y, 0], filter: [`blur(${blur}px)`, 'blur(0px)'] },
+          { duration: dur, ease: EASE, delay: stagger(gap, { startDelay: start }) }
+        );
+        items.forEach(show);
+      }
+
+      function initReveals() {
+        // Hero: plays immediately with the same staggered reveal used across the site.
+        const hero = document.querySelector<HTMLElement>('[data-hero]');
+        if (hero && !hero.dataset.revealed) {
+          hero.dataset.revealed = '1';
+          const items = Array.from(hero.querySelectorAll<HTMLElement>('[data-reveal]'));
+          revealIn(items, { y: 28, blur: 8, dur: 0.7, gap: 0.09, start: 0.05 });
+        }
+
+        // Scroll-triggered groups.
+        document.querySelectorAll<HTMLElement>('[data-reveal-group]:not([data-hero])').forEach((group) => {
+          const items = Array.from(group.querySelectorAll<HTMLElement>('[data-reveal]')).filter((el) => !el.dataset.revealed);
+          if (!items.length) return;
+          track(inView(group, () => { revealIn(items); }, { amount: 0.12 }));
+        });
+
+        // Standalone reveals.
+        document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+          if (el.dataset.revealed || el.closest('[data-reveal-group]')) return;
+          track(inView(el, () => { revealIn([el]); }, { amount: 0.12 }));
+        });
+      }
+
+      function initMagnetic() {
+        document.querySelectorAll<HTMLElement>('.btn-accent, [data-magnetic]').forEach((el) => {
+          if (el.dataset.magneticBound) return;
+          el.dataset.magneticBound = '1';
+          const strength = 0.35;
+          el.addEventListener('pointermove', (e) => {
+            if (!motionOn()) return;
+            const r = el.getBoundingClientRect();
+            const x = (e.clientX - (r.left + r.width / 2)) * strength;
+            const y = (e.clientY - (r.top + r.height / 2)) * strength;
+            animate(el, { x, y }, { type: 'spring', stiffness: 350, damping: 22 });
+          });
+          el.addEventListener('pointerleave', () => {
+            animate(el, { x: 0, y: 0 }, { type: 'spring', stiffness: 220, damping: 18 });
+          });
+        });
+      }
+
+      function initMotion() {
+        clearFX();
+        if (!motionOn()) return;
+        initReveals();
+        initMagnetic();
+      }
+
+      document.addEventListener('astro:page-load', initMotion);
+      document.addEventListener('astro:before-swap', clearFX);
     </script>
   </body>
 </html>

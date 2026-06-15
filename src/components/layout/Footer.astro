@@ -1,19 +1,22 @@
 ---
 import type { Lang } from '../../lib/i18n';
-import { t, langPrefix } from '../../lib/i18n';
+import { t } from '../../lib/i18n';
 
 interface Props {
   lang?: Lang;
 }
 
 const { lang = 'de' } = Astro.props;
-const prefix = langPrefix(lang);
 ---
 
-<footer class="py-10 pb-14 border-t border-rule font-mono text-[12px] sm:text-[13px] text-muted">
-  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex justify-between items-center flex-wrap gap-3">
-    <a href={`${prefix}/`} class="wordmark text-fg font-sans text-[14px] font-medium tracking-[-0.02em] leading-none">d<span class="wordmark-dot">.</span></a>
+<footer class="relative border-t-2 border-rule overflow-hidden" style="background-image: linear-gradient(to bottom, transparent 0%, var(--bg) 24%);">
+  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 pt-10 pb-10 flex justify-between items-center flex-wrap gap-3 font-mono text-[12px] sm:text-[13px] text-muted">
     <span>&copy; {new Date().getFullYear()} Dragan Balatinac</span>
     <span>{t('footer.built', lang)}</span>
+  </div>
+
+  <!-- Oversized brand wordmark — full-bleed footer graphic -->
+  <div class="footer-wordmark-wrap" aria-hidden="true">
+    <span class="footer-wordmark">dragan<span class="wordmark-dot">.</span></span>
   </div>
 </footer>
