@@ -89,7 +89,7 @@ const relatedPosts = allEn
   <section class="border-t border-rule">
     <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 py-10 md:py-14">
       <h2 class="font-mono text-[12px] uppercase tracking-[0.08em] text-muted mb-6">{t('blog.relatedPosts', lang)}</h2>
-      <ul class="list-none p-0 m-0 divide-y divide-rule">
+      <ul class="list-none p-0 m-0">
         {relatedPosts.map((rp) => {
           const rpDate = rp.data.publishedAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
           return (
@@ -130,8 +130,7 @@ const relatedPosts = allEn
   .prose-article :global(h3) { font-weight: 600; font-size: 20px; margin-top: 28px; margin-bottom: 8px; }
   .prose-article :global(p) { font-size: 17px; line-height: 1.75; margin: 0 0 16px; text-wrap: pretty; }
   .prose-article :global(ul), .prose-article :global(ol) { list-style: none; padding: 0; margin: 0 0 22px; counter-reset: ord; }
-  .prose-article :global(li) { position: relative; padding: 8px 0 8px 26px; font-size: 17px; line-height: 1.65; border-bottom: 1px solid var(--rule); }
-  .prose-article :global(li:first-child) { border-top: 1px solid var(--rule); }
+  .prose-article :global(li) { position: relative; padding: 8px 0 8px 26px; font-size: 17px; line-height: 1.65; }
   .prose-article :global(ul li::before) { content: "—"; position: absolute; left: 0; color: var(--accent); }
   .prose-article :global(ol li) { counter-increment: ord; }
   .prose-article :global(ol li::before) { content: counter(ord, decimal-leading-zero); position: absolute; left: 0; color: var(--accent); font-family: var(--font-mono); font-size: 13px; top: 10px; }
