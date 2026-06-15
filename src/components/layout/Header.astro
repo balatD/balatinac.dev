@@ -21,11 +21,11 @@ const navLinks = [
 ];
 ---
 
-<header id="site-nav" class="fixed top-0 left-0 right-0 z-50 backdrop-blur-[16px]" style="background: color-mix(in oklab, var(--bg) 75%, transparent); padding-top: env(safe-area-inset-top); transform: translateZ(0); will-change: transform;">
+<header id="site-nav" class="fixed top-0 left-0 right-0 z-50 backdrop-blur-[16px] border-b border-rule" style="background: color-mix(in oklab, var(--bg) 75%, transparent); padding-top: env(safe-area-inset-top); transform: translateZ(0); will-change: transform;">
   <!-- Mobile -->
   <div class="md:hidden">
     <div class="flex items-center justify-between h-12 px-5 sm:px-7">
-      <a href={`${prefix}/`} aria-label="Dragan Balatinac — home" class="wordmark font-sans text-[15px] font-medium tracking-[-0.02em] leading-none text-fg">dragan<span class="wordmark-dot">.</span></a>
+      <a href={`${prefix}/`} aria-label="Dragan Balatinac — home" class="wordmark font-display text-[19px] font-bold tracking-[-0.03em] leading-none text-fg">dragan<span class="wordmark-dot">.</span></a>
       <div class="flex items-center">
         <a href={altUrl} class="inline-flex items-center justify-center w-8 h-8 font-mono text-[11px] tracking-[0.1em] text-muted hover:text-fg transition-colors" aria-label={altLang === 'en' ? 'Switch to English' : 'Auf Deutsch wechseln'}>{altLang.toUpperCase()}</a>
         <button id="theme-toggle" class="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-fg cursor-pointer transition-colors" aria-label="Toggle theme">
@@ -57,7 +57,7 @@ const navLinks = [
         <a
           href={`${prefix}/`}
           aria-label="Dragan Balatinac — home"
-          class="wordmark font-sans text-[17px] font-medium tracking-[-0.02em] leading-none text-fg mr-8"
+          class="wordmark font-display text-[21px] font-bold tracking-[-0.03em] leading-none text-fg mr-9"
         >dragan<span class="wordmark-dot">.</span></a>
 
         <nav id="nav-links-desktop" class="flex items-baseline font-mono text-[12px] uppercase tracking-[0.08em]" aria-label="Primary">

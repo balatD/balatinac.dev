@@ -6,21 +6,21 @@ interface Props { lang?: Lang; }
 const { lang = 'de' } = Astro.props;
 ---
 
-<section id="contact" class="py-14 sm:py-16 md:py-20 border-t border-rule">
+<section id="contact" class="py-16 sm:py-20 md:py-24 border-t border-rule" data-reveal-group>
   <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-    <p class="section-label font-mono text-[13px] text-muted m-0 mb-7 md:mb-8">{t('contact.label', lang)}</p>
+    <h2 class="section-title m-0 mb-7 md:mb-9" data-reveal>{t('contact.label', lang)}</h2>
     <ul class="list-none p-0 m-0">
-      <li class="grid grid-cols-[70px_1fr] sm:grid-cols-[80px_1fr] gap-4 sm:gap-6 py-3 border-b border-rule text-[15px]">
-        <span class="font-mono text-[13px] text-muted">{t('contact.email', lang)}</span>
-        <a class="text-fg border-b border-muted hover:text-accent hover:border-accent transition-colors break-all sm:break-normal" href="mailto:hello@balatinac.com">hello@balatinac.com</a>
+      <li class="grid grid-cols-[88px_1fr] sm:grid-cols-[120px_1fr] gap-4 sm:gap-6 py-2 items-baseline text-[15px]" data-reveal>
+        <span class="mono-label">{t('contact.email', lang)}</span>
+        <a class="text-fg hover:text-accent transition-colors break-all sm:break-normal" href="mailto:hello@balatinac.com">hello@balatinac.com</a>
       </li>
-      <li class="grid grid-cols-[70px_1fr] sm:grid-cols-[80px_1fr] gap-4 sm:gap-6 py-3 border-b border-rule text-[15px]">
-        <span class="font-mono text-[13px] text-muted">{t('contact.code', lang)}</span>
-        <a class="text-fg border-b border-muted hover:text-accent hover:border-accent transition-colors break-all sm:break-normal" href="https://github.com/balatD" target="_blank" rel="noopener">github.com/balatD</a>
+      <li class="grid grid-cols-[88px_1fr] sm:grid-cols-[120px_1fr] gap-4 sm:gap-6 py-2 items-baseline text-[15px]" data-reveal>
+        <span class="mono-label">{t('contact.code', lang)}</span>
+        <a class="text-fg hover:text-accent transition-colors break-all sm:break-normal" href="https://github.com/balatD" target="_blank" rel="noopener">github.com/balatD</a>
       </li>
-      <li class="grid grid-cols-[70px_1fr] sm:grid-cols-[80px_1fr] gap-4 sm:gap-6 py-3 text-[15px]">
-        <span class="font-mono text-[13px] text-muted">{t('contact.network', lang)}</span>
-        <a class="text-fg border-b border-muted hover:text-accent hover:border-accent transition-colors break-all sm:break-normal" href="https://linkedin.com/in/balatinac" target="_blank" rel="noopener">linkedin.com/in/balatinac</a>
+      <li class="grid grid-cols-[88px_1fr] sm:grid-cols-[120px_1fr] gap-4 sm:gap-6 py-2 items-baseline text-[15px]" data-reveal>
+        <span class="mono-label">{t('contact.network', lang)}</span>
+        <a class="text-fg hover:text-accent transition-colors break-all sm:break-normal" href="https://www.linkedin.com/in/dragan-balatinac/" target="_blank" rel="noopener">linkedin.com/in/dragan-balatinac</a>
       </li>
     </ul>
   </div>

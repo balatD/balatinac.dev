@@ -5,15 +5,20 @@ import { t, langPrefix } from '../../lib/i18n';
 interface Props { lang?: Lang; }
 const { lang = 'de' } = Astro.props;
 const prefix = langPrefix(lang);
+
+const eyebrow = lang === 'de'
+  ? 'Backend-Entwickler · verlässliche Systeme'
+  : 'Backend engineer · reliable systems';
 ---
 
-<section class="relative pt-[140px] pb-20 sm:pt-[160px] sm:pb-24 md:pt-[180px] md:pb-[120px]">
+<section class="relative pt-[136px] pb-20 sm:pt-[156px] sm:pb-24 md:pt-[176px] md:pb-[120px]" data-reveal-group data-hero>
   <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-    <h1 class="h1-hero font-medium leading-[1.05] tracking-[-0.035em] m-0 mb-7 sm:mb-8 text-balance text-fg" set:html={t('hero.heading', lang)} />
-    <p class="text-[18px] sm:text-[19px] leading-[1.55] text-muted m-0 mb-8 sm:mb-9 max-w-[56ch] text-pretty" set:html={t('hero.sub', lang)} />
-    <div class="flex flex-wrap gap-x-6 gap-y-4 font-mono text-[14px]">
-      <a class="cta-link inline-flex items-center gap-2 pb-1 text-fg border-b border-fg hover:text-accent hover:border-accent" href={`${prefix}/#work`}>{t('hero.cta.work', lang)}</a>
-      <a class="cta-link inline-flex items-center gap-2 pb-1 text-muted border-b border-rule hover:text-accent hover:border-accent" href={`${prefix}/#writing`}>{t('hero.cta.notes', lang)}</a>
+    <p class="section-label m-0 mb-6 sm:mb-7" data-reveal>{eyebrow}</p>
+    <h1 class="h1-hero m-0 mb-7 sm:mb-9 text-balance text-fg" data-reveal set:html={t('hero.heading', lang)} />
+    <p class="text-[18px] sm:text-[19px] leading-[1.6] text-muted m-0 mb-9 sm:mb-10 text-pretty" data-reveal set:html={t('hero.sub', lang)} />
+    <div class="flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-[15px]" data-reveal>
+      <a class="cta-link inline-flex items-center gap-2 pb-1 text-fg border-b border-fg hover:text-accent hover:border-accent" href={`${prefix}/#work`}>{t('hero.cta.work', lang)} <span aria-hidden="true">→</span></a>
+      <a class="cta-link inline-flex items-center gap-2 pb-1 text-fg border-b border-fg hover:text-accent hover:border-accent" href={`${prefix}/#writing`}>{t('hero.cta.notes', lang)} <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>

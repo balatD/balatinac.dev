@@ -78,7 +78,7 @@ const relatedSlugs = relatedPosts.map((p, i) => relatedDe[i]?.data.urlSlug || p.
   <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]">
     <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
       <p class="font-mono text-[13px] text-muted m-0 mb-5">{dateStr} · {displayReadTime}</p>
-      <h1 class="h1-page font-medium leading-[1.15] tracking-[-0.02em] m-0 mb-5 text-balance">{displayTitle}</h1>
+      <h1 class="h1-page leading-[1.1] m-0 mb-5 text-balance">{displayTitle}</h1>
     </div>
   </header>
 
@@ -95,7 +95,7 @@ const relatedSlugs = relatedPosts.map((p, i) => relatedDe[i]?.data.urlSlug || p.
   </section>
 
   <article class="py-12 sm:py-14 md:py-14 pb-16 md:pb-20">
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 [&>*]:max-w-[64ch] prose-article">
+    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 prose-article">
       <Content />
     </div>
   </article>
@@ -144,21 +144,21 @@ const relatedSlugs = relatedPosts.map((p, i) => relatedDe[i]?.data.urlSlug || p.
 </BaseLayout>
 
 <style>
-  .prose-article :global(h2) { font-weight: 500; font-size: 26px; line-height: 1.25; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 16px; }
-  .prose-article :global(h3) { font-weight: 500; font-size: 18px; margin-top: 28px; margin-bottom: 8px; }
+  .prose-article :global(h2) { font-weight: 700; font-size: 26px; line-height: 1.25; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 16px; }
+  .prose-article :global(h3) { font-weight: 600; font-size: 20px; margin-top: 28px; margin-bottom: 8px; }
   .prose-article :global(p) { font-size: 17px; line-height: 1.75; margin: 0 0 16px; text-wrap: pretty; }
   .prose-article :global(ul), .prose-article :global(ol) { list-style: none; padding: 0; margin: 0 0 22px; counter-reset: ord; }
   .prose-article :global(li) { position: relative; padding: 8px 0 8px 26px; font-size: 17px; line-height: 1.65; border-bottom: 1px solid var(--rule); }
   .prose-article :global(li:first-child) { border-top: 1px solid var(--rule); }
   .prose-article :global(ul li::before) { content: "—"; position: absolute; left: 0; color: var(--accent); }
   .prose-article :global(ol li) { counter-increment: ord; }
-  .prose-article :global(ol li::before) { content: counter(ord, decimal-leading-zero); position: absolute; left: 0; color: var(--accent); font-family: "Space Mono", monospace; font-size: 13px; top: 10px; }
+  .prose-article :global(ol li::before) { content: counter(ord, decimal-leading-zero); position: absolute; left: 0; color: var(--accent); font-family: var(--font-mono); font-size: 13px; top: 10px; }
   .prose-article :global(blockquote) { border-left: 2px solid var(--accent); padding: 4px 0 4px 18px; margin: 28px 0; font-size: 19px; line-height: 1.45; font-style: italic; }
   .prose-article :global(blockquote p) { font-size: inherit; line-height: inherit; margin: 0; }
   .prose-article :global(pre) { padding: 20px 24px; margin: 0 0 24px; font-size: 13px; line-height: 1.65; border-radius: 6px; overflow-x: auto; white-space: pre; }
-  .prose-article :global(pre code) { font-family: "Space Mono", monospace; background: none; padding: 0; font-size: inherit; }
+  .prose-article :global(pre code) { font-family: var(--font-mono); background: none; padding: 0; font-size: inherit; }
   .prose-article :global(hr) { border: 0; border-top: 1px solid var(--rule); margin: 56px 0; }
   .prose-article :global(a) { color: var(--fg); border-bottom: 1px solid var(--muted); transition: color 0.15s, border-color 0.15s; }
   .prose-article :global(a:hover) { color: var(--accent); border-color: var(--accent); }
-  .prose-article :global(p:last-child > em:only-child) { font-family: "Space Mono", monospace; font-size: 13px; color: var(--muted); font-style: normal; }
+  .prose-article :global(p:last-child > em:only-child) { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-style: normal; }
 </style>
