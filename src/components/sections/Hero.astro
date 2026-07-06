@@ -9,16 +9,90 @@ const prefix = langPrefix(lang);
 const eyebrow = lang === 'de'
   ? 'Backend-Entwickler · verlässliche Systeme'
   : 'Backend engineer · reliable systems';
+
+// Heading is built here (not via i18n set:html) so the accent word can roll/cycle.
+const headingPre = lang === 'de' ? 'Ich baue ' : 'Building ';
+const headingPost = lang === 'de' ? ' Systeme' : ' systems';
+const words = lang === 'de'
+  ? ['ruhige', 'stabile', 'wartbare', 'schnelle', 'robuste']
+  : ['quiet', 'stable', 'fast', 'clean', 'resilient'];
 ---
 
-<section class="relative pt-[136px] pb-20 sm:pt-[156px] sm:pb-24 md:pt-[176px] md:pb-[120px]" data-reveal-group data-hero>
+<section class="hero-band relative pt-[136px] pb-20 sm:pt-[156px] sm:pb-24 md:pt-[176px] md:pb-[120px]" data-reveal-group data-hero>
   <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
     <p class="section-label m-0 mb-6 sm:mb-7" data-reveal>{eyebrow}</p>
-    <h1 class="h1-hero m-0 mb-7 sm:mb-9 text-balance text-fg" data-reveal set:html={t('hero.heading', lang)} />
+    <h1 class="h1-hero m-0 mb-7 sm:mb-9 text-balance text-fg" data-reveal>
+      {headingPre}<span class="sr-only">{words[0]} </span><span class="word-roll" data-word-roll aria-hidden="true"
+        ><span class="word-roll__track"
+          >{words.map((w) => <span class="word-roll__item text-accent">{w}</span>)}</span
+        ></span
+      >{headingPost}<span class="text-accent">.</span>
+    </h1>
     <p class="text-[18px] sm:text-[19px] leading-[1.6] text-muted m-0 mb-9 sm:mb-10 text-pretty" data-reveal set:html={t('hero.sub', lang)} />
-    <div class="flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-[15px]" data-reveal>
-      <a class="cta-link inline-flex items-center gap-2 pb-1 text-fg border-b border-fg hover:text-accent hover:border-accent" href={`${prefix}/#work`}>{t('hero.cta.work', lang)} <span aria-hidden="true">→</span></a>
-      <a class="cta-link inline-flex items-center gap-2 pb-1 text-fg border-b border-fg hover:text-accent hover:border-accent" href={`${prefix}/#writing`}>{t('hero.cta.notes', lang)} <span aria-hidden="true">→</span></a>
+    <div class="flex flex-wrap items-center gap-4" data-reveal>
+      <a class="btn-roll btn-roll--primary" href={`${prefix}/#work`} data-magnetic>
+        <span class="btn-roll__text"><span>{t('hero.cta.work', lang)}</span><span aria-hidden="true">{t('hero.cta.work', lang)}</span></span>
+        <span class="btn-roll__arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="btn-roll btn-roll--ghost" href={`${prefix}/#writing`}>
+        <span class="btn-roll__text"><span>{t('hero.cta.notes', lang)}</span><span aria-hidden="true">{t('hero.cta.notes', lang)}</span></span>
+        <span class="btn-roll__arrow" aria-hidden="true">→</span>
+      </a>
     </div>
   </div>
 </section>
+
+<script>
+  function initWordRoll() {
+    const motionOn = document.documentElement.classList.contains('has-motion');
+    if (!motionOn) return;
+    document.querySelectorAll<HTMLElement>('[data-word-roll]').forEach((el) => {
+      if (el.dataset.wrBound) return;
+      const track = el.querySelector<HTMLElement>('.word-roll__track');
+      const items = Array.from(el.querySelectorAll<HTMLElement>('.word-roll__item'));
+      if (!track || items.length < 2) return;
+      el.dataset.wrBound = '1';
+      el.classList.add('is-active');
+
+      let i = 0;
+      const size = () => {
+        const it = items[i];
+        el.style.width = it.offsetWidth + 'px';
+        el.style.height = it.offsetHeight + 'px';
+        track.style.transform = `translateY(${-it.offsetTop}px)`;
+      };
+      const sizeInstant = () => {
+        const a = el.style.transition, b = track.style.transition;
+        el.style.transition = 'none';
+        track.style.transition = 'none';
+        size();
+        requestAnimationFrame(() => { el.style.transition = a; track.style.transition = b; });
+      };
+
+      sizeInstant();
+      const timer = window.setInterval(() => {
+        if (document.visibilityState !== 'visible') return;
+        i = (i + 1) % items.length;
+        size();
+      }, 2300);
+
+      const onResize = () => sizeInstant();
+      window.addEventListener('resize', onResize);
+      if ((document as any).fonts?.ready) (document as any).fonts.ready.then(onResize);
+
+      (el as any).__wrCleanup = () => {
+        clearInterval(timer);
+        window.removeEventListener('resize', onResize);
+      };
+    });
+  }
+
+  function cleanupWordRoll() {
+    document.querySelectorAll<HTMLElement>('[data-word-roll]').forEach((el) => {
+      (el as any).__wrCleanup?.();
+    });
+  }
+
+  document.addEventListener('astro:page-load', initWordRoll);
+  document.addEventListener('astro:before-swap', cleanupWordRoll);
+</script>

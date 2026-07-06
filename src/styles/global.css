@@ -354,6 +354,86 @@ html, body {
   gap: 14px;
 }
 
+/* ─── Hero band — full-bleed warm region that sets the hero apart ─── */
+.hero-band {
+  background:
+    radial-gradient(150% 95% at 88% -25%, color-mix(in oklch, var(--accent) 20%, transparent), transparent 55%),
+    radial-gradient(120% 80% at -5% 0%, color-mix(in oklch, var(--accent) 9%, transparent), transparent 50%),
+    var(--surface);
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(to right, transparent, var(--rule) 14%, var(--rule) 86%, transparent) 1;
+}
+
+/* ─── Codex-style roll buttons — label rolls up, twin rolls in from below ─── */
+.btn-roll {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 12px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.25s var(--ease-out-expo), color 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease;
+  will-change: transform;
+}
+.btn-roll__text {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.25;
+}
+.btn-roll__text > span {
+  display: block;
+  transition: transform 0.45s var(--ease-out-expo);
+}
+.btn-roll__text > span:last-child {
+  position: absolute;
+  inset: 0;
+  transform: translateY(110%);
+}
+.btn-roll:hover .btn-roll__text > span:first-child,
+.btn-roll:focus-visible .btn-roll__text > span:first-child { transform: translateY(-110%); }
+.btn-roll:hover .btn-roll__text > span:last-child,
+.btn-roll:focus-visible .btn-roll__text > span:last-child { transform: translateY(0); }
+.btn-roll__arrow { transition: transform 0.35s var(--ease-out-expo); }
+.btn-roll:hover .btn-roll__arrow,
+.btn-roll:focus-visible .btn-roll__arrow { transform: translateX(5px); }
+
+.btn-roll--primary { background: var(--accent); color: var(--accent-ink); }
+.btn-roll--primary:hover,
+.btn-roll--primary:focus-visible { box-shadow: 0 12px 32px -12px var(--accent); }
+.btn-roll--ghost { color: var(--fg); border: 1px solid var(--rule); }
+.btn-roll--ghost:hover,
+.btn-roll--ghost:focus-visible { border-color: var(--fg); }
+
+/* ─── Word rotator (hero accent word) — fallback: plain inline accent word ─── */
+.word-roll { display: inline; }
+.word-roll__track { display: contents; }
+.word-roll__item { display: none; }
+.word-roll__item:first-child { display: inline; }
+/* JS-enabled rolling state: clip to one line, slide the stacked track */
+.word-roll.is-active {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  transition: width 0.5s var(--ease-out-expo), height 0.5s var(--ease-out-expo);
+}
+.word-roll.is-active .word-roll__track {
+  display: block;
+  will-change: transform;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.word-roll.is-active .word-roll__item { display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-roll__text > span,
+  .btn-roll__arrow { transition: none; }
+}
+
 /* Fluid display headlines — Bricolage Grotesque */
 .h1-hero {
   font-family: var(--font-display);
