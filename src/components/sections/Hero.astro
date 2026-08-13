@@ -1,10 +1,9 @@
 ---
 import type { Lang } from '../../lib/i18n';
-import { t, langPrefix } from '../../lib/i18n';
+import { t } from '../../lib/i18n';
 
 interface Props { lang?: Lang; }
 const { lang = 'de' } = Astro.props;
-const prefix = langPrefix(lang);
 
 const eyebrow = lang === 'de'
   ? 'Backend-Entwickler · verlässliche Systeme'
@@ -28,17 +27,7 @@ const words = lang === 'de'
         ></span
       >{headingPost}<span class="text-accent">.</span>
     </h1>
-    <p class="text-[18px] sm:text-[19px] leading-[1.6] text-muted m-0 mb-9 sm:mb-10 text-pretty" data-reveal set:html={t('hero.sub', lang)} />
-    <div class="flex flex-wrap items-center gap-4" data-reveal>
-      <a class="btn-roll btn-roll--primary" href={`${prefix}/#work`} data-magnetic>
-        <span class="btn-roll__text"><span>{t('hero.cta.work', lang)}</span><span aria-hidden="true">{t('hero.cta.work', lang)}</span></span>
-        <span class="btn-roll__arrow" aria-hidden="true">→</span>
-      </a>
-      <a class="btn-roll btn-roll--ghost" href={`${prefix}/#writing`}>
-        <span class="btn-roll__text"><span>{t('hero.cta.notes', lang)}</span><span aria-hidden="true">{t('hero.cta.notes', lang)}</span></span>
-        <span class="btn-roll__arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
+    <p class="text-[18px] sm:text-[19px] leading-[1.6] text-muted m-0 text-pretty" data-reveal set:html={t('hero.sub', lang)} />
   </div>
 </section>
 
