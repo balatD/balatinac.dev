@@ -196,3 +196,14 @@ All JS is vanilla `<script>` in `BaseLayout.astro`, using `astro:page-load` and 
 - [ ] `astro check` passes with no TS errors
 - [ ] All images have meaningful `alt` text
 - [ ] Deployed to `balatinac.dev` with HTTPS and security headers
+
+## Repository Map
+
+A full codemap is available at `codemap.md` in the project root.
+
+Before working on any task, read `codemap.md` to understand:
+- Project architecture and entry points
+- Directory responsibilities and design patterns
+- Data flow and integration points between modules
+
+For deep work on a specific folder, also read that folder's `codemap.md`.
