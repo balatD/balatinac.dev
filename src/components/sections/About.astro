@@ -1,13 +1,15 @@
 ---
 import type { Lang } from '../../lib/i18n';
 import { t } from '../../lib/i18n';
+import { sectionContours } from '../../lib/ascii-decor';
 
 interface Props { lang?: Lang; }
 const { lang = 'de' } = Astro.props;
 ---
 
-<section id="about" class="py-16 sm:py-20 md:py-24 border-t border-rule" data-reveal-group>
-  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+<section id="about" class="decorated-section py-16 sm:py-20 md:py-24 border-t border-rule" data-reveal-group>
+  <pre class="ascii-art section-decor section-decor--contours" aria-hidden="true">{sectionContours}</pre>
+  <div class="section-content mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
     <h2 class="section-title m-0 mb-7 md:mb-9" data-reveal>{t('about.label', lang)}</h2>
     <p class="text-[17px] leading-[1.75] text-fg text-pretty m-0 mb-[18px]" data-reveal set:html={t('about.p1', lang)} />
     <p class="text-[17px] leading-[1.75] text-fg text-pretty m-0 mb-[18px]" data-reveal set:html={t('about.p2', lang)} />

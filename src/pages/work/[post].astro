@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
+import DetailHeaderDecor from '../../components/ui/DetailHeaderDecor.astro';
 import JsonLd from '../../components/layout/JsonLd.astro';
 import { getCollection, render } from 'astro:content';
 import { buildDeMap, getDeSlug } from '../../lib/content-helpers';
@@ -64,14 +65,14 @@ const altLangUrl = `/en/work/${project.id}/`;
     ],
   }} />
 
-  <Breadcrumbs items={[
-    { label: t('crumb.home', lang), href: '/' },
-    { label: t('crumb.work', lang), href: '/work/' },
-    { label: displayTitle },
-  ]} />
-
-  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]">
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+  <header class="detail-header">
+    <DetailHeaderDecor variant="project" />
+    <Breadcrumbs items={[
+      { label: t('crumb.home', lang), href: '/' },
+      { label: t('crumb.work', lang), href: '/work/' },
+      { label: displayTitle },
+    ]} />
+    <div class="detail-header__content mx-auto max-w-wrap px-5 pt-12 pb-12 sm:px-7 sm:pt-14 sm:pb-14 md:px-8 md:pt-14 md:pb-[60px]">
       <p class="font-mono text-[13px] text-muted m-0 mb-5">{t('meta.caseStudy', lang)} · {orderStr} / {totalStr}</p>
       <h1 class="h1-page leading-[1.1] m-0 mb-5 text-balance">{displayTitle}</h1>
       <p class="text-[18px] leading-[1.6] text-muted m-0 text-pretty">{displayDesc}</p>

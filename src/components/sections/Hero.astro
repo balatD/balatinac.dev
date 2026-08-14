@@ -1,13 +1,10 @@
 ---
 import type { Lang } from '../../lib/i18n';
 import { t } from '../../lib/i18n';
+import { heroAccentForm, heroBackForm, heroContour, heroGauge } from '../../lib/ascii-decor';
 
 interface Props { lang?: Lang; }
 const { lang = 'de' } = Astro.props;
-
-const eyebrow = lang === 'de'
-  ? 'Backend-Entwickler · verlässliche Systeme'
-  : 'Backend engineer · reliable systems';
 
 // Heading is built here (not via i18n set:html) so the accent word can roll/cycle.
 const headingPre = lang === 'de' ? 'Ich baue ' : 'Building ';
@@ -18,12 +15,20 @@ const words = lang === 'de'
 ---
 
 <section class="hero-band relative pt-[136px] pb-20 sm:pt-[156px] sm:pb-24 md:pt-[176px] md:pb-[120px]" data-reveal-group data-hero>
-  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-    <p class="section-label m-0 mb-6 sm:mb-7" data-reveal>{eyebrow}</p>
+  <div class="hero-art" data-hero-art aria-hidden="true">
+    <pre class="ascii-art hero-art__layer hero-form hero-form--back" data-hero-depth="0.35">{heroBackForm}</pre>
+    <pre class="ascii-art hero-art__layer hero-form hero-form--accent" data-hero-depth="-0.62">{heroAccentForm}</pre>
+    <pre class="ascii-art hero-art__layer hero-contour" data-hero-depth="0.92">{heroContour}</pre>
+    <pre class="ascii-art hero-art__layer hero-gauge" data-hero-depth="-1.15">{heroGauge}</pre>
+    <pre class="hero-ascii" data-ascii-wave></pre>
+    <div class="hero-art__focus" data-hero-focus></div>
+  </div>
+
+  <div class="hero-copy relative z-10 mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
     <h1 class="h1-hero m-0 mb-7 sm:mb-9 text-balance text-fg" data-reveal>
       {headingPre}<span class="sr-only">{words[0]} </span><span class="word-roll" data-word-roll aria-hidden="true"
         ><span class="word-roll__track"
-          >{words.map((w) => <span class="word-roll__item text-accent">{w}</span>)}</span
+          >{words.map((w, idx) => <span class={`word-roll__item text-accent${idx === 0 ? ' is-current' : ''}`}>{w}</span>)}</span
         ></span
       >{headingPost}<span class="text-accent">.</span>
     </h1>
@@ -32,56 +37,320 @@ const words = lang === 'de'
 </section>
 
 <script>
-  function initWordRoll() {
+  type HeroElement = HTMLElement & { __heroCleanup?: () => void };
+
+  const ASCII_RAMP = ' .:-=+*#%@';
+
+  // The strand is a chain of coupled springs the cursor can grab. Constants are
+  // per-step, not per-second, so the loop below has to run a fixed timestep —
+  // a variable dt would change the feel and blow the integrator up on a long frame.
+  const STEP_MS = 1000 / 60;
+  const MAX_CATCHUP_STEPS = 4;
+  const DRAW_MS = 28;
+  const TENSION = 0.4; // neighbour coupling — how fast a ripple travels along the strand
+  const VISCOSITY = 0.05; // bleeds the grid-frequency buzz a sharp grab would otherwise leave
+  const RESTORE = 0.007; // pull back to the ambient line so displacement can't drift
+  const DAMPING = 0.986; // energy loss — this is the ring-out after the cursor leaves
+  const GRAB = 0.18; // how hard the cursor drags nearby columns toward itself
+  const FLICK = 0.005; // cursor speed folded into velocity, so a fast swipe throws a wake
+  const MAX_OFFSET = 0.4;
+  const BAND_CUTOFF = 3.2; // beyond this many band-widths a cell can never reach the ramp
+
+  const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+  // Idle travelling swell — the shape the strand springs back to.
+  const ambient = (x: number, time: number) =>
+    Math.sin(x * 7.2 + time) * 0.105 + Math.sin(x * 2.7 - time * 0.62) * 0.055;
+
+  function createAsciiWave(output: HTMLElement) {
+    let columns = 0;
+    let rows = 0;
+    let offset = new Float32Array(0);
+    let velocity = new Float32Array(0);
+    let accel = new Float32Array(0);
+    let primary = new Float32Array(0);
+    let secondary = new Float32Array(0);
+    let edgeX = new Float32Array(0);
+
+    let pointerColumn = 0;
+    let pointerOffset = 0;
+    let pointerSpeed = 0;
+    let grip = 0;
+    let targetGrip = 0;
+
+    function resize(nextColumns: number, nextRows: number) {
+      rows = nextRows;
+      if (nextColumns === columns) return;
+      columns = nextColumns;
+      offset = new Float32Array(columns);
+      velocity = new Float32Array(columns);
+      accel = new Float32Array(columns);
+      primary = new Float32Array(columns);
+      secondary = new Float32Array(columns);
+      edgeX = new Float32Array(columns);
+      for (let i = 0; i < columns; i += 1) {
+        edgeX[i] = Math.sin((Math.PI * i) / Math.max(1, columns - 1));
+      }
+    }
+
+    function grab(column: number, verticalOffset: number, speed: number) {
+      pointerColumn = column;
+      pointerOffset = verticalOffset;
+      pointerSpeed = speed;
+      targetGrip = 1;
+    }
+
+    function release() {
+      targetGrip = 0;
+    }
+
+    function step(time: number) {
+      if (!columns) return;
+      grip += (targetGrip - grip) * 0.18;
+
+      if (grip > 0.002) {
+        const sigma = Math.max(2.5, columns * 0.055);
+        const spread = 2 * sigma * sigma;
+        const reach = Math.ceil(sigma * 3);
+        const from = Math.max(0, Math.floor(pointerColumn - reach));
+        const to = Math.min(columns - 1, Math.ceil(pointerColumn + reach));
+        for (let i = from; i <= to; i += 1) {
+          const distance = i - pointerColumn;
+          const weight = Math.exp(-(distance * distance) / spread) * grip;
+          const x = i / Math.max(1, columns - 1);
+          const target = clamp(pointerOffset - ambient(x, time), -MAX_OFFSET, MAX_OFFSET);
+          velocity[i] += (target - offset[i]) * GRAB * weight + pointerSpeed * FLICK * weight;
+        }
+      }
+      pointerSpeed *= 0.82;
+
+      const last = columns - 1;
+      for (let i = 0; i <= last; i += 1) {
+        const leftIndex = i > 0 ? i - 1 : 0;
+        const rightIndex = i < last ? i + 1 : last;
+        accel[i] =
+          ((offset[leftIndex] + offset[rightIndex]) * 0.5 - offset[i]) * TENSION
+          - offset[i] * RESTORE
+          + ((velocity[leftIndex] + velocity[rightIndex]) * 0.5 - velocity[i]) * VISCOSITY;
+      }
+      for (let i = 0; i <= last; i += 1) {
+        velocity[i] = (velocity[i] + accel[i]) * DAMPING;
+        offset[i] = clamp(offset[i] + velocity[i], -MAX_OFFSET, MAX_OFFSET);
+      }
+    }
+
+    function draw(time: number) {
+      if (!columns || !rows) return;
+      const last = columns - 1;
+      for (let i = 0; i <= last; i += 1) {
+        const x = i / Math.max(1, last);
+        const line = 0.5 + ambient(x, time) + offset[i];
+        primary[i] = line;
+        secondary[i] = line + Math.sin(x * 11.5 - time * 0.38) * 0.055 + 0.16;
+      }
+
+      let text = '';
+      for (let row = 0; row < rows; row += 1) {
+        const y = row / Math.max(1, rows - 1);
+        const edgeY = Math.sin(Math.PI * y);
+        for (let i = 0; i <= last; i += 1) {
+          const dPrimary = (y - primary[i]) / 0.13;
+          const dSecondary = (y - secondary[i]) / 0.085;
+          const nearPrimary = dPrimary * dPrimary;
+          const nearSecondary = dSecondary * dSecondary;
+          if (nearPrimary > BAND_CUTOFF && nearSecondary > BAND_CUTOFF) {
+            text += ' ';
+            continue;
+          }
+          const band = Math.max(Math.exp(-nearPrimary), Math.exp(-nearSecondary) * 0.58);
+          const grain = 0.82 + Math.sin(i * 1.73 + row * 2.31 + time * 1.4) * 0.18;
+          const edgeFade = edgeX[i] * edgeY;
+          const value = band * grain * Math.pow(Math.max(0, edgeFade), 0.28);
+          const index = Math.min(ASCII_RAMP.length - 1, Math.floor(value * ASCII_RAMP.length));
+          text += ASCII_RAMP[index];
+        }
+        if (row < rows - 1) text += '\n';
+      }
+
+      output.textContent = text;
+    }
+
+    return { resize, grab, release, step, draw };
+  }
+
+  function initHero() {
     const motionOn = document.documentElement.classList.contains('has-motion');
-    if (!motionOn) return;
-    document.querySelectorAll<HTMLElement>('[data-word-roll]').forEach((el) => {
-      if (el.dataset.wrBound) return;
-      const track = el.querySelector<HTMLElement>('.word-roll__track');
-      const items = Array.from(el.querySelectorAll<HTMLElement>('.word-roll__item'));
-      if (!track || items.length < 2) return;
-      el.dataset.wrBound = '1';
-      el.classList.add('is-active');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-      let i = 0;
-      const size = () => {
-        const it = items[i];
-        el.style.width = it.offsetWidth + 'px';
-        el.style.height = it.offsetHeight + 'px';
-        track.style.transform = `translateY(${-it.offsetTop}px)`;
-      };
-      const sizeInstant = () => {
-        const a = el.style.transition, b = track.style.transition;
-        el.style.transition = 'none';
-        track.style.transition = 'none';
-        size();
-        requestAnimationFrame(() => { el.style.transition = a; track.style.transition = b; });
+    document.querySelectorAll<HeroElement>('[data-hero]').forEach((hero) => {
+      if (hero.dataset.heroBound) return;
+      const wordRoll = hero.querySelector<HTMLElement>('[data-word-roll]');
+      const items = Array.from(hero.querySelectorAll<HTMLElement>('.word-roll__item'));
+      const layers = Array.from(hero.querySelectorAll<HTMLElement>('[data-hero-depth]'));
+      const focus = hero.querySelector<HTMLElement>('[data-hero-focus]');
+      const ascii = hero.querySelector<HTMLElement>('[data-ascii-wave]');
+      if (!wordRoll || items.length < 2) return;
+
+      const wave = ascii ? createAsciiWave(ascii) : null;
+      let gridColumns = 0;
+      const measure = () => {
+        const width = hero.clientWidth;
+        gridColumns = width < 640 ? 42 : Math.min(86, Math.max(58, Math.round(width / 15)));
+        wave?.resize(gridColumns, width < 640 ? 24 : 32);
       };
 
-      sizeInstant();
-      const timer = window.setInterval(() => {
+      wordRoll.classList.add('is-active');
+      if (!motionOn) {
+        measure();
+        wave?.draw(0.8);
+        return;
+      }
+
+      hero.dataset.heroBound = '1';
+      if (finePointer) hero.classList.add('is-interactive');
+      let frame = 0;
+      let running = false;
+      let inView = true;
+      let currentWord = 0;
+      let wordReset = 0;
+      let x = 0;
+      let y = 0;
+      let targetX = 0;
+      let targetY = 0;
+      let lastTick = 0;
+      let lastDraw = 0;
+      let accumulator = 0;
+      let pointerAt = 0;
+      let pointerNy = 0;
+      const started = performance.now();
+
+      measure();
+
+      const advanceWord = () => {
         if (document.visibilityState !== 'visible') return;
-        i = (i + 1) % items.length;
-        size();
-      }, 2300);
+        const previous = items[currentWord];
+        currentWord = (currentWord + 1) % items.length;
+        const next = items[currentWord];
+        previous.classList.remove('is-current');
+        previous.classList.add('is-leaving');
+        next.classList.add('is-current');
+        clearTimeout(wordReset);
+        wordReset = window.setTimeout(() => previous.classList.remove('is-leaving'), 520);
+      };
+      const wordTimer = window.setInterval(advanceWord, 2400);
 
-      const onResize = () => sizeInstant();
-      window.addEventListener('resize', onResize);
-      if ((document as any).fonts?.ready) (document as any).fonts.ready.then(onResize);
+      const tick = (now: number) => {
+        if (!running) return;
+        frame = requestAnimationFrame(tick);
+        const time = (now - started) / 1700;
 
-      (el as any).__wrCleanup = () => {
-        clearInterval(timer);
-        window.removeEventListener('resize', onResize);
+        accumulator += Math.min(120, now - lastTick);
+        lastTick = now;
+        let steps = 0;
+        while (accumulator >= STEP_MS && steps < MAX_CATCHUP_STEPS) {
+          wave?.step(time);
+          accumulator -= STEP_MS;
+          steps += 1;
+        }
+        if (steps === MAX_CATCHUP_STEPS) accumulator = 0;
+
+        if (now - lastDraw >= DRAW_MS) {
+          lastDraw = now;
+          wave?.draw(time);
+        }
+
+        if (Math.abs(targetX - x) > 0.0005 || Math.abs(targetY - y) > 0.0005) {
+          x += (targetX - x) * 0.085;
+          y += (targetY - y) * 0.085;
+          layers.forEach((layer) => {
+            const depth = Number(layer.dataset.heroDepth ?? 0);
+            const rotate = depth * x * 0.7;
+            layer.style.transform = `translate3d(${x * depth * 24}px, ${y * depth * 18}px, 0) rotate(${rotate}deg)`;
+          });
+          if (focus) {
+            focus.style.transform = `translate3d(${x * hero.clientWidth * 0.5}px, ${y * hero.clientHeight * 0.5}px, 0)`;
+          }
+        }
+      };
+
+      const startLoop = () => {
+        if (running) return;
+        running = true;
+        lastTick = performance.now();
+        accumulator = 0;
+        frame = requestAnimationFrame(tick);
+      };
+
+      const stopLoop = () => {
+        running = false;
+        cancelAnimationFrame(frame);
+        frame = 0;
+      };
+
+      const syncLoop = () => {
+        if (inView && document.visibilityState === 'visible') startLoop();
+        else stopLoop();
+      };
+
+      const onPointerMove = (event: PointerEvent) => {
+        const heroRect = hero.getBoundingClientRect();
+        const asciiRect = ascii?.getBoundingClientRect();
+        targetX = clamp((event.clientX - heroRect.left) / heroRect.width, 0, 1) * 2 - 1;
+        targetY = clamp((event.clientY - heroRect.top) / heroRect.height, 0, 1) * 2 - 1;
+
+        if (!wave || !asciiRect?.width || !asciiRect.height) return;
+        // Grid space, not hero space: the strand only occupies part of the band,
+        // so a cursor beside it should fall outside the grab falloff entirely.
+        const nx = (event.clientX - asciiRect.left) / asciiRect.width;
+        const ny = (event.clientY - asciiRect.top) / asciiRect.height;
+        const elapsed = pointerAt ? Math.max(8, event.timeStamp - pointerAt) : 0;
+        const speed = elapsed ? clamp(((ny - pointerNy) * 1000) / elapsed, -6, 6) : 0;
+        pointerAt = event.timeStamp;
+        pointerNy = ny;
+        wave.grab(nx * Math.max(1, gridColumns - 1), clamp(ny - 0.5, -0.55, 0.55), speed);
+      };
+
+      const onPointerLeave = () => {
+        targetX = 0;
+        targetY = 0;
+        pointerAt = 0;
+        wave?.release();
+      };
+
+      const observer = new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        syncLoop();
+      });
+      observer.observe(hero);
+      const resizeObserver = new ResizeObserver(measure);
+      resizeObserver.observe(hero);
+      document.addEventListener('visibilitychange', syncLoop);
+      if (finePointer) {
+        hero.addEventListener('pointermove', onPointerMove);
+        hero.addEventListener('pointerleave', onPointerLeave);
+      }
+      syncLoop();
+
+      hero.__heroCleanup = () => {
+        stopLoop();
+        observer.disconnect();
+        resizeObserver.disconnect();
+        clearInterval(wordTimer);
+        clearTimeout(wordReset);
+        document.removeEventListener('visibilitychange', syncLoop);
+        hero.removeEventListener('pointermove', onPointerMove);
+        hero.removeEventListener('pointerleave', onPointerLeave);
+        delete hero.dataset.heroBound;
       };
     });
   }
 
-  function cleanupWordRoll() {
-    document.querySelectorAll<HTMLElement>('[data-word-roll]').forEach((el) => {
-      (el as any).__wrCleanup?.();
+  function cleanupHero() {
+    document.querySelectorAll<HeroElement>('[data-hero]').forEach((hero) => {
+      hero.__heroCleanup?.();
     });
   }
 
-  document.addEventListener('astro:page-load', initWordRoll);
-  document.addEventListener('astro:before-swap', cleanupWordRoll);
+  document.addEventListener('astro:page-load', initHero);
+  document.addEventListener('astro:before-swap', cleanupHero);
 </script>

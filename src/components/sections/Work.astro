@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { buildDeMap, getLocalizedEntry } from '../../lib/content-helpers';
 import type { Lang } from '../../lib/i18n';
 import { t, langPrefix } from '../../lib/i18n';
+import { sectionRoutes } from '../../lib/ascii-decor';
 
 interface Props { lang?: Lang; }
 const { lang = 'de' } = Astro.props;
@@ -15,8 +16,9 @@ const deMap = buildDeMap(deProjects);
 const hasProjects = projects.length > 0;
 ---
 
-<section id="work" class="py-16 sm:py-20 md:py-24 border-t border-rule" data-reveal-group>
-  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
+<section id="work" class="decorated-section py-16 sm:py-20 md:py-24 border-t border-rule" data-reveal-group>
+  <pre class="ascii-art section-decor section-decor--routes" aria-hidden="true">{sectionRoutes}</pre>
+  <div class="section-content mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
     <h2 class="section-title m-0 mb-7 md:mb-9" data-reveal>{t('work.label', lang)}</h2>
     {hasProjects ? (
       <>
