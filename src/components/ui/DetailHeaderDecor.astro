@@ -1,0 +1,15 @@
+---
+import { detailRoutes, detailSheets } from '../../lib/ascii-decor';
+
+interface Props {
+  variant: 'project' | 'blog';
+}
+
+const { variant } = Astro.props;
+---
+
+{variant === 'project' ? (
+  <pre class="ascii-art detail-decor detail-decor--project" aria-hidden="true">{detailRoutes}</pre>
+) : (
+  <pre class="ascii-art detail-decor detail-decor--blog" aria-hidden="true">{detailSheets}</pre>
+)}
