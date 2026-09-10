@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
-import { rehypeHeadingIds } from '@astrojs/markdown-remark';
+import { unified, rehypeHeadingIds } from '@astrojs/markdown-remark';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 
 import cloudflare from '@astrojs/cloudflare';
@@ -17,14 +17,19 @@ export default defineConfig({
         dark: 'github-dark',
       },
     },
-    rehypePlugins: [
-      rehypeHeadingIds,
-      [rehypeAutolinkHeadings, {
-        behavior: 'append',
-        content: { type: 'text', value: '#' },
-        properties: { class: 'heading-link', ariaHidden: true, tabIndex: -1 },
-      }],
-    ],
+    // Astro 7 defaults to the Sätteri pipeline; rehype-autolink-headings is a
+    // unified plugin, so this project stays on unified(). rehypeHeadingIds must
+    // run first so autolink has an id to point at.
+    processor: unified({
+      rehypePlugins: [
+        rehypeHeadingIds,
+        [rehypeAutolinkHeadings, {
+          behavior: 'append',
+          content: { type: 'text', value: '#' },
+          properties: { class: 'heading-link', ariaHidden: true, tabIndex: -1 },
+        }],
+      ],
+    }),
   },
 
   trailingSlash: 'always',

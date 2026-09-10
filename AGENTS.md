@@ -10,7 +10,7 @@
 
 | Layer | Technology | Version | Purpose |
 |-------|------------|---------|---------|
-| Framework | Astro | 6.1 | Static site generation, islands architecture |
+| Framework | Astro | 7.3 | Static site generation, islands architecture |
 | Styling | Tailwind CSS | v4.x (via Vite plugin) | Utility-first CSS |
 | Language | TypeScript | latest | Type safety for components and content |
 | Package Manager | pnpm (recommended) / npm | latest | Dependency management |
