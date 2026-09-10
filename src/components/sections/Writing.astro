@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import { buildDeMap, getLocalizedEntry } from '../../lib/content-helpers';
 import type { Lang } from '../../lib/i18n';
-import { t, langPrefix } from '../../lib/i18n';
+import { t, langPrefix, dateLocale } from '../../lib/i18n';
 import { sectionSheets } from '../../lib/ascii-decor';
 
 interface Props { lang?: Lang; }
@@ -27,7 +27,7 @@ const hasPosts = posts.length > 0;
         <ul class="list-none p-0 m-0">
           {posts.map((post) => {
             const { title, description, slug } = getLocalizedEntry(post, deMap, lang);
-            const dateStr = post.data.publishedAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            const dateStr = post.data.publishedAt.toLocaleDateString(dateLocale(lang), { month: 'short', year: 'numeric' });
             return (
               <li data-reveal>
                 <a class="row-link group grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 transition-colors" href={`${prefix}/blog/${slug}/`}>

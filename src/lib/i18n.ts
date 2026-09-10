@@ -9,21 +9,16 @@ const translations: Record<string, Record<Lang, string>> = {
 
   // === Page titles ===
   'title.home': { en: 'Dragan Balatinac', de: 'Dragan Balatinac' },
-  'title.work': { en: 'Selected Work — Dragan Balatinac', de: 'Ausgewählte Arbeiten — Dragan Balatinac' },
-  'title.blog': { en: 'Writing — Dragan Balatinac', de: 'Texte — Dragan Balatinac' },
-  'title.404': { en: '404 — Not found — Dragan Balatinac', de: '404 — Nicht gefunden — Dragan Balatinac' },
+  // Titles carry no site-name suffix — SEO.astro appends it once for every page.
+  'title.work': { en: 'Selected Work', de: 'Ausgewählte Arbeiten' },
+  'title.blog': { en: 'Writing', de: 'Texte' },
+  'title.404': { en: '404 — Not found', de: '404 — Nicht gefunden' },
 
   // === Homepage — Hero ===
-  'hero.heading': {
-    en: 'Building <span class="tooltip-trigger text-accent" tabindex="0">quiet<span class="tooltip-bubble" role="tooltip" aria-hidden="true">No drama. No hype. Systems that just work.</span></span> systems<span class="text-accent">.</span>',
-    de: 'Ich baue <span class="tooltip-trigger text-accent" tabindex="0">ruhige<span class="tooltip-bubble" role="tooltip" aria-hidden="true">Kein Drama. Kein Hype. Systeme, die einfach laufen.</span></span> Systeme<span class="text-accent">.</span>',
-  },
   'hero.sub': {
     en: 'Backend developer from NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span>, and the DevOps glue around them. This is where I keep my work, my notes, and the occasional opinion about why the boring choice is usually the right one.',
     de: 'Backend-Entwickler aus NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span> und der DevOps-Klebstoff drumherum. Hier sammle ich meine Arbeit, meine Notizen und gelegentlich die Meinung, warum die langweilige Lösung meist die richtige ist.',
   },
-  'hero.cta.work': { en: 'See the work', de: 'Zur Arbeit' },
-  'hero.cta.notes': { en: 'Read the notes', de: 'Notizen lesen' },
 
   // === Homepage — About ===
   'about.label': { en: 'About', de: 'Über mich' },
@@ -76,7 +71,6 @@ const translations: Record<string, Record<Lang, string>> = {
 
   // === Blog index ===
   'blogIndex.crumb': { en: 'Writing', de: 'Texte' },
-  'blogIndex.label': { en: 'Writing · Notes from the server room', de: 'Texte · Notizen aus dem Serverraum' },
   'blogIndex.heading': {
     en: 'Written down before I <span class="text-accent">forget</span> again.',
     de: 'Aufgeschrieben, bevor ich es wieder <span class="text-accent">vergesse</span>.',
@@ -132,6 +126,14 @@ const translations: Record<string, Record<Lang, string>> = {
 /** Get a translated string by key and language. */
 export function t(key: string, lang: Lang): string {
   return translations[key]?.[lang] ?? translations[key]?.['de'] ?? key;
+}
+
+/**
+ * BCP 47 tag for date formatting. Shared, language-driven views must format
+ * through this rather than a literal, or German pages render English months.
+ */
+export function dateLocale(lang: Lang): string {
+  return lang === 'en' ? 'en-US' : 'de-DE';
 }
 
 /** Build the URL prefix for a given language. DE = root, EN = /en */

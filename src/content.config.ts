@@ -1,5 +1,7 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+// `z` re-exported from astro:content is deprecated; import zod directly.
+import { z } from 'astro/zod';
 
 const projectsDe = defineCollection({
   loader: glob({ pattern: 'de/*.md', base: './src/content/projects' }),

@@ -34,24 +34,30 @@
 
 ### Color Palette
 
+Defined in `src/styles/global.css`. All tokens are `oklch()` — the redesign moved
+off hex so lightness stays perceptually even between the two themes.
+
 | Token | Light | Dark |
 |-------|-------|------|
-| `--bg` | `#f4f2ec` | `#0e0e0e` |
-| `--fg` | `#111` | `#ececec` |
-| `--muted` | `#6f6c66` | `#9a9892` |
-| `--rule` | `#e3e0d8` | `#1f1f1f` |
-| `--accent` | `#ff4500` | `#ff5a1a` |
+| `--bg` | `oklch(0.955 0.010 75)` | `oklch(0.180 0.008 62)` |
+| `--surface` | `oklch(0.925 0.012 75)` | `oklch(0.225 0.009 62)` |
+| `--fg` | `oklch(0.235 0.012 60)` | `oklch(0.920 0.008 75)` |
+| `--muted` | `oklch(0.520 0.016 62)` | `oklch(0.640 0.013 66)` |
+| `--rule` | `oklch(0.875 0.013 72)` | `oklch(0.310 0.009 62)` |
+| `--accent` | `oklch(0.560 0.150 48)` | `oklch(0.660 0.150 52)` |
+| `--accent-ink` | `oklch(0.985 0.004 75)` | `oklch(0.160 0.010 60)` |
 
-Fonts: **Space Grotesk** (sans) + **Space Mono** (mono), self-hosted WOFF2.
+Fonts: **Bricolage Grotesque** (display) + **Hanken Grotesk** (sans) +
+**Spline Sans Mono** (mono), self-hosted WOFF2 in `public/fonts/`.
 
 ### Project Structure
 
 ```
 src/
 ├── components/
-│   ├── layout/       # Header, Footer, SEO, JsonLd, Wordmark, AmbientBlobs
+│   ├── layout/       # Header, Footer, SEO, JsonLd, AmbientBlobs
 │   ├── sections/     # Hero, About, Work, Writing, Contact
-│   └── ui/           # Breadcrumbs, FilterBar, ListItem, Tooltip
+│   └── ui/           # Breadcrumbs, DetailHeaderDecor, FilterBar, ListItem, Tooltip
 ├── content/
 │   ├── blog/         # EN blog posts (.md)
 │   ├── blog/de/      # DE blog posts (.md)

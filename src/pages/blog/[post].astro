@@ -4,7 +4,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import DetailHeaderDecor from '../../components/ui/DetailHeaderDecor.astro';
 import JsonLd from '../../components/layout/JsonLd.astro';
 import { getCollection, render } from 'astro:content';
-import { buildDeMap, getDeSlug } from '../../lib/content-helpers';
+import { buildDeMap } from '../../lib/content-helpers';
 import { t } from '../../lib/i18n';
 
 const lang = 'de';
@@ -17,11 +17,11 @@ export async function getStaticPaths() {
   return en.map((post) => {
     const de = deMap.get(post.id);
     const deSlug = de?.data.urlSlug || post.id;
-    return { params: { post: deSlug }, props: { post, deSlug } };
+    return { params: { post: deSlug }, props: { post } };
   });
 }
 
-const { post, deSlug } = Astro.props;
+const { post } = Astro.props;
 
 const allEn = (await getCollection('blog')).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 const dePosts = await getCollection('blogDe');
@@ -48,7 +48,7 @@ const relatedDe = relatedPosts.map((p) => deMap.get(p.id));
 const relatedSlugs = relatedPosts.map((p, i) => relatedDe[i]?.data.urlSlug || p.id);
 ---
 
-<BaseLayout title={`${displayTitle} — Dragan Balatinac`} description={displayDesc} activeNav="writing" ogType="article" publishedAt={post.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
+<BaseLayout title={displayTitle} description={displayDesc} activeNav="writing" ogType="article" publishedAt={post.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
   <JsonLd schema={{
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',

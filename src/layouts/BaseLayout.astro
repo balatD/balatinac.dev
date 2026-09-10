@@ -2,12 +2,11 @@
 import '../styles/global.css';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import Wordmark from '../components/layout/Wordmark.astro';
 import AmbientBlobs from '../components/layout/AmbientBlobs.astro';
 import SEO from '../components/layout/SEO.astro';
 import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../lib/i18n';
-import { t, langPrefix, langSwitchUrl } from '../lib/i18n';
+import { t, langSwitchUrl } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -33,7 +32,6 @@ const {
   altLangUrl,
 } = Astro.props;
 
-const prefix = langPrefix(lang);
 const altUrl = altLangUrl || langSwitchUrl(Astro.url.pathname, lang);
 const altLang = lang === 'de' ? 'en' : 'de';
 ---
@@ -52,6 +50,7 @@ const altLang = lang === 'de' ? 'en' : 'de';
       ogType={ogType}
       publishedAt={publishedAt}
       noindex={noindex}
+      lang={lang}
     />
 
     <!-- hreflang for SEO -->
@@ -94,7 +93,6 @@ const altLang = lang === 'de' ? 'en' : 'de';
     <!-- zed-style structural rails framing the content column -->
     <div class="frame-lines" aria-hidden="true"></div>
 
-    <Wordmark href={`${prefix}/`} />
     <Header activeNav={activeNav} lang={lang} altLangUrl={altUrl} />
 
     <main id="main" tabindex="-1">
@@ -256,8 +254,9 @@ const altLang = lang === 'de' ? 'en' : 'de';
 
       // ─── Lightbox ───
       function initLightbox() {
-        const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
-        if (!dialog) return;
+        const found = document.getElementById('lightbox') as HTMLDialogElement | null;
+        if (!found) return;
+        const dialog: HTMLDialogElement = found;
         const lightboxImg = dialog.querySelector<HTMLImageElement>('.lightbox-img');
         const lightboxCaption = dialog.querySelector<HTMLParagraphElement>('.lightbox-caption');
         const closeBtn = dialog.querySelector<HTMLButtonElement>('.lightbox-close');
@@ -363,7 +362,9 @@ const altLang = lang === 'de' ? 'en' : 'de';
     <script>
       import { animate, inView, stagger } from 'motion';
 
-      const EASE = [0.16, 1, 0.3, 1];
+      // Annotated as a tuple — a bare literal widens to number[], which fails
+      // motion's BezierDefinition and silently knocks out its DOM overload.
+      const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
       const motionOn = () => document.documentElement.classList.contains('has-motion');
 
       // Cleanups for scroll/inView observers — cleared between SPA navigations so they don't stack.

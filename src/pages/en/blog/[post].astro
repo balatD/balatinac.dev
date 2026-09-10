@@ -33,7 +33,7 @@ const relatedPosts = allEn
   .slice(0, 3);
 ---
 
-<BaseLayout title={`${post.data.title} — Dragan Balatinac`} description={post.data.description} activeNav="writing" ogType="article" publishedAt={post.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
+<BaseLayout title={post.data.title} description={post.data.description} activeNav="writing" ogType="article" publishedAt={post.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
   <JsonLd schema={{
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',

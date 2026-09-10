@@ -16,12 +16,19 @@ export function buildDeMap<T extends { id: string }>(deEntries: T[]): Map<string
 
 /**
  * Get display data for a content entry in the requested language.
+ *
+ * The EN entry and the DE map need separate type parameters: paired entries come
+ * from two different collections ('projects' vs 'projectsDe'), so their literal
+ * `collection` fields make them mutually unassignable.
  */
-export function getLocalizedEntry<T extends { id: string; data: { title: string; description: string; urlSlug?: string } }>(
-  enEntry: T,
-  deMap: Map<string, T>,
+export function getLocalizedEntry<
+  E extends { id: string; data: { title: string; description: string; urlSlug?: string } },
+  D extends { data: { title: string; description: string; urlSlug?: string } },
+>(
+  enEntry: E,
+  deMap: Map<string, D>,
   lang: Lang,
-): { entry: T; title: string; description: string; slug: string } {
+): { entry: E; title: string; description: string; slug: string } {
   const de = deMap.get(enEntry.id);
   if (lang === 'de' && de) {
     return {
@@ -42,9 +49,12 @@ export function getLocalizedEntry<T extends { id: string; data: { title: string;
 /**
  * Get the DE slug for an EN entry. Falls back to the EN entry's id.
  */
-export function getDeSlug<T extends { id: string; data: { urlSlug?: string } }>(
-  enEntry: T,
-  deMap: Map<string, T>,
+export function getDeSlug<
+  E extends { id: string },
+  D extends { data: { urlSlug?: string } },
+>(
+  enEntry: E,
+  deMap: Map<string, D>,
 ): string {
   const de = deMap.get(enEntry.id);
   return de?.data.urlSlug || enEntry.id;

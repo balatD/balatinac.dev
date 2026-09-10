@@ -6,7 +6,9 @@ const lang = 'de';
 export const prerender = true;
 ---
 
-<BaseLayout title={t('title.404', lang)} description="Seite nicht gefunden." noindex={true} lang={lang}>
+<!-- altLangUrl is pinned to the EN home: Astro serves one 404 for the whole
+     site, so the default /en/404/ swap would land on another 404. -->
+<BaseLayout title={t('title.404', lang)} description="Seite nicht gefunden." noindex={true} lang={lang} altLangUrl="/en/">
   <section class="pt-[140px] pb-20 sm:pt-[160px] sm:pb-24 md:pt-[200px] md:pb-[140px]">
     <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
       <p class="font-mono text-[13px] text-accent m-0 mb-6">404</p>

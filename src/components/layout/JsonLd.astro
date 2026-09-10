@@ -5,4 +5,5 @@ interface Props {
 const { schema } = Astro.props;
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<!-- is:inline is explicit: this is a JSON-LD data block, not a script to bundle. -->
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -1,0 +1,157 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>og-default</title>
+<style>
+  /* Tokens copied from src/styles/global.css :root — keep in sync if the palette moves. */
+  :root {
+    --bg: oklch(0.955 0.010 75);
+    --fg: oklch(0.235 0.012 60);
+    --muted: oklch(0.520 0.016 62);
+    --rule: oklch(0.875 0.013 72);
+    --accent: oklch(0.560 0.150 48);
+  }
+
+  @font-face {
+    font-family: "Bricolage Grotesque";
+    src: url("/fonts/bricolage-grotesque-latin.woff2") format("woff2");
+    font-weight: 400 800;
+    font-stretch: 100%;
+  }
+  @font-face {
+    font-family: "Hanken Grotesk";
+    src: url("/fonts/hanken-grotesk-latin.woff2") format("woff2");
+    font-weight: 400 700;
+  }
+  @font-face {
+    font-family: "Spline Sans Mono";
+    src: url("/fonts/spline-sans-mono-latin.woff2") format("woff2");
+    font-weight: 400 600;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Hanken Grotesk", system-ui, sans-serif;
+  }
+
+  /* Same structural rails that frame the live pages. */
+  .rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+  .rail--l { left: 80px; }
+  .rail--r { right: 80px; }
+
+  .ornament {
+    position: absolute;
+    /* 34 rows x ~15.9px = ~540px tall; centred so the ring form stays whole. */
+    top: 45px;
+    right: 56px;
+    margin: 0;
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 15px;
+    line-height: 1.06;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    opacity: 0.26;
+    white-space: pre;
+  }
+
+  .content {
+    position: absolute;
+    left: 136px;
+    bottom: 96px;
+    right: 136px;
+  }
+
+  .wordmark {
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 132px;
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+  }
+  .dot { color: var(--accent); }
+
+  .lede {
+    margin-top: 34px;
+    font-size: 33px;
+    line-height: 1.3;
+    letter-spacing: -0.012em;
+    font-weight: 500;
+  }
+
+  .stack {
+    margin-top: 22px;
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 21px;
+    letter-spacing: 0.075em;
+    color: var(--muted);
+  }
+
+  .domain {
+    position: absolute;
+    left: 136px;
+    top: 84px;
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 19px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .domain b { color: var(--accent); font-weight: 400; }
+</style>
+
+<div class="rail rail--l"></div>
+<div class="rail rail--r"></div>
+<pre class="ornament" aria-hidden="true">                          .:..                          
+                      .-*#**##*=.                       
+                    .=**=..  .:*#-                      
+                  .=#*-         :#+                     
+                 :**-   .-=++=.  .*+                    
+               .+#+.   =##*++*%=  :%-                   
+              :##-   :##-.    :*+  =%:                  
+             -#*:   =%+.   ..  .%- .**.                 
+            :#+.  :*%-   -#%#+. :%. :%*.                
+           .**.  -%*:  .+%=::*#  #-  :*%+.              
+           -%-  -%+.  .*%.    *- -%:   -+%*:            
+           +#. .#*.  :%#.     :* .##-.   .-##-          
+          .*+  :#-  -@*.       %  .=#%#+.   -#+.        
+          .**  -@: .#*.        @:     .=##:  :#+.       
+           **  -%: .#=        .*#%%%#-   =#=  :#+       
+           +*. .#=  +#              .*#:  =%:  +*.      
+           +%. .#*  :%-              .#*  :#=  -%-      
+           +#. .**  :%-              .**  .%+  -%:      
+           +*. :%- .%-               =%-  =%:  =#:      
+          .#+  +#  #-              :*%-  :#+  .**       
+          :%: .%: -*              =%*.  :#*.  +%:       
+          =*  =*  *=      .##-..:+%+   -#*.  =%-        
+          ++  *+  #+     =%=-*%%%#-   =#+.  =%=         
+         .#=  #=  =#*=-*%-     ..   .+%+   =#=          
+         .#-  +*.  :++=.   ::.    .-*#-   =#=           
+          *+  -%=.      :*%##@%*##%#+.  .+#=            
+          +*.  -##=--=*##=:....---:.   :*#-             
+          :#+   .-+*+=:.             .=#*:              
+           -#+.         .:==++=----=##*-.               
+            :*#+=:::-=+#%#+++++#****=:                  
+              :=***#+=-:.                               
+                                                        
+                                                        
+                                                        </pre>
+
+<div class="domain">balatinac<b>.</b>dev</div>
+
+<div class="content">
+  <div class="wordmark">dragan<span class="dot">.</span></div>
+  <div class="lede">Backend-Entwickler aus NRW.</div>
+  <div class="stack">TYPO3 &middot; PHP &middot; DEVOPS</div>
+</div>

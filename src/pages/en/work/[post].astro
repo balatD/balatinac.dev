@@ -31,7 +31,7 @@ const totalStr = String(total).padStart(2, '0');
 const altLangUrl = `/work/${deSlug}/`;
 ---
 
-<BaseLayout title={`${project.data.title} — Dragan Balatinac`} description={project.data.description} activeNav="work" ogType="article" publishedAt={project.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
+<BaseLayout title={project.data.title} description={project.data.description} activeNav="work" ogType="article" publishedAt={project.data.publishedAt} lang={lang} altLangUrl={altLangUrl}>
   <JsonLd schema={{
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',

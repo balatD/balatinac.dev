@@ -30,7 +30,6 @@ Provides site-wide navigation, branding, metadata, structured data, footer conte
 - `SEO.astro`: title composition, canonical, robots, Open Graph, article, and Twitter metadata.
 - `JsonLd.astro`: embeds page-provided schema objects as JSON-LD.
 - `AmbientBlobs.astro`: fixed decorative background gradients.
-- `Wordmark.astro`: currently a no-op placeholder retained by `BaseLayout`.
 
 ## Flow And Integration
 

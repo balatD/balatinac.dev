@@ -617,35 +617,6 @@ html, body {
   }
 }
 
-/* ─── Hero CTAs — clean mechanical text links (muted → accent on hover) ─── */
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
-  padding: 6px 0;
-  color: var(--muted);
-  transition: color 0.2s ease;
-}
-.hero-cta:hover,
-.hero-cta:focus-visible {
-  color: var(--accent);
-}
-.hero-cta__arrow {
-  display: inline-block;
-  transition: transform 0.3s var(--ease-out-expo);
-}
-.hero-cta:hover .hero-cta__arrow,
-.hero-cta:focus-visible .hero-cta__arrow {
-  transform: translateX(4px);
-}
-
 /* ─── Word rotator (hero accent word) — fallback: plain inline accent word ─── */
 .word-roll { display: inline; }
 .word-roll__track { display: contents; }
@@ -681,7 +652,6 @@ html, body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-cta__arrow { transition: none; }
   .hero-art__layer,
   .hero-art__focus { transform: none !important; }
   .hero-art__focus { display: none; }
@@ -927,21 +897,21 @@ body.lightbox-open {
 }
 
 /* ─── Prose images ─── */
-.prose-article :global(img) {
+.prose-article img {
   max-width: 100%;
   height: auto;
   border-radius: 6px;
   cursor: zoom-in;
 }
-.prose-article :global(img[role="button"]:focus-visible) {
+.prose-article img[role="button"]:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
-.prose-article :global(figure) {
+.prose-article figure {
   margin: 32px 0;
   max-width: none !important;
 }
-.prose-article :global(figcaption) {
+.prose-article figcaption {
   margin-top: 8px;
   font-family: var(--font-mono);
   font-size: 13px;
@@ -949,11 +919,11 @@ body.lightbox-open {
   line-height: 1.5;
   text-align: center;
 }
-.prose-article :global(figure img) {
+.prose-article figure img {
   display: block;
   margin: 0 auto;
 }
-.prose-article :global(p > img:only-child) {
+.prose-article p > img:only-child {
   display: block;
   margin: 32px auto;
 }
