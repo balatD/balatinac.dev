@@ -21,6 +21,22 @@ That is the whole problem with putting a design system into a CMS. [KERN](https:
 
 > This is an independent community integration. It is not part of the KERN team and not an official KERN kit.
 
+## What comes out of the box
+
+Every screenshot below is the demo page tree the extension installs itself, via `kern-ux:demo:install`. Nothing was staged for the pictures, which is deliberate: a screenshot of a hand-built page proves nothing about what an editor can actually assemble.
+
+![KERN municipal homepage with a hero, a notice box, three cards, text with an image, a task overview and a footer](/images/work/kern-ux-homepage.webp)
+
+That is a municipal homepage built from seven content elements — hero, notice, card grid, text and media, task overview, footer — all of them editor-maintained. The whole page is German, because KERN is the standard for German public administration; so is the demo content.
+
+Two details in that shot are defaults rather than choices. The theme is light, and the *Digitale Dachmarke* header strip — "Offizielle Website – Bundesrepublik Deutschland" — is switched **off**. That banner is reserved for offerings by federal, state and municipal bodies, so shipping it enabled would have invited every installation to claim something it may not be entitled to.
+
+The other page templates are shaped for the work public bodies actually publish. This is the two-column service page — the one a citizen lands on when they need a document:
+
+![KERN service page for applying for an identity card, two columns with a sidebar for the responsible office and required documents](/images/work/kern-ux-service-page.webp)
+
+Sidebar with a table of contents and the responsible office, a description list for fees and deadlines, an accordion for common questions, a download list that states format and file size, and buttons to close. Four page templates ship in total — standard, homepage, topic, application — each with a matching backend layout. Those two belong together: a layout whose columns the template never renders costs editors their content without ever raising an error.
+
 ## The markup exists exactly once
 
 A layer of native Fluid components is the single source of KERN markup. Content Blocks, form templates and page templates all call the same components and only map data onto them.
@@ -39,6 +55,10 @@ vendor/bin/typo3 kern-ux:component:render '<k:atom.button icon="arrow-forward">W
 
 The point of the layer is not reuse. It is that there is one place to be correct, and tests that hold it there under both TYPO3 majors.
 
+![Component gallery section for molecule.alert showing four notice variants alongside the Fluid source that produced them](/images/work/kern-ux-component-gallery.webp)
+
+The gallery renders every component in its documented states next to the Fluid source that produced it — living documentation, visual check and axe target in one. Every component **must** appear there: a test compares the example file against the component tree and fails when something is missing. A gallery that silently omits components is worse than none, because it reads as "this is all of them".
+
 ## Form rules belong in two partials, not thirty
 
 `ext:form` ships around thirty element partials. Putting KERN's field contract in each of them would mean thirty copies of the same ARIA wiring. Instead it sits in two: `Field/Field.html` for the `kern-form-input` family, `Field/Group.html` for checkbox and radio groups.
@@ -52,6 +72,10 @@ What that buys, implemented once:
 - **The element's `fluidAdditionalAttributes` are passed through**, with the contract's ARIA attributes layered on top. Without that you lose everything the form editor writes into that property — above all `autocomplete`, without which WCAG 1.3.5 simply cannot be met. Attributes that would overwrite the contract itself are dropped: no editor should be able to unhook the promises by hand.
 
 `KernDate` renders a date as three fields, the way KERN prescribes — not an `<input type="date">`.
+
+![Review step of an application showing a progress bar, two summary blocks and a warning notice before the binding submission](/images/work/kern-ux-form-summary.webp)
+
+Multi-page applications get the parts that make a form survive a mistake: a progress indicator, summary blocks rendered as description lists, and a warning before anything becomes binding. A failed submission also produces an error overview with jump links — `kern-alert--danger` with `role="alert"`, which is correct here precisely because that markup does not exist until a submission has failed. All of it is pinned by functional tests that render whole forms, because a parse test cannot catch this class of bug: a variable that does not exist is valid Fluid and renders silently as nothing.
 
 ## Testing the standard, not the components
 
@@ -70,6 +94,18 @@ Three details in that run were decisions, not defaults.
 
 **The run aborts if the KERN stylesheet failed to load.** Without CSS, axe silently skips every contrast rule and the suite goes green for the wrong reason.
 
+Those second and third passes are not hypothetical. Here is the 390px one — both menus in a single panel, main navigation with its second level, service links below a divider:
+
+![Opened mobile menu with main navigation, its second level, and service links beneath a divider](/images/work/kern-ux-mobile-navigation.webp)
+
+Document order and screen order are the same here, so the keyboard order follows what a visitor can actually see. That is a property only the narrow pass can check — and `target-size`, KERN's 24px minimum for touch targets, is meaningless at 1280px.
+
+And the dark theme, which is one line in the site settings (`kernUx.theme`; `auto` follows the visitor's system preference):
+
+![The same municipal homepage rendered in the dark theme](/images/work/kern-ux-dark-theme.webp)
+
+The colours are KERN's own tokens, not a second palette invented here. That distinction is the reason the theme is worth testing rather than trusting: contrast ratios are a property of the token pair, so a desktop-light-only run would have signed off on half the palette.
+
 And the gallery only answers half the question — whether each component is accessible *on its own*. Whether they still are *together* takes a real page, so the same runner accepts arbitrarily many:
 
 ```bash
@@ -79,6 +115,16 @@ node axe.mjs --sitemap https://v14.kern-ux.ddev.site kern-ux-demo kern-ux-demo/e
 Five of the accessibility bugs in this extension were found exactly that way, and not by the unit or markup tests. All five sat *between* the tested units — heading order across a full page, landmark uniqueness, contrast in the real layout. None of those are properties a component can have by itself.
 
 The gallery is off by default, because it is a development and audit tool rather than page content. In the `Production` context the setting alone is not enough: there it is served only to a logged-in backend session. A switch in site settings is too little to open an extra public route on a live site.
+
+## What editors see
+
+An accessible frontend that editors cannot operate is a rewrite waiting to happen, so the 20 Content Blocks each carry a backend preview that shows the content rather than just the type name:
+
+![TYPO3 page module with the page tree and the Stage, Notice and Cards content blocks rendered with previews](/images/work/kern-ux-backend.webp)
+
+The interface and block names read English in that shot only because the demo instance has no German language pack installed. The extension ships German labels — the same blocks are *Bühne*, *Hinweis* and *Karten* in a normal German installation.
+
+Previews are the unglamorous half of a design system. A page module that lists "Content Block" eight times forces editors to open each element to find out what it is, and that cost lands on the people who use the system every day rather than on the people who built it.
 
 ## Two majors, one codebase, mutually exclusive dependencies
 

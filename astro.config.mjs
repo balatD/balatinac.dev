@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import { unified, rehypeHeadingIds } from '@astrojs/markdown-remark';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeProseImages from './plugins/rehype-prose-images.mjs';
 
 import cloudflare from '@astrojs/cloudflare';
 
@@ -28,6 +29,7 @@ export default defineConfig({
           content: { type: 'text', value: '#' },
           properties: { class: 'heading-link', ariaHidden: true, tabIndex: -1 },
         }],
+        rehypeProseImages,
       ],
     }),
   },

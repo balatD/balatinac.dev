@@ -22,6 +22,22 @@ Genau das ist das Problem, wenn ein Design-System in ein CMS soll. [KERN](https:
 
 > Das ist eine unabhängige Community-Integration. Sie gehört nicht zum KERN-Team und ist kein offizielles KERN-Kit.
 
+## Was aus der Packung kommt
+
+Jeder Screenshot hier ist der Demo-Seitenbaum, den die Extension selbst anlegt, über `kern-ux:demo:install`. Für die Bilder ist nichts aufgebaut worden, und das ist Absicht: der Screenshot einer handgebauten Seite beweist nichts darüber, was Redakteure tatsächlich zusammensetzen können.
+
+![Kommunale Startseite im KERN UX-Standard mit Bühne, Hinweisbox, drei Karten, Text mit Bild, Aufgabenübersicht und Fußbereich](/images/work/kern-ux-homepage.webp)
+
+Das ist eine kommunale Startseite aus sieben Inhaltselementen — Bühne, Hinweis, Kartengitter, Text und Medien, Aufgabenübersicht, Fußbereich — alle von Redakteuren gepflegt.
+
+Zwei Details darin sind Voreinstellungen und keine Entscheidungen. Das Thema ist hell, und die Kopfzeile der *Digitalen Dachmarke* — „Offizielle Website – Bundesrepublik Deutschland“ — ist **aus**. Diese Zeile ist Angeboten von Bund, Ländern und Kommunen vorbehalten; sie eingeschaltet auszuliefern hieße, jede Installation dazu einzuladen, etwas zu behaupten, was ihr womöglich nicht zusteht.
+
+Die übrigen Seiten-Templates sind auf das geschnitten, was öffentliche Stellen wirklich veröffentlichen. Das hier ist die zweispaltige Dienstleistungsseite — die, auf der ein Bürger landet, wenn er ein Dokument braucht:
+
+![Dienstleistungsseite „Personalausweis beantragen“, zweispaltig mit Seitenleiste für zuständige Stelle und benötigte Unterlagen](/images/work/kern-ux-service-page.webp)
+
+Seitenleiste mit Inhaltsverzeichnis und zuständiger Stelle, Definitionsliste für Gebühren und Fristen, Akkordeon für häufige Fragen, Downloadliste mit Format und Dateigröße, Schaltflächen zum Abschluss. Insgesamt liegen vier Templates bei — Standard, Startseite, Thema, Antrag — jedes mit einem passenden Backend-Layout. Die beiden gehören zusammen: ein Layout, dessen Spalten das Template nicht rendert, kostet Redakteure Inhalte, ohne je einen Fehler zu erzeugen.
+
 ## Das Markup existiert genau einmal
 
 Eine Schicht nativer Fluid Components ist die einzige Quelle für KERN-Markup. Content Blocks, Formular-Templates und Seiten-Templates rufen dieselben Components auf und bilden nur Daten darauf ab.
@@ -40,6 +56,10 @@ vendor/bin/typo3 kern-ux:component:render '<k:atom.button icon="arrow-forward">W
 
 Der Sinn dieser Schicht ist nicht Wiederverwendung. Er ist, dass es genau eine Stelle gibt, an der es richtig sein muss — und Tests, die sie unter beiden TYPO3-Majors dort halten.
 
+![Galerie-Abschnitt molecule.alert mit vier Hinweis-Varianten und dem zugehörigen Fluid-Quelltext](/images/work/kern-ux-component-gallery.webp)
+
+Die Galerie zeigt jede Component in ihren dokumentierten Zuständen neben dem Fluid-Quelltext, der sie erzeugt hat — lebende Doku, Sichtprüfung und axe-Ziel in einem. Jede Component **muss** dort auftauchen: ein Test vergleicht die Beispieldatei mit dem Component-Baum und schlägt fehl, wenn etwas fehlt. Eine Galerie, die stillschweigend Components auslässt, ist schlimmer als keine — sie liest sich als „das ist alles“.
+
 ## Formularregeln gehören in zwei Partials, nicht in dreißig
 
 `ext:form` liefert rund dreißig Element-Partials mit. KERNs Feld-Kontrakt in jedes davon zu schreiben, hieße dreißig Kopien derselben ARIA-Verdrahtung. Stattdessen sitzt er in zwei: `Field/Field.html` für die `kern-form-input`-Familie, `Field/Group.html` für Checkbox- und Radio-Gruppen.
@@ -53,6 +73,10 @@ Was das bringt, einmal implementiert:
 - **Die `fluidAdditionalAttributes` des Elements werden durchgereicht**, mit den ARIA-Attributen des Kontrakts darüber. Ohne das fällt alles weg, was der Formular-Editor in diese Eigenschaft schreibt — vor allem `autocomplete`, ohne das WCAG 1.3.5 gar nicht erfüllbar ist. Attribute, die den Kontrakt selbst überschreiben würden, werden verworfen: kein Redakteur soll die Zusagen von Hand aushängen können.
 
 `KernDate` rendert ein Datum als drei Felder, wie KERN es vorschreibt — kein `<input type="date">`.
+
+![Prüfschritt eines Antrags mit Fortschrittsbalken, zwei Zusammenfassungsblöcken und Warnhinweis vor der verbindlichen Buchung](/images/work/kern-ux-form-summary.webp)
+
+Mehrseitige Antragsstrecken bekommen die Teile, mit denen ein Formular einen Fehler übersteht: eine Fortschrittsanzeige, Zusammenfassungsblöcke als Definitionslisten und einen Warnhinweis, bevor etwas verbindlich wird. Ein fehlgeschlagenes Absenden erzeugt zusätzlich eine Fehlerübersicht mit Sprungmarken — `kern-alert--danger` mit `role="alert"`, hier gerade deshalb korrekt, weil dieses Markup erst nach einem gescheiterten Absenden existiert. Festgehalten wird das von Functional Tests, die ganze Formulare rendern: ein Parse-Test kann diese Fehlerklasse nicht fangen, denn eine Variable, die es nicht gibt, ist gültiges Fluid und rendert stillschweigend nichts.
 
 ## Geprüft wird der Standard, nicht die Component
 
@@ -71,6 +95,18 @@ Drei Details in diesem Lauf sind Entscheidungen und keine Voreinstellungen.
 
 **Der Lauf bricht ab, wenn das KERN-Stylesheet nicht geladen wurde.** Ohne CSS überspringt axe still alle Kontrastregeln, und die Suite wird aus dem falschen Grund grün.
 
+Der zweite und dritte Durchgang sind nicht theoretisch. Das hier ist der mit 390px — beide Menüs in einem Panel, Hauptnavigation mit zweiter Ebene, darunter die Servicelinks hinter einem Trenner:
+
+![Geöffnetes Mobilmenü mit Hauptnavigation, zweiter Ebene und Servicelinks unter einem Trenner](/images/work/kern-ux-mobile-navigation.webp)
+
+Dokumentreihenfolge und Bildschirmreihenfolge sind hier dieselben, die Tastaturreihenfolge folgt also dem, was zu sehen ist. Das ist eine Eigenschaft, die nur der schmale Durchgang prüfen kann — und `target-size`, KERNs Mindestmaß von 24px für Berührungsziele, ist bei 1280px bedeutungslos.
+
+Und das dunkle Thema, das eine Zeile in den Site-Settings ist (`kernUx.theme`; `auto` folgt der Systemeinstellung des Besuchers):
+
+![Dieselbe kommunale Startseite im dunklen Thema](/images/work/kern-ux-dark-theme.webp)
+
+Die Farben sind KERNs eigene Tokens und nicht eine zweite, hier erfundene Palette. Genau diese Unterscheidung ist der Grund, das Thema zu prüfen statt ihm zu vertrauen: Kontrastverhältnisse sind eine Eigenschaft des Token-Paars, ein reiner Desktop-Hell-Lauf hätte also die halbe Palette ungeprüft abgenommen.
+
 Die Galerie beantwortet außerdem nur die halbe Frage — ob jede Component *einzeln* barrierefrei ist. Ob sie es *zusammen* noch sind, zeigt erst eine echte Seite, deshalb nimmt derselbe Lauf beliebig viele:
 
 ```bash
@@ -81,6 +117,16 @@ Fünf der Barrierefreiheitsfehler in dieser Extension sind genau so gefunden wor
 
 Die Galerie ist standardmäßig aus, weil sie ein Entwicklungs- und Prüfwerkzeug ist und nicht Seiteninhalt. Im Kontext `Production` genügt die Einstellung allein nicht: dort wird sie nur an eine angemeldete Backend-Sitzung ausgeliefert. Ein Schalter in den Site-Settings ist zu wenig, um auf einer Produktivseite eine zusätzliche öffentliche Route zu öffnen.
 
+## Was Redakteure sehen
+
+Ein barrierefreies Frontend, das Redakteure nicht bedienen können, ist ein Rewrite mit Anlauf — deshalb hat jeder der 20 Content Blocks eine Backend-Vorschau, die den Inhalt zeigt statt nur den Typnamen:
+
+![TYPO3-Seitenmodul mit Seitenbaum und den Content Blocks Stage, Notice und Cards samt Vorschauen](/images/work/kern-ux-backend.webp)
+
+Die Bedienoberfläche und die Blocknamen stehen auf diesem Bild nur deshalb auf Englisch, weil in der Demo-Instanz kein deutsches Sprachpaket installiert ist. Die Extension liefert deutsche Labels mit — dieselben Blöcke heißen in einer normalen deutschen Installation *Bühne*, *Hinweis* und *Karten*.
+
+Vorschauen sind die undankbare Hälfte eines Design-Systems. Ein Seitenmodul, das achtmal „Content Block“ auflistet, zwingt Redakteure dazu, jedes Element zu öffnen, um herauszufinden, was darin steht — und diese Kosten tragen die Leute, die täglich damit arbeiten, nicht die, die es gebaut haben.
+
 ## Zwei Majors, eine Codebase, unvereinbare Abhängigkeiten
 
 Content Blocks 1.x ist TYPO3-13-only, 2.x ist 14-only. Eine Codebase, die beide bedient, heißt also, dass sich die Abhängigkeitsgraphen gegenseitig ausschließen — deshalb bringt das Repository einen DDEV-Harness mit, der beide Majors parallel betreibt:
@@ -89,7 +135,7 @@ Content Blocks 1.x ist TYPO3-13-only, 2.x ist 14-only. Eine Codebase, die beide 
 ddev install-all          # oder: ddev install-v13 / ddev install-v14
 ```
 
-„Tests laufen lassen" heißt hier folglich immer *einen Major festpinnen, auflösen, testen* — ein nacktes `phpunit` würde nur den zuletzt installierten Major prüfen. Die CI fährt dieselbe Matrix: statische Analyse, Unit- und Functional-Tests über TYPO3 13/14 × PHP 8.2/8.3/8.4, ein `--prefer-lowest`-Lauf je Major und der axe-Lauf gegen die Galerie.
+„Tests laufen lassen“ heißt hier folglich immer *einen Major festpinnen, auflösen, testen* — ein nacktes `phpunit` würde nur den zuletzt installierten Major prüfen. Die CI fährt dieselbe Matrix: statische Analyse, Unit- und Functional-Tests über TYPO3 13/14 × PHP 8.2/8.3/8.4, ein `--prefer-lowest`-Lauf je Major und der axe-Lauf gegen die Galerie.
 
 Die KERN-Distribution wird bewusst nicht mitgeliefert. Sie wird einmalig zur Installationszeit von npm geholt und per SHA-512 geprüft — zur Laufzeit gibt es also keine Fremd-Requests und kein CDN in der Seite:
 
@@ -115,7 +161,7 @@ Quellsprache ist **Englisch, die deutsche Übersetzung liegt in `de.*.xlf`** —
 
 Die interessante Arbeit war nicht, vierzig Components zu bauen. Sie war die Entscheidung, wo eine Zusage leben darf.
 
-Jede Barrierefreiheits-Zusage in dieser Extension steht in genau einem Partial, einer Component oder einem Test — und wo das nicht so war, ist sie gebrochen. Die fünf Fehler, die erst die Ganzseiten-Läufe gefunden haben, sind der deutlichste Beleg: Unit-Tests können nur die Einheiten prüfen, und „barrierefreie Components" und „eine barrierefreie Seite" sind zwei verschiedene Behauptungen. Genauso wie „axe ist grün" und „axe wurde die richtige Frage gestellt" — weshalb Regelmenge, drei Viewport-Durchgänge und Stylesheet-Wächter alle begründet werden mussten, statt sie aus einer Vorlage zu übernehmen.
+Jede Barrierefreiheits-Zusage in dieser Extension steht in genau einem Partial, einer Component oder einem Test — und wo das nicht so war, ist sie gebrochen. Die fünf Fehler, die erst die Ganzseiten-Läufe gefunden haben, sind der deutlichste Beleg: Unit-Tests können nur die Einheiten prüfen, und „barrierefreie Components“ und „eine barrierefreie Seite“ sind zwei verschiedene Behauptungen. Genauso wie „axe ist grün“ und „axe wurde die richtige Frage gestellt“ — weshalb Regelmenge, drei Viewport-Durchgänge und Stylesheet-Wächter alle begründet werden mussten, statt sie aus einer Vorlage zu übernehmen.
 
 Was Automatisierung weiterhin nicht fängt, steht geschrieben statt angedeutet: Tastaturbedienung durch mehrstufige Formulare mit Fehlern, Screenreader-Ausgabe bei Feldern mit Hinweis *und* Fehler, und die Überschriftenordnung ganzer Seiten. Das wird von Hand abgenommen. Das Alpha-Label ist ehrlich — der Nutzen ist echt, aber ein Standard, an dem öffentliche Stellen rechtlich gemessen werden, verdient Praxis-Kilometer, bevor er 1.0 behauptet.
 

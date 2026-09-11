@@ -35,7 +35,7 @@ Der Conductor ist der einzige Agent mit `task`-Berechtigung — dem Tool, das ei
 
 ## Eine Grenze, die man nicht versehentlich aufweitet
 
-Das ist der Teil, der mir am wichtigsten war. Viele Agent-Setups haben ein Muster „Hauptagent delegiert an Helfer". Der Fehlermodus ist immer derselbe: die Grenze ist ein Vorschlag, und über eine lange Session hinweg driftet sie. Der Conductor delegiert irgendwann an alles, was gerade da ist. Die Flotte leckt.
+Das ist der Teil, der mir am wichtigsten war. Viele Agent-Setups haben ein Muster „Hauptagent delegiert an Helfer“. Der Fehlermodus ist immer derselbe: die Grenze ist ein Vorschlag, und über eine lange Session hinweg driftet sie. Der Conductor delegiert irgendwann an alles, was gerade da ist. Die Flotte leckt.
 
 `gorc` verhindert das auf Plugin-Ebene. Nach dem Injizieren der Agenten schreibt das Plugin die `task`-Berechtigung des Conductors bedingungslos neu:
 
@@ -65,7 +65,7 @@ Das klingt nach einer Nicht-Entscheidung. Ist es nicht. Agent-Prompts stecken vo
 
 Hier kommt der Teil, der Zurückhaltung brauchte: der Befehl leitet das Urteil **nicht** an `go-implementer` für einen automatischen Fix weiter. Er zeigt die Empfehlung und stoppt. Der Conductor — oder der Mensch, der ihn steuert — entscheidet, ob sich eine zweite Implementer-Runde lohnt.
 
-Auto-Schleifen „fix, was QA gefunden hat" klingt produktiv. In der Praxis verbrennt sie Tokens damit, Dinge zu polieren, die nicht wichtig waren, und sie versteckt dem Menschen die Einschätzungs-Entscheidung. Die langweilige Wahl — Urteil weiterreichen, eine Person entscheiden lassen — ist hier die richtige.
+Auto-Schleifen „fix, was QA gefunden hat“ klingt produktiv. In der Praxis verbrennt sie Tokens damit, Dinge zu polieren, die nicht wichtig waren, und sie versteckt dem Menschen die Einschätzungs-Entscheidung. Die langweilige Wahl — Urteil weiterreichen, eine Person entscheiden lassen — ist hier die richtige.
 
 ## Klein gebaut
 
@@ -76,7 +76,7 @@ Auto-Schleifen „fix, was QA gefunden hat" klingt produktiv. In der Praxis verb
 
 ## Was ich gelernt habe
 
-Das Flotten-Muster funktioniert, weil die Modelle nicht symmetrisch sind. Ein billiges Modell, das drei Dateien liest und eine Zusammenfassung zurückgibt, ist billig. Ein teures Modell, das dasselbe tut, ist teuer *und* verschwendet. Der Gewinn ist nicht „mehr Agenten" — es ist, die richtige Modell-Stufe auf die richtige Arbeit-Stufe zu legen, und die Grenze dazwischen strukturell statt habituell zu machen.
+Das Flotten-Muster funktioniert, weil die Modelle nicht symmetrisch sind. Ein billiges Modell, das drei Dateien liest und eine Zusammenfassung zurückgibt, ist billig. Ein teures Modell, das dasselbe tut, ist teuer *und* verschwendet. Der Gewinn ist nicht „mehr Agenten“ — es ist, die richtige Modell-Stufe auf die richtige Arbeit-Stufe zu legen, und die Grenze dazwischen strukturell statt habituell zu machen.
 
 Dazu habe ich gelernt, dass die verteidigungsstärkste Zeile Code im ganzen Plugin der Berechtigungs-Stempel ist. Features kommen dazu; Prompts werden getweakt; Modelle werden getauscht. Das eine, was jede zukünftige Änderung überstehen muss, ist die Garantie, dass der Conductor nur an die vier Agenten delegieren kann, an die er soll. Alles andere ist verhandelbar. Das nicht.
 
