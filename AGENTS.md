@@ -10,11 +10,11 @@
 
 | Layer | Technology | Version | Purpose |
 |-------|------------|---------|---------|
-| Framework | Astro | 7.3 | Static site generation, islands architecture |
+| Framework | Astro | 7.4 | Static site generation, islands architecture |
 | Styling | Tailwind CSS | v4.x (via Vite plugin) | Utility-first CSS |
 | Language | TypeScript | latest | Type safety for components and content |
 | Package Manager | pnpm (recommended) / npm | latest | Dependency management |
-| Runtime | Node.js | ≥ 22.12.0 | Build environment |
+| Runtime | Node.js | ≥ 22.23.4 | Build environment |
 | Deploy | Cloudflare Pages | — | Edge CDN, free hosting |
 
 > **Shell setup required:** The default shell (zsh) doesn't have Node/npm on PATH. Before running `npm` or `pnpm` commands, switch to fish shell and activate Node: `fish && nvm use latest`. Alternatively, prefix commands: `fish -c 'nvm use latest && npm run build'`.
