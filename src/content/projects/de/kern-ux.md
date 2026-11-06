@@ -1,6 +1,6 @@
 ---
 title: "kern_ux — der KERN UX-Standard für TYPO3"
-description: "Vierzig barrierefreie Fluid Components, zwanzig Content Blocks und ein ext:form-Theme bringen den Standard der öffentlichen Verwaltung nach TYPO3 13.4 und 14.3 — mit KERN-Markup, das genau einmal existiert und von Tests unter beiden Majors festgenagelt wird."
+description: "Zweiundvierzig barrierefreie Fluid Components, vierundzwanzig Content Blocks und ein ext:form-Theme bringen den Standard der öffentlichen Verwaltung nach TYPO3 13.4 und 14.3 — mit KERN-Markup, das genau einmal existiert und von Tests unter beiden Majors festgenagelt wird."
 urlSlug: "kern-ux"
 tags: ["typo3", "accessibility", "fluid", "content-blocks"]
 year: 2026
@@ -8,17 +8,17 @@ order: 3
 featured: true
 publishedAt: 2026-09-10
 meta:
-  duration: "Spätsommer 2026"
+  duration: "Spätsommer–Herbst 2026"
   role: "Autor & Maintainer"
   team: "Solo"
-  status: "Public Alpha · 1.0.0-alpha"
+  status: "Public Beta · 1.0.0-beta.2"
 ---
 
 Ein Barrierefreiheits-Standard ist keine Farbpalette. Er ist eine Menge Klassennamen und ARIA-Attribute, die exakt stimmen müssen.
 
 Genau das ist das Problem, wenn ein Design-System in ein CMS soll. [KERN](https://www.kern-ux.de/) — der UX-Standard für die deutsche öffentliche Verwaltung — macht konkrete Zusagen: BITV 2.0 AA über EN 301 549, zusätzlich gegen WCAG 2.2 getestet. Diese Zusagen stehen nicht in einem Spezifikationsdokument. Sie hängen daran, ob ein `fieldset` das `aria-required` trägt, ob die Fehlermeldung in `aria-describedby` nach dem Hinweis kommt, ob der Text einer Bühne im Quelltext vor ihrem Bild steht. Kopiert man dieses Markup in dreißig Templates, hat man dreißig Stellen, an denen es still auseinanderläuft.
 
-[`kern_ux`](https://github.com/balatD/kern_ux) bringt KERN nach TYPO3 13.4 und 14.3: 40 barrierefreie Fluid Components, 20 Content Blocks für Redakteure, ein `ext:form`-Theme und vier Seiten-Templates mit passenden Backend-Layouts.
+[`kern_ux`](https://github.com/balatD/kern_ux) bringt KERN nach TYPO3 13.4 und 14.3: 42 barrierefreie Fluid Components, 24 Content Blocks für Redakteure, ein `ext:form`-Theme samt Formularvorlagen und fünf Seiten-Templates mit passenden Backend-Layouts.
 
 > Das ist eine unabhängige Community-Integration. Sie gehört nicht zum KERN-Team und ist kein offizielles KERN-Kit.
 
@@ -36,16 +36,16 @@ Die übrigen Seiten-Templates sind auf das geschnitten, was öffentliche Stellen
 
 ![Dienstleistungsseite „Personalausweis beantragen“, zweispaltig mit Seitenleiste für zuständige Stelle und benötigte Unterlagen](/images/work/kern-ux-service-page.webp)
 
-Seitenleiste mit Inhaltsverzeichnis und zuständiger Stelle, Definitionsliste für Gebühren und Fristen, Akkordeon für häufige Fragen, Downloadliste mit Format und Dateigröße, Schaltflächen zum Abschluss. Insgesamt liegen vier Templates bei — Standard, Startseite, Thema, Antrag — jedes mit einem passenden Backend-Layout. Die beiden gehören zusammen: ein Layout, dessen Spalten das Template nicht rendert, kostet Redakteure Inhalte, ohne je einen Fehler zu erzeugen.
+Seitenleiste mit Inhaltsverzeichnis und zuständiger Stelle, Definitionsliste für Gebühren und Fristen, Akkordeon für häufige Fragen, Downloadliste mit Format und Dateigröße, Schaltflächen zum Abschluss. Insgesamt liegen fünf Templates bei — Standard, Startseite, Landingpage, Thema, Antrag — jedes mit einem passenden Backend-Layout. Die beiden gehören zusammen: ein Layout, dessen Spalten das Template nicht rendert, kostet Redakteure Inhalte, ohne je einen Fehler zu erzeugen.
 
 ## Das Markup existiert genau einmal
 
 Eine Schicht nativer Fluid Components ist die einzige Quelle für KERN-Markup. Content Blocks, Formular-Templates und Seiten-Templates rufen dieselben Components auf und bilden nur Daten darauf ab.
 
-Vierzig davon, gebaut gegen KERN 2.7.2:
+Zweiundvierzig davon, gebaut gegen KERN 2.7.2:
 
 - **Atome** (15) — Badge, Body, Button, Divider, Error, Heading, Hint, Icon, Label, Link, List, Loader, Preline, Progress, Subline.
-- **Moleküle** (16) — AccordionItem, Alert, Breadcrumb, ButtonGroup, Card, ContentHeader, DescriptionList, DownloadList, Figure, Hgroup, MediaPlayer, NavigationList, Section, SkipLink, SummaryItem, TaskListItem.
+- **Moleküle** (18) — AccordionItem, Alert, Breadcrumb, ButtonGroup, Card, ContentHeader, DescriptionList, DownloadList, Figure, Hgroup, MediaPlayer, NavigationList, OpeningHours, Section, SkipLink, SummaryItem, Table, TaskListItem.
 - **Organismen** (9) — CardGrid, Dialog, Footer, Gallery, Header, Hero, Kopfzeile, TaskList, TaskListGroup.
 
 Der Namespace `k` ist global registriert, `<k:atom.button>` löst also ohne `xmlns` im Template auf. Das echte Markup einer Component sieht man ohne Browser und ohne Datenbank:
@@ -73,6 +73,8 @@ Was das bringt, einmal implementiert:
 - **Die `fluidAdditionalAttributes` des Elements werden durchgereicht**, mit den ARIA-Attributen des Kontrakts darüber. Ohne das fällt alles weg, was der Formular-Editor in diese Eigenschaft schreibt — vor allem `autocomplete`, ohne das WCAG 1.3.5 gar nicht erfüllbar ist. Attribute, die den Kontrakt selbst überschreiben würden, werden verworfen: kein Redakteur soll die Zusagen von Hand aushängen können.
 
 `KernDate` rendert ein Datum als drei Felder, wie KERN es vorschreibt — kein `<input type="date">`.
+
+Zwei Formularvorlagen liegen als Ausgangspunkt bei: ein Kontaktformular und eine Barriere-Meldung — der Feedback-Mechanismus, den die EU-Richtlinie zur Barrierefreiheit von Websites und die BITV 2.0 von jeder öffentlichen Stelle verlangen. Keine der beiden bringt einen E-Mail-Finisher mit. Der Empfänger ist das Einzige, was die Extension nicht wissen kann, und ein Finisher, der auf einen Platzhalter zeigt, scheitert still im ungünstigsten Moment.
 
 ![Prüfschritt eines Antrags mit Fortschrittsbalken, zwei Zusammenfassungsblöcken und Warnhinweis vor der verbindlichen Buchung](/images/work/kern-ux-form-summary.webp)
 
@@ -115,17 +117,23 @@ node axe.mjs --sitemap https://v14.kern-ux.ddev.site kern-ux-demo kern-ux-demo/e
 
 Fünf der Barrierefreiheitsfehler in dieser Extension sind genau so gefunden worden und nicht von den Unit- oder Markup-Tests. Alle fünf lagen *zwischen* den geprüften Einheiten — Überschriftenordnung über eine ganze Seite, Eindeutigkeit der Landmarken, Kontrast im echten Layout. Keine davon ist eine Eigenschaft, die eine Component allein haben kann.
 
+Seit der Beta läuft dieser Ganzseiten-Durchgang in der CI, bei jedem Push auf `main`: je eine Seite pro Seiten-Template, jede in drei Durchgängen. Vorher war das ein manueller Schritt, und es ist genau der, der Fehler zwischen den Components findet.
+
+Auf die erste Beta folgte einen Tag später ein Hotfix, der denselben Punkt von der anderen Seite zeigt. Die Audio-Variante des Medien-Blocks wurde seit der ersten Alpha mit null Höhe gerendert — `height: auto` lässt Chromiums `<audio controls>` zusammenfallen —, während die Datei lud und axe die Seite durchwinkte. axe misst kein Layout. Der Barrierefreiheits-Lauf schlägt jetzt bei jedem sichtbaren Player ohne Höhe fehl.
+
 Die Galerie ist standardmäßig aus, weil sie ein Entwicklungs- und Prüfwerkzeug ist und nicht Seiteninhalt. Im Kontext `Production` genügt die Einstellung allein nicht: dort wird sie nur an eine angemeldete Backend-Sitzung ausgeliefert. Ein Schalter in den Site-Settings ist zu wenig, um auf einer Produktivseite eine zusätzliche öffentliche Route zu öffnen.
 
 ## Was Redakteure sehen
 
-Ein barrierefreies Frontend, das Redakteure nicht bedienen können, ist ein Rewrite mit Anlauf — deshalb hat jeder der 20 Content Blocks eine Backend-Vorschau, die den Inhalt zeigt statt nur den Typnamen:
+Ein barrierefreies Frontend, das Redakteure nicht bedienen können, ist ein Rewrite mit Anlauf — deshalb hat jeder der 24 Content Blocks eine Backend-Vorschau, die den Inhalt zeigt statt nur den Typnamen:
 
 ![TYPO3-Seitenmodul mit Seitenbaum und den Content Blocks Stage, Notice und Cards samt Vorschauen](/images/work/kern-ux-backend.webp)
 
 Die Bedienoberfläche und die Blocknamen stehen auf diesem Bild nur deshalb auf Englisch, weil in der Demo-Instanz kein deutsches Sprachpaket installiert ist. Die Extension liefert deutsche Labels mit — dieselben Blöcke heißen in einer normalen deutschen Installation *Bühne*, *Hinweis* und *Karten*.
 
 Vorschauen sind die undankbare Hälfte eines Design-Systems. Ein Seitenmodul, das achtmal „Content Block“ auflistet, zwingt Redakteure dazu, jedes Element zu öffnen, um herauszufinden, was darin steht — und diese Kosten tragen die Leute, die täglich damit arbeiten, nicht die, die es gebaut haben.
+
+Manche Barrierefreiheits-Fakten stehen gar nicht im Markup, sondern in dem, was jemand über eine Datei weiß — deshalb sind sie Felder geworden. Ein Dokument trägt neben dem Alternativtext ein Kennzeichen *barrierefrei*; ein Download-Link, dessen Datei nicht gekennzeichnet ist, sagt das in seinem Linktext, neben Format und Größe. Die BITV 2.0 gilt auch für veröffentlichte Dokumente, und der Standardwert ist „nicht bekannt“, nicht „ja“. Ein komplexes Bild bekommt eine Langbeschreibung, die als sichtbarer Text in der `figcaption` steht und über `aria-describedby` verknüpft ist — ausdrücklich nicht im `longdesc`-Attribut, nach dem das Feld benannt ist und das aus HTML5 entfernt wurde. Und der Medien-Block nimmt eine Fassung des Videos mit Audiodeskription, denn die erfüllt WCAG 1.2.3 und 1.2.5 heute — nicht eine `descriptions`-Spur, die Browser ignorieren.
 
 ## Zwei Majors, eine Codebase, unvereinbare Abhängigkeiten
 
@@ -135,12 +143,12 @@ Content Blocks 1.x ist TYPO3-13-only, 2.x ist 14-only. Eine Codebase, die beide 
 ddev install-all          # oder: ddev install-v13 / ddev install-v14
 ```
 
-„Tests laufen lassen“ heißt hier folglich immer *einen Major festpinnen, auflösen, testen* — ein nacktes `phpunit` würde nur den zuletzt installierten Major prüfen. Die CI fährt dieselbe Matrix: statische Analyse, Unit- und Functional-Tests über TYPO3 13/14 × PHP 8.2/8.3/8.4, ein `--prefer-lowest`-Lauf je Major und der axe-Lauf gegen die Galerie.
+„Tests laufen lassen“ heißt hier folglich immer *einen Major festpinnen, auflösen, testen* — ein nacktes `phpunit` würde nur den zuletzt installierten Major prüfen. Die CI fährt dieselbe Matrix: statische Analyse und eine REUSE-Lizenzprüfung, Unit- und Functional-Tests über TYPO3 13/14 × PHP 8.2/8.3/8.4, ein `--prefer-lowest`-Lauf je Major, der axe-Lauf gegen die Galerie und auf `main` der Ganzseiten-Lauf.
 
 Die KERN-Distribution wird bewusst nicht mitgeliefert. Sie wird einmalig zur Installationszeit von npm geholt und per SHA-512 geprüft — zur Laufzeit gibt es also keine Fremd-Requests und kein CDN in der Seite:
 
 ```bash
-composer require balatd/kern-ux:^1.0@alpha
+composer require balatd/kern-ux:^1.0@beta
 vendor/bin/typo3 extension:setup
 vendor/bin/typo3 kern-ux:assets:install
 ```
@@ -151,9 +159,11 @@ Das Zielverzeichnis ist nicht eingecheckt, damit gehört der letzte Schritt in j
 
 Ein paar Verhaltensweisen sehen wie fehlende Optionen aus und sind es nicht.
 
-Der Block **Bühne** stellt seinen Text im Quelltext immer vor das Bild, auch wenn das Bild links gezeigt wird — die Seite ist eine Grid-Reihenfolge, damit die Lesereihenfolge dem Inhalt folgt und nicht dem Layout. Das Bild trägt keine Bildunterschrift und ist keine `figure`: ein Bühnenbild illustriert, und was ein Besucher wirklich braucht, steht im Vorspann. Ein Bild mit eigener Aussage gehört in *Bild* oder *Text und Medien*.
+Der Block **Bühne** stellt seinen Text im Quelltext immer vor das Bild, auch wenn das Bild links gezeigt wird — das Layout ist eine Grid-Reihenfolge, damit die Lesereihenfolge dem Inhalt folgt und nicht dem Layout. Das Bild trägt keine Bildunterschrift und ist keine `figure`: ein Bühnenbild illustriert, und was ein Besucher wirklich braucht, steht im Vorspann. Ein Bild mit eigener Aussage gehört in *Bild* oder *Text und Medien*.
 
 **Semantik und Optik** einer Component sind getrennte Argumente. Die Überschriftenstufe ist ein Argument, die visuelle Größe ein zweites. KERN verlangt das ausdrücklich, damit eine Component in jede Dokumentstruktur passt, ohne ihr Aussehen zu ändern.
+
+**`kern-dropdown` fehlt mit Absicht.** KERNs eigenes Stylesheet markiert die Komponente als noch in Entwicklung und nicht Teil des Frameworks; einen Tag-Namen samt Argumenten dagegen einzufrieren, hieße etwas zu versprechen, was upstream nicht verspricht. Eine Abdeckungsprüfung meldet sie in jedem CI-Lauf und schlägt fehl, wenn sich die Liste der KERN-Familien, die hier niemand umsetzt, unerwartet ändert.
 
 Quellsprache ist **Englisch, die deutsche Übersetzung liegt in `de.*.xlf`** — die TYPO3-Konvention, und das ist nicht kosmetisch. TYPO3 behandelt `en` als Default-Sprachschlüssel und liest dann die `<source>`-Werte, statt nach einer `en.`-Übersetzung zu suchen. Mit deutscher Quelle zeigte eine englische Seite auf TYPO3 13 deutsche Texte, während TYPO3 14 die Übersetzung fand.
 
@@ -163,6 +173,6 @@ Die interessante Arbeit war nicht, vierzig Components zu bauen. Sie war die Ents
 
 Jede Barrierefreiheits-Zusage in dieser Extension steht in genau einem Partial, einer Component oder einem Test — und wo das nicht so war, ist sie gebrochen. Die fünf Fehler, die erst die Ganzseiten-Läufe gefunden haben, sind der deutlichste Beleg: Unit-Tests können nur die Einheiten prüfen, und „barrierefreie Components“ und „eine barrierefreie Seite“ sind zwei verschiedene Behauptungen. Genauso wie „axe ist grün“ und „axe wurde die richtige Frage gestellt“ — weshalb Regelmenge, drei Viewport-Durchgänge und Stylesheet-Wächter alle begründet werden mussten, statt sie aus einer Vorlage zu übernehmen.
 
-Was Automatisierung weiterhin nicht fängt, steht geschrieben statt angedeutet: Tastaturbedienung durch mehrstufige Formulare mit Fehlern, Screenreader-Ausgabe bei Feldern mit Hinweis *und* Fehler, und die Überschriftenordnung ganzer Seiten. Das wird von Hand abgenommen. Das Alpha-Label ist ehrlich — der Nutzen ist echt, aber ein Standard, an dem öffentliche Stellen rechtlich gemessen werden, verdient Praxis-Kilometer, bevor er 1.0 behauptet.
+Was Automatisierung weiterhin nicht fängt, steht geschrieben statt angedeutet: Tastaturbedienung durch mehrstufige Formulare mit Fehlern, Screenreader-Ausgabe bei Feldern mit Hinweis *und* Fehler, und die Überschriftenordnung ganzer Seiten. Das wird von Hand abgenommen. Auch das Beta-Label ist ehrlich. Die öffentliche Schnittstelle ist jetzt eingefroren und wird von Tests verteidigt statt von guten Absichten, aber ein Standard, an dem öffentliche Stellen rechtlich gemessen werden, verdient Praxis-Kilometer, bevor er 1.0 behauptet.
 
-`kern_ux` liegt auf [GitHub](https://github.com/balatD/kern_ux) und [Packagist](https://packagist.org/packages/balatd/kern-ux). GPL-2.0-or-later, Public Alpha, TYPO3 13.4 und 14.3.
+`kern_ux` liegt auf [GitHub](https://github.com/balatD/kern_ux) und [Packagist](https://packagist.org/packages/balatd/kern-ux). GPL-2.0-or-later, Public Beta, TYPO3 13.4 und 14.3.

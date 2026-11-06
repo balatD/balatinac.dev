@@ -18,14 +18,14 @@ Das teuerste Modell der Flotte las Dateien. Das war der Fehler.
 
 Ich hatte eine Weile mit [opencode](https://opencode.ai) gearbeitet — dem Open-Source-Coding-Agent-CLI — und mir fiel immer dasselbe auf: das starke, teure Modell verbrachte seinen Zug damit, eine Codebase zu durchsuchen, ein README zusammenzufassen, ein Rename über zwölf Dateien zu ziehen. Wenn es ans eigentliche Denken ging, war halb das Kontextfenster weg, und der schwere Teil der Aufgabe bekam die billige Aufmerksamkeit des Modells.
 
-Die Lösung war kein schlauereres Modell. Sondern eine bessere Arbeitsteilung. `gorc` ist diese Arbeitsteilung, verpackt als opencode-Plugin.
+Die Lösung war kein schlaueres Modell. Sondern eine bessere Arbeitsteilung. `gorc` ist diese Arbeitsteilung, verpackt als opencode-Plugin.
 
 ## Ein Agent, der denkt, vier, die arbeiten
 
 `gorc` liefert fünf Agenten. Nur einer davon — der **Conductor** — ist ein primärer Agent. Er plant, denkt, delegiert. Die anderen vier sind Subagenten, jeweils auf einem billigeren Modell, jeweils auf eine Art Hilfsarbeit begrenzt:
 
 - **`go-research`** — Websuche, Web-Fetch und nur-lesendes Erkunden unbekannten Codes. Der einzige Subagent mit Webzugriff.
-- **`go-reader`** — gezielte Lesezugriffe auf Code, dessen Ort der Conductor schon kennt. Der am stärksten eingesperrte Agent der Flotte: lesen, grep, glob, sonst nichts.
+- **`go-reader`** — gezielte Lesezugriffe auf Code, dessen Ort der Conductor schon kennt. Der am stärksten eingesperrte Agent der Flotte: lesen, grep, glob, list, sonst nichts.
 - **`go-implementer`** — der einzige Subagent, der editieren und bash ausführen darf. Er wendet geplante Edits an, führt den Build aus und verifiziert seine eigene Arbeit.
 - **`go-qa`** — nur-lesende Testbarkeits-Prüfung. Er liest, was der Implementer gerade geschrieben hat, und liefert eine Einschätzung in einem Wort: `testable`, `nearly` oder `not testable`.
 
@@ -55,7 +55,7 @@ Kein Subagent bekommt `task` überhaupt. Der Implementer darf editieren und bash
 
 ## Prompts als Markdown, nicht als Template-Strings
 
-Jeder System-Prompt eines Agenten liegt in einer benachbarten `.md`-Datei — `agents/conductor.md`, `agents/go-qa.md` und so weiter — und wird beim Plugin-Init per `fs.readFileSync` von der Platte gelesen. Nicht zur Build-Zeit in ein TypeScript-Template-Literal inlineiert.
+Jeder System-Prompt eines Agenten liegt in einer benachbarten `.md`-Datei — `agents/conductor.md`, `agents/go-qa.md` und so weiter — und wird beim Plugin-Init per `fs.readFileSync` von der Platte gelesen. Nicht zur Build-Zeit in ein TypeScript-Template-Literal eingebettet.
 
 Das klingt nach einer Nicht-Entscheidung. Ist es nicht. Agent-Prompts stecken voller Backticks, Code-Fences und spitzen Klammern. Sobald man einen in ein TS-Template-Literal stopft, escaped man ein Leben lang — oder man inlinet den Prompt als Base64-Blob, was schlimmer ist. Prompts als reine Markdown-Dateien zu halten bedeutet: sie sind diffbar, editierbar und in jedem Editor lesbar. Der Build-Schritt fasst sie nicht an; das Paket liefert sie unverändert neben `dist/index.js` aus.
 
@@ -65,7 +65,7 @@ Das klingt nach einer Nicht-Entscheidung. Ist es nicht. Agent-Prompts stecken vo
 
 Hier kommt der Teil, der Zurückhaltung brauchte: der Befehl leitet das Urteil **nicht** an `go-implementer` für einen automatischen Fix weiter. Er zeigt die Empfehlung und stoppt. Der Conductor — oder der Mensch, der ihn steuert — entscheidet, ob sich eine zweite Implementer-Runde lohnt.
 
-Auto-Schleifen „fix, was QA gefunden hat“ klingt produktiv. In der Praxis verbrennt sie Tokens damit, Dinge zu polieren, die nicht wichtig waren, und sie versteckt dem Menschen die Einschätzungs-Entscheidung. Die langweilige Wahl — Urteil weiterreichen, eine Person entscheiden lassen — ist hier die richtige.
+Auto-Schleifen „fix, was QA gefunden hat“ klingt produktiv. In der Praxis verbrennt es Tokens damit, Dinge zu polieren, die nicht wichtig waren, und es versteckt dem Menschen die Einschätzungs-Entscheidung. Die langweilige Wahl — Urteil weiterreichen, eine Person entscheiden lassen — ist hier die richtige.
 
 ## Klein gebaut
 
@@ -82,4 +82,4 @@ Dazu habe ich gelernt, dass die verteidigungsstärkste Zeile Code im ganzen Plug
 
 `gorc` liegt [auf GitHub](https://github.com/balatD/gorc) und [auf npm](https://www.npmjs.com/package/@balatd/gorc) als `@balatd/gorc`. MIT.
 
-*— DB, geschrieben während sein Conductor leise die Hilfsarbeit an ein Modell delegierte, das einen Zehntel kostet.*
+*— DB, geschrieben während sein Conductor leise die Hilfsarbeit an ein Modell delegierte, das ein Zehntel kostet.*

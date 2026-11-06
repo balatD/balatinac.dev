@@ -24,7 +24,7 @@ The fix wasn't a smarter model. It was a better division of labor. `gorc` is tha
 `gorc` ships five agents. Only one of them — the **conductor** — is a primary agent. It plans, reasons, and delegates. The other four are subagents, each on a cheaper model, each scoped to one kind of grunt work:
 
 - **`go-research`** — web search, web fetch, and read-only exploration of unfamiliar code. The only subagent with web access.
-- **`go-reader`** — targeted reads of code the conductor already knows the location of. The most locked-down agent in the fleet: read, grep, glob, nothing else.
+- **`go-reader`** — targeted reads of code the conductor already knows the location of. The most locked-down agent in the fleet: read, grep, glob, list, nothing else.
 - **`go-implementer`** — the only subagent allowed to edit and run bash. It applies planned edits, runs the build, and verifies its own work.
 - **`go-qa`** — read-only testability review. It reads what the implementer just wrote and returns a one-word verdict: `testable`, `nearly`, or `not testable`.
 

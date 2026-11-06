@@ -1,23 +1,23 @@
 ---
 title: "kern_ux — the KERN UX-Standard for TYPO3"
-description: "Forty accessible Fluid components, twenty Content Blocks and an ext:form theme bringing Germany's public-sector design standard to TYPO3 13.4 and 14.3 — with the KERN markup living exactly once and pinned by tests under both majors."
+description: "Forty-two accessible Fluid components, twenty-four Content Blocks and an ext:form theme bringing Germany's public-sector design standard to TYPO3 13.4 and 14.3 — with the KERN markup living exactly once and pinned by tests under both majors."
 tags: ["typo3", "accessibility", "fluid", "content-blocks"]
 year: 2026
 order: 3
 featured: true
 publishedAt: 2026-09-10
 meta:
-  duration: "Late summer 2026"
+  duration: "Late summer–autumn 2026"
   role: "Author & Maintainer"
   team: "Solo"
-  status: "Public alpha · 1.0.0-alpha"
+  status: "Public beta · 1.0.0-beta.2"
 ---
 
 An accessibility standard is not a colour palette. It is a set of class names and ARIA attributes that have to be exactly right.
 
 That is the whole problem with putting a design system into a CMS. [KERN](https://www.kern-ux.de/) — the UX standard for German public administration — makes concrete promises: BITV 2.0 AA via EN 301 549, tested additionally against WCAG 2.2. Those promises do not live in a spec document. They live in whether a `fieldset` carries `aria-required`, whether the error message comes after the hint in `aria-describedby`, whether a hero's text precedes its image in the source order. Copy that markup into thirty templates and you have thirty places for it to quietly drift.
 
-[`kern_ux`](https://github.com/balatD/kern_ux) brings KERN to TYPO3 13.4 and 14.3: 40 accessible Fluid components, 20 Content Blocks for editors, an `ext:form` theme and four page templates with matching backend layouts.
+[`kern_ux`](https://github.com/balatD/kern_ux) brings KERN to TYPO3 13.4 and 14.3: 42 accessible Fluid components, 24 Content Blocks for editors, an `ext:form` theme with form templates, and five page templates with matching backend layouts.
 
 > This is an independent community integration. It is not part of the KERN team and not an official KERN kit.
 
@@ -35,16 +35,16 @@ The other page templates are shaped for the work public bodies actually publish.
 
 ![KERN service page for applying for an identity card, two columns with a sidebar for the responsible office and required documents](/images/work/kern-ux-service-page.webp)
 
-Sidebar with a table of contents and the responsible office, a description list for fees and deadlines, an accordion for common questions, a download list that states format and file size, and buttons to close. Four page templates ship in total — standard, homepage, topic, application — each with a matching backend layout. Those two belong together: a layout whose columns the template never renders costs editors their content without ever raising an error.
+Sidebar with a table of contents and the responsible office, a description list for fees and deadlines, an accordion for common questions, a download list that states format and file size, and buttons to close. Five page templates ship in total — standard, homepage, landing, topic, application — each with a matching backend layout. Those two belong together: a layout whose columns the template never renders costs editors their content without ever raising an error.
 
 ## The markup exists exactly once
 
 A layer of native Fluid components is the single source of KERN markup. Content Blocks, form templates and page templates all call the same components and only map data onto them.
 
-Forty of them, built against KERN 2.7.2:
+Forty-two of them, built against KERN 2.7.2:
 
 - **Atoms** (15) — Badge, Body, Button, Divider, Error, Heading, Hint, Icon, Label, Link, List, Loader, Preline, Progress, Subline.
-- **Molecules** (16) — AccordionItem, Alert, Breadcrumb, ButtonGroup, Card, ContentHeader, DescriptionList, DownloadList, Figure, Hgroup, MediaPlayer, NavigationList, Section, SkipLink, SummaryItem, TaskListItem.
+- **Molecules** (18) — AccordionItem, Alert, Breadcrumb, ButtonGroup, Card, ContentHeader, DescriptionList, DownloadList, Figure, Hgroup, MediaPlayer, NavigationList, OpeningHours, Section, SkipLink, SummaryItem, Table, TaskListItem.
 - **Organisms** (9) — CardGrid, Dialog, Footer, Gallery, Header, Hero, Kopfzeile, TaskList, TaskListGroup.
 
 The `k` namespace is registered globally, so `<k:atom.button>` resolves without any `xmlns` in the template. You can see a component's real output without a browser or a database:
@@ -72,6 +72,8 @@ What that buys, implemented once:
 - **The element's `fluidAdditionalAttributes` are passed through**, with the contract's ARIA attributes layered on top. Without that you lose everything the form editor writes into that property — above all `autocomplete`, without which WCAG 1.3.5 simply cannot be met. Attributes that would overwrite the contract itself are dropped: no editor should be able to unhook the promises by hand.
 
 `KernDate` renders a date as three fields, the way KERN prescribes — not an `<input type="date">`.
+
+Two form templates ship as starting points: a contact form and a barrier report — the feedback mechanism the EU Web Accessibility Directive and BITV 2.0 require every public body to offer. Neither ships an email finisher. The recipient is the one thing the extension cannot know, and a finisher pointing at a placeholder fails silently at the worst moment.
 
 ![Review step of an application showing a progress bar, two summary blocks and a warning notice before the binding submission](/images/work/kern-ux-form-summary.webp)
 
@@ -114,17 +116,23 @@ node axe.mjs --sitemap https://v14.kern-ux.ddev.site kern-ux-demo kern-ux-demo/e
 
 Five of the accessibility bugs in this extension were found exactly that way, and not by the unit or markup tests. All five sat *between* the tested units — heading order across a full page, landmark uniqueness, contrast in the real layout. None of those are properties a component can have by itself.
 
+Since the beta, that whole-page pass runs in CI on every push to `main`: one page per page template, three passes each. It had been a manual step, and it is the one that finds defects living between components.
+
+The first beta was followed a day later by a hotfix that makes the same point from the other side. The audio variant of the media block had rendered with zero height since the first alpha — `height: auto` collapses Chromium's `<audio controls>` — while its file loaded and axe passed the page. axe does not measure layout. The accessibility run now fails on any visible player without height.
+
 The gallery is off by default, because it is a development and audit tool rather than page content. In the `Production` context the setting alone is not enough: there it is served only to a logged-in backend session. A switch in site settings is too little to open an extra public route on a live site.
 
 ## What editors see
 
-An accessible frontend that editors cannot operate is a rewrite waiting to happen, so the 20 Content Blocks each carry a backend preview that shows the content rather than just the type name:
+An accessible frontend that editors cannot operate is a rewrite waiting to happen, so the 24 Content Blocks each carry a backend preview that shows the content rather than just the type name:
 
 ![TYPO3 page module with the page tree and the Stage, Notice and Cards content blocks rendered with previews](/images/work/kern-ux-backend.webp)
 
 The interface and block names read English in that shot only because the demo instance has no German language pack installed. The extension ships German labels — the same blocks are *Bühne*, *Hinweis* and *Karten* in a normal German installation.
 
 Previews are the unglamorous half of a design system. A page module that lists "Content Block" eight times forces editors to open each element to find out what it is, and that cost lands on the people who use the system every day rather than on the people who built it.
+
+Some accessibility facts are not in the markup at all, but in what somebody knows about a file, so they became fields. A document carries an *accessible* flag next to its alternative text; a download link whose file is not flagged says so in its link text, beside format and size. BITV 2.0 covers published documents too, and the default is "unknown", not "yes". A complex image gets a long description, rendered as visible text in the `figcaption` and linked through `aria-describedby` — deliberately not the `longdesc` attribute the field is named after, which HTML5 removed. And the media block takes an audio-described cut of a video, because that, not a `descriptions` track browsers ignore, is what satisfies WCAG 1.2.3 and 1.2.5 today.
 
 ## Two majors, one codebase, mutually exclusive dependencies
 
@@ -134,12 +142,12 @@ Content Blocks 1.x is TYPO3 13 only; 2.x is 14 only. One codebase serving both m
 ddev install-all          # or: ddev install-v13 / ddev install-v14
 ```
 
-"Run the tests" therefore always means *pin a major, resolve, test* — a bare `phpunit` would only check whichever major was installed last. CI runs the same matrix: static analysis, unit and functional tests across TYPO3 13/14 × PHP 8.2/8.3/8.4, a `--prefer-lowest` pass per major, and the axe run against the gallery.
+"Run the tests" therefore always means *pin a major, resolve, test* — a bare `phpunit` would only check whichever major was installed last. CI runs the same matrix: static analysis and a REUSE licensing check, unit and functional tests across TYPO3 13/14 × PHP 8.2/8.3/8.4, a `--prefer-lowest` pass per major, the axe run against the gallery and, on `main`, the whole-page run.
 
 The KERN distribution is deliberately not vendored. It is fetched once from npm at install time and verified by SHA-512, so there are no third-party requests at runtime and no CDN in the page:
 
 ```bash
-composer require balatd/kern-ux:^1.0@alpha
+composer require balatd/kern-ux:^1.0@beta
 vendor/bin/typo3 extension:setup
 vendor/bin/typo3 kern-ux:assets:install
 ```
@@ -154,6 +162,8 @@ The **Hero** block always puts its text before its image in the source order, ev
 
 Component **semantics and appearance are separate arguments**. Heading level is one argument, visual size a second. KERN requires this explicitly, so a component can slot into any document structure without changing how it looks.
 
+**`kern-dropdown` is missing on purpose.** KERN's own stylesheet marks it as still in development and not part of the framework, so freezing a tag name and its arguments against it would promise something upstream has not. A coverage check reports it on every CI run, and fails when the list of KERN families nothing here implements changes unexpectedly.
+
 The source language is **English, with the German translation in `de.*.xlf`** — the TYPO3 convention, and not cosmetic. TYPO3 treats `en` as the default language key and then reads the `<source>` values instead of looking for an `en.` translation. With a German source, an English page on TYPO3 13 showed German text while TYPO3 14 found the translation.
 
 ## What I learned
@@ -162,6 +172,6 @@ The interesting work was not building forty components. It was deciding where a 
 
 Every accessibility guarantee in this extension is either in one partial, one component, or one test — and where it wasn't, it broke. The five bugs the whole-page runs caught are the clearest evidence: unit tests can only check the units, and "accessible components" and "an accessible page" are different claims. So are "axe passes" and "axe was asked the right question", which is why the rule set, the three viewport passes and the stylesheet guard all had to be argued for rather than accepted from a template.
 
-What automation still does not catch is written down instead of implied: keyboard operation through multi-step forms with errors, screen reader output for fields carrying both a hint *and* an error, and heading order across whole pages. Those get checked by hand. The alpha label is honest — the value is real, but a standard that public bodies are legally measured against deserves production mileage before it claims 1.0.
+What automation still does not catch is written down instead of implied: keyboard operation through multi-step forms with errors, screen reader output for fields carrying both a hint *and* an error, and heading order across whole pages. Those get checked by hand. The beta label is honest too. The public surface is frozen now and defended by tests rather than by intent, but a standard that public bodies are legally measured against deserves production mileage before it claims 1.0.
 
-`kern_ux` is [available on GitHub](https://github.com/balatD/kern_ux) and [Packagist](https://packagist.org/packages/balatd/kern-ux). GPL-2.0-or-later, public alpha, TYPO3 13.4 and 14.3.
+`kern_ux` is [available on GitHub](https://github.com/balatD/kern_ux) and [Packagist](https://packagist.org/packages/balatd/kern-ux). GPL-2.0-or-later, public beta, TYPO3 13.4 and 14.3.
