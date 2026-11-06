@@ -1,6 +1,6 @@
 ---
 title: "TYPO3 v14 — was wirklich neu ist und worauf ich mich freue"
-description: "Ein praktischer Blick auf die Features von TYPO3 v14 LTS — vom Form Framework-Overhaul und der System Resource API bis zu Extbase-Upgrades und das Ende von ext_emconf.php."
+description: "Ein praktischer Blick auf die Features von TYPO3 v14 LTS — vom Form Framework-Overhaul und der System Resource API bis zu Extbase-Upgrades und dem Anfang vom Ende für ext_emconf.php."
 urlSlug: "typo3-v14-features"
 tags: ["typo3", "php", "cms", "backend"]
 publishedAt: 2026-05-05
@@ -16,7 +16,7 @@ Hier ist, was mir tatsächlich aufgefallen ist — und was ich für wichtiger ha
 
 ## Das Form Framework wird endlich erwachsen
 
-Wer in TYPO3 jemals mehr als ein einfaches Kontaktformular gebaut hat, kennt das Form Framework — und kennt seine Schmerzpunkte. v14.2 addressiert mehrere davon auf einmal, und das ist aus meiner Sicht das Update mit dem größten Hebel im Alltag.
+Wer in TYPO3 jemals mehr als ein einfaches Kontaktformular gebaut hat, kennt das Form Framework — und kennt seine Schmerzpunkte. v14.2 adressiert mehrere davon auf einmal, und das ist aus meiner Sicht das Update mit dem größten Hebel im Alltag.
 
 ### Multi-Datei-Uploads in einem Feld
 
@@ -54,7 +54,7 @@ Er verschiebt Form-Definitionen zwischen Storages — sauber und nachvollziehbar
 
 Das ist die Änderung, von der ich nicht wusste, dass ich sie brauche, bis ich sie gesehen habe.
 
-Ressourcen waren in TYPO3 immer ein kleines Tohuwabohu: Extension-Dateien benutzten die eine Syntax, FAL-Referenzen eine andere, Projektdateien hatten ihre eigenen Konventionen, und externe URIs waren schlicht Strings. Die neue **System Resource API** vereinheitlicht das über eine einzige Schnittstelle mit klaren Schlüsselwörtern: `EXT`, `FAL` und `PKG`.
+Ressourcen waren in TYPO3 immer ein kleines Tohuwabohu: Extension-Dateien benutzten die eine Syntax, FAL-Referenzen eine andere, Projektdateien hatten ihre eigenen Konventionen, und externe URIs waren schlicht Strings. Die neue **System Resource API** vereinheitlicht das über eine einzige Schnittstelle mit klaren Schlüsselwörtern: `EXT`, `FAL`, `PKG` und `URI`.
 
 Egal ob in PHP, TypoScript oder Fluid — Ressourcen werden konsistent aufgelöst. Das reduziert genau die Klasse von subtilen Fehlern, die in der Vergangenheit zu Sicherheitsproblemen geführt hat: falsche Pfadauflösung, fehlende Existenzprüfungen, inkonsistente URL-Generierung.
 
@@ -75,8 +75,8 @@ Es ist nicht revolutionär. Es ist die Art Funktion, die von Anfang an hätte da
 Drei Änderungen, alle bringen TYPO3 näher an moderne PHP-Konventionen:
 
 - **`composer.json` ist Pflicht** in jeder Extension, auch in Legacy-Installationen. Das schafft eine einheitliche Grundlage, unabhängig vom Installationsweg.
-- **`ext_emconf.php` ist Geschichte.** Extension-Metadaten leben jetzt in der `composer.json`. Wer beide Dateien je synchron halten musste, weiß, was für eine Erleichterung das ist.
-- **`ext_tables.php` ist Geschichte.** Ihre Aufgaben übernehmen modernere Konfigurationsmechanismen.
+- **`ext_emconf.php` ist auf dem Rückzug.** Seit v14.2 können sämtliche Metadaten in der `composer.json` stehen. Eine Extension, die die Datei noch ohne diese Metadaten ausliefert, löst eine Deprecation aus, und v15 liest sie nicht mehr. Wer beide Dateien je synchron halten musste, weiß, was für eine Erleichterung das ist.
+- **`ext_tables.php` ist deprecated.** Ihre verbliebenen Aufgaben — Backend-Module, Routen, Benutzereinstellungen — haben inzwischen eigene Orte, und v15 entfernt die Unterstützung für die Datei.
 
 Für Redakteurinnen und Redakteure ist das unsichtbar, für Entwickler bedeutend: weniger Dateien zum Pflegen, weniger Inkonsistenzen, ein Setup, das endlich so funktioniert, wie es das PHP-Ökosystem ohnehin vorsieht.
 
@@ -162,7 +162,7 @@ Drei kleinere Dinge, die im Alltag spürbar sind:
 
 ## Worauf ich mich tatsächlich freue
 
-Wenn ich ehrlich bin, sind die Änderungen, die mir am meisten bedeuten, die unspektakulären: Form-Definitionen in der Datenbank. Das Ende von `ext_emconf.php`. Die System Resource API, die Pfadauflösung endlich vorhersagbar macht. `#[Authorize]` und `#[RateLimit]`, die Boilerplate aus meinen Controllern verschwinden lassen.
+Wenn ich ehrlich bin, sind die Änderungen, die mir am meisten bedeuten, die unspektakulären: Form-Definitionen in der Datenbank. Das absehbare Ende von `ext_emconf.php`. Die System Resource API, die Pfadauflösung endlich vorhersagbar macht. `#[Authorize]` und `#[RateLimit]`, die Boilerplate aus meinen Controllern verschwinden lassen.
 
 Das sind nicht die Features für laute Release-Ankündigungen. Aber es sind die, die die tägliche Reibung mit einem CMS reduzieren — und genau das macht ein LTS wertvoll.
 

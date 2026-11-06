@@ -37,7 +37,7 @@ But for a personal portfolio, TYPO3 brings overhead that earns nothing:
 - **A PHP runtime.** FPM, OPcache config, memory limits, a web server. All of it for pages that could be plain HTML files on a CDN.
 - **An editorial backend.** I'm the only editor. I don't need a login screen, a permission system, or a content tree. I need a text editor and `git push`.
 - **Extension management.** Composer, TER, version constraints. Even a minimal TYPO3 install pulls in more moving parts than this entire site has pages.
-- **Hosting cost.** A VPS that can run TYPO3 comfortably costs €5–15/month. This site deploys to Cloudflare Pages for free.
+- **Hosting cost.** A VPS that can run TYPO3 comfortably costs €5–15/month. This site deploys to Cloudflare Workers for free.
 
 The mismatch isn't TYPO3's fault. It's a scope problem. Using TYPO3 for a portfolio is like renting a warehouse to store a suitcase.
 
@@ -66,7 +66,7 @@ Build time: about one second. Total output size: under 300 KB.
 
 ### The island architecture
 
-The few interactive pieces — the theme toggle, the language switcher, the tag filter — run as small scripts that hydrate independently. The rest of the page is static HTML. No framework runtime, no virtual DOM, no hydration waterfall.
+Astro's islands let you hydrate a single component and leave the rest of the page static. This site doesn't even need that: the few interactive pieces — the theme toggle, the mobile menu, the tag filter — are small vanilla scripts, and nothing hydrates at all. No framework runtime, no virtual DOM, no hydration waterfall.
 
 For a portfolio, this means a Lighthouse performance score that basically maxes out without trying.
 

@@ -1,6 +1,6 @@
 ---
 title: "TYPO3 v14 — what's actually new and what I'm looking forward to"
-description: "A practical look at the features coming to TYPO3 v14 LTS — from the Form Framework overhaul and System Resource API to Extbase upgrades and the death of ext_emconf.php."
+description: "A practical look at the features coming to TYPO3 v14 LTS — from the Form Framework overhaul and System Resource API to Extbase upgrades and the beginning of the end for ext_emconf.php."
 tags: ["typo3", "php", "cms", "backend"]
 publishedAt: 2026-05-05
 readTime: "~9 min"
@@ -53,7 +53,7 @@ Translation labels now support the ICU message format, which means proper plural
 
 This is the change I didn't know I needed until I saw it.
 
-Resources in TYPO3 have always been a bit of a mess: extension files used one syntax, FAL references another, project files had their own conventions, and external URIs were just strings. The new **System Resource API** unifies all of this through a single interface with clear keywords: `EXT`, `FAL`, and `PKG`.
+Resources in TYPO3 have always been a bit of a mess: extension files used one syntax, FAL references another, project files had their own conventions, and external URIs were just strings. The new **System Resource API** unifies all of this through a single interface with clear keywords: `EXT`, `FAL`, `PKG`, and `URI`.
 
 Whether in PHP, TypoScript, or Fluid — resources are resolved consistently. This eliminates exactly the kind of subtle errors that have led to security issues in the past: wrong path resolution, missing file checks, inconsistent URL generation.
 
@@ -74,8 +74,8 @@ It's not revolutionary. It's the kind of thing that should have been there from 
 Three changes, all moving TYPO3 closer to modern PHP conventions:
 
 - **`composer.json` is now required** in every extension, including legacy installations. This creates a consistent foundation regardless of how the extension was installed.
-- **`ext_emconf.php` is gone.** Extension metadata now lives in `composer.json`. If you've ever had to keep both files in sync, you know what a relief this is.
-- **`ext_tables.php` is gone.** Its responsibilities have been taken over by more modern configuration mechanisms.
+- **`ext_emconf.php` is on its way out.** Since v14.2, all of its metadata can live in `composer.json`. An extension that still ships the file without that metadata triggers a deprecation, and v15 stops reading it. If you've ever had to keep both files in sync, you know what a relief this is.
+- **`ext_tables.php` is deprecated.** Its remaining jobs — backend modules, routes, user settings — have dedicated homes now, and v15 drops support for the file.
 
 Invisible to editors, but meaningful for developers: fewer files to maintain, fewer inconsistencies, and a setup that finally works the way the PHP ecosystem expects it to.
 
@@ -162,7 +162,7 @@ Three smaller things that make a daily difference:
 
 ## What I'm actually looking forward to
 
-If I'm honest, the changes that matter most to me are the unglamorous ones. Form definitions moving to the database. The death of `ext_emconf.php`. The System Resource API making path resolution predictable. `#[Authorize]` and `#[RateLimit]` stripping boilerplate from my controllers.
+If I'm honest, the changes that matter most to me are the unglamorous ones. Form definitions moving to the database. `ext_emconf.php` on its way out. The System Resource API making path resolution predictable. `#[Authorize]` and `#[RateLimit]` stripping boilerplate from my controllers.
 
 These aren't the features that make for loud release announcements. But they're the ones that reduce daily friction with a CMS — and that's exactly what makes an LTS worth upgrading for.
 

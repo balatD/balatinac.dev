@@ -34,23 +34,30 @@ Ich möchte das klarstellen: Das ist keine Kritik an TYPO3. Ich nutze es jeden T
 
 Aber für ein persönliches Portfolio bringt TYPO3 Overhead mit, der nichts einbringt:
 
-- **Eine Datenbank.** MariaDB oder PostgreSQL, 24/7 laufend, für Inhalte die sich einmal im Monat ändern. Das bedeutet eine Backup-Strategie, einen Migrationspfad und ein Monitoring-Setup — für einen Blog mit acht Beiträgen.
+- **Eine Datenbank.** MariaDB oder PostgreSQL, 24/7 laufend, für Inhalte, die sich einmal im Monat ändern. Das bedeutet eine Backup-Strategie, einen Migrationspfad und ein Monitoring-Setup — für einen Blog mit acht Beiträgen.
 - **Eine PHP-Laufzeitumgebung.** FPM, OPcache-Konfiguration, Memory-Limits, ein Webserver. Alles für Seiten, die schlichte HTML-Dateien auf einem CDN sein könnten.
 - **Ein redaktionelles Backend.** Ich bin der einzige Redakteur. Ich brauche keinen Login-Bildschirm, kein Berechtigungssystem, keinen Seitenbaum. Ich brauche einen Texteditor und `git push`.
 - **Extension-Management.** Composer, TER, Versionsabhängigkeiten. Selbst eine minimale TYPO3-Installation zieht mehr bewegliche Teile mit als diese gesamte Seite Seiten hat.
-- **Hosting-Kosten.** Ein VPS, der TYPO3 komfortabel betreiben kann, kostet 5–15 € im Monat. Diese Seite läuft auf Cloudflare Pages — kostenlos.
+- **Hosting-Kosten.** Ein VPS, der TYPO3 komfortabel betreiben kann, kostet 5–15 € im Monat. Diese Seite läuft auf Cloudflare Workers — kostenlos.
 
 Das Missverhältnis ist nicht TYPO3s Schuld. Es ist ein Scope-Problem. TYPO3 für ein Portfolio zu nutzen ist wie eine Lagerhalle zu mieten, um einen Koffer abzustellen.
 
 ## Was Astro für diesen Anwendungsfall richtig macht
 
-Astro hat bei mir sofort geklickt, als ich das Kernprinzip verstanden habe: **Standardmäßig kein JavaScript ausliefern, nur dort hinzufügen wo man es braucht.**
+Astro hat bei mir sofort geklickt, als ich das Kernprinzip verstanden habe: **Standardmäßig kein JavaScript ausliefern, nur dort hinzufügen, wo man es braucht.**
 
 ### Content Collections mit Markdown
 
 Statt einer Datenbank liegen meine Inhalte in `.md`-Dateien mit typisierten Frontmatter-Feldern. Das Schema wird zur Build-Zeit mit Zod validiert — wenn ich ein Pflichtfeld vergesse, schlägt der Build fehl. Keine Migrationsskripte, keine SQL-Dumps. Inhalte sind versionskontrolliert, diffbar und portabel.
 
-Einen neuen Beitrag erstellen heißt: Datei anlegen, Markdown schreiben, nach Git pushen. Die Startseite übernimmt die neuesten Einträge automatisch. Kein Backend, kein Cache leeren, kein "Ist der Scheduler gelaufen?"
+```
+src/content/blog/
+├── why-astro-not-typo3.md      # Englisch
+└── de/
+    └── why-astro-not-typo3.md  # Deutsch
+```
+
+Einen neuen Beitrag erstellen heißt: Datei anlegen, Markdown schreiben, nach Git pushen. Die Startseite übernimmt die neuesten Einträge automatisch. Kein Backend, kein Cache leeren, kein „Ist der Scheduler gelaufen?“
 
 ### Statischer Output
 
@@ -60,7 +67,7 @@ Build-Zeit: etwa eine Sekunde. Gesamtgröße: unter 300 KB.
 
 ### Die Island-Architektur
 
-Die wenigen interaktiven Teile — Theme-Toggle, Sprachwechsler, Tag-Filter — laufen als kleine Skripte, die unabhängig hydrieren. Der Rest der Seite ist statisches HTML. Kein Framework-Runtime, kein Virtual DOM, kein Hydration-Wasserfall.
+Mit Astros Islands kann man eine einzelne Komponente hydrieren und den Rest der Seite statisch lassen. Diese Seite braucht nicht einmal das: Die wenigen interaktiven Teile — Theme-Toggle, Mobilmenü, Tag-Filter — sind kleine Vanilla-Skripte, und hydriert wird gar nichts. Keine Framework-Runtime, kein Virtual DOM, kein Hydration-Wasserfall.
 
 Für ein Portfolio bedeutet das einen Lighthouse-Performance-Score, der praktisch ohne Anstrengung das Maximum erreicht.
 
@@ -74,7 +81,7 @@ Nach dieser Erfahrung denke ich so über CMS vs. Static bei neuen Projekten nach
 
 - **Wer bearbeitet die Inhalte?** Wenn es Entwickler oder technisch versierte Menschen sind, ist Markdown + Git schneller als jedes CMS. Wenn es ein Marketing-Team ist, brauchen die ein Backend.
 - **Wie oft ändern sich die Inhalte?** Wöchentliche redaktionelle Zyklen rechtfertigen ein CMS. Monatliche Updates auf einer persönlichen Seite nicht.
-- **Wie viele Content-Typen?** Wenn man strukturierte Inhalte mit Relationen, Varianten und redaktionellen Workflows braucht — das ist CMS-Territorium. Wenn man "Seite" und "Beitrag" hat — das ist ein Ordner mit Markdown-Dateien.
+- **Wie viele Content-Typen?** Wenn man strukturierte Inhalte mit Relationen, Varianten und redaktionellen Workflows braucht — das ist CMS-Territorium. Wenn man „Seite“ und „Beitrag“ hat — das ist ein Ordner mit Markdown-Dateien.
 - **Was ist das Budget?** Eine statische Seite auf Cloudflare Pages oder Netlify kostet nichts. Ein CMS braucht Hosting, Wartung und Sicherheitsupdates.
 - **Was ist der Blast Radius?** Eine statische Seite kann zur Laufzeit nicht gehackt werden. Kein Admin-Panel zum Brute-Forcen, keine SQL-Injection, keine PHP-Schwachstellen zum Patchen.
 
