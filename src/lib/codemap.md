@@ -36,6 +36,11 @@ Provides bilingual string lookup, route-prefix helpers, and translation pairing 
 - `getLocalizedEntry()` chooses German fields/body/slug when requested and available, otherwise English data.
 - `getDeSlug()` resolves alternate-language detail URLs.
 
+## `paintings.ts`
+
+- `SLOT_GRID` fixes the character grid of each slot; `scripts/ascii-paintings.py` renders every file in `public/ascii/<slot>/` to it.
+- `artPool(slot, lang)` returns the paintings of a slot with localized captions and optional ripple rows for `AsciiArt.astro`; colours come from each painting's colour maps.
+
 ## Data Flow And Constraints
 
 English entry IDs act as translation keys. Route generation, homepage lists, collection indexes, and detail pages all rely on matching filenames across collections. Localized `urlSlug` values affect public German URLs but not pair identity.

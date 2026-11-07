@@ -9,14 +9,9 @@ interface Props {
 const { lang = 'de' } = Astro.props;
 ---
 
-<footer class="relative border-t-2 border-rule overflow-hidden" style="background-image: linear-gradient(to bottom, transparent 0%, var(--bg) 24%);">
-  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 pt-10 pb-10 flex justify-between items-center flex-wrap gap-3 font-mono text-[12px] sm:text-[13px] text-muted">
-    <span>&copy; {new Date().getFullYear()} Dragan Balatinac</span>
-    <span>{t('footer.built', lang)}</span>
-  </div>
-
-  <!-- Oversized brand wordmark — full-bleed footer graphic -->
-  <div class="footer-wordmark-wrap" aria-hidden="true">
-    <span class="footer-wordmark">dragan<span class="wordmark-dot">.</span></span>
+<footer class="border-t border-rule">
+  <div class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 py-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-1 text-[14px] text-muted">
+    <span>&copy; {new Date().getFullYear()} Dragan Balatinac · {t('footer.built', lang)}</span>
+    <a class="py-3 text-fg hover:text-accent transition-colors" href="#main">{t('footer.top', lang)}</a>
   </div>
 </footer>

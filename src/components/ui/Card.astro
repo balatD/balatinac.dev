@@ -1,0 +1,24 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  meta: string;
+  /** Comma-separated tags read by FilterBar. */
+  tags?: string;
+  draftLabel?: string;
+}
+
+const { href, title, description, meta, tags, draftLabel } = Astro.props;
+---
+
+<li class="card-item" data-tags={tags} data-reveal>
+  <a class="card" href={href}>
+    <span class="card-title">
+      {title}
+      {draftLabel && <span class="card-draft">{draftLabel}</span>}
+    </span>
+    <span class="card-desc">{description}</span>
+    <span class="card-meta">{meta}</span>
+  </a>
+</li>

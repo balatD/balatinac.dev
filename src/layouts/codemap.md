@@ -36,7 +36,7 @@
 1. A route passes title, description, content language, navigation state, and optional alternate-language URL.
 2. The layout computes default language-switch and hreflang URLs.
 3. It renders global chrome around the route slot.
-4. Client scripts bind theme, menu, tooltip, lightbox, reveal, and magnetic interactions.
+4. Client scripts bind theme, tooltip, lightbox, and reveal interactions.
 5. Navigation lifecycle handlers restore theme state and dispose motion observers.
 
 ## Integration

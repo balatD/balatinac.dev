@@ -12,15 +12,14 @@ const { tags, total, lang } = Astro.props;
 const padded = String(total).padStart(2, '0');
 ---
 
-<div data-filters class="border-y border-rule font-mono text-[13px] py-4">
-  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap items-center gap-4 sm:gap-[18px]">
-    <span class="text-muted">{t('filter.label', lang)}</span>
-    <button data-tag="all" data-on="true" class="bg-transparent border-0 p-0 cursor-pointer text-accent transition-colors hover:text-fg">{t('filter.all', lang)}</button>
+<div data-filters class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+  <div class="flex flex-wrap gap-2" role="group" aria-label={t('filter.label', lang)}>
+    <button type="button" data-tag="all" aria-pressed="true" class="chip">{t('filter.all', lang)}</button>
     {tags.map((tag) => (
-      <button data-tag={tag.toLowerCase()} class="bg-transparent border-0 p-0 cursor-pointer text-muted transition-colors hover:text-fg"><span class="text-accent">#</span>{tag}</button>
+      <button type="button" data-tag={tag.toLowerCase()} aria-pressed="false" class="chip">{tag}</button>
     ))}
-    <span id="count" class="text-muted basis-full sm:basis-auto sm:ml-auto">{padded} / {padded}</span>
   </div>
+  <span id="count" class="font-mono text-[13px] text-muted" aria-live="polite">{padded} / {padded}</span>
 </div>
 
 <script>
@@ -42,14 +41,7 @@ const padded = String(total).padStart(2, '0');
 
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
-        buttons.forEach((b) => {
-          b.classList.remove('text-accent');
-          b.classList.add('text-muted');
-          b.dataset.on = 'false';
-        });
-        btn.classList.remove('text-muted');
-        btn.classList.add('text-accent');
-        btn.dataset.on = 'true';
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
 
         const tag = btn.dataset.tag;
         let shown = 0;

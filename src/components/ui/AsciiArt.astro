@@ -1,0 +1,222 @@
+---
+import type { Lang } from '../../lib/i18n';
+import { t } from '../../lib/i18n';
+import { artPool, SLOT_GRID, type ArtSlot } from '../../lib/paintings';
+
+interface Props {
+  slot: ArtSlot;
+  lang: Lang;
+  /** Placement modifier, e.g. ascii-cover--hero, --band, --bottom or --side. */
+  class?: string;
+}
+
+const { slot, lang, class: className } = Astro.props;
+const { cols, rows } = SLOT_GRID[slot];
+const pool = JSON.stringify(artPool(slot, lang));
+const size = `${cols} × ${rows} ${t('art.characters', lang)}`;
+// Geist Mono advances 0.6em per glyph, so the grid is this many ems wide.
+const width = +(cols * 0.6).toFixed(2);
+---
+
+<div class:list={['ascii-cover', className]} aria-hidden="true" data-ascii data-slot={slot} data-cols={cols} data-rows={rows} data-pool={pool}>
+  <div class="ascii-cover__art">
+    <pre class="ascii" style={`--ascii-w: ${width}; --ascii-rows: ${rows}`}></pre>
+  </div>
+  <p class="ascii-label" data-ascii-label hidden><span class="ascii-label__title" data-ascii-caption></span><br />{size}</p>
+</div>
+
+<script>
+  type Entry = { id: string; caption: string; ripple?: number };
+  type Theme = 'dark' | 'light';
+  type Player = { stop: () => void; setTheme: (theme: Theme) => void };
+
+  // The converter's glyphs ordered by ink coverage; shimmer steps one place along it.
+  const RAMP = ' .,:;`-\'_!~"^/\\+)|(=><?*}{[]#%&$@';
+  const NOISE = RAMP.slice(1);
+  const DECODE_MS = 1800;
+  // Ambient motion runs at a deliberately painterly ~8 fps.
+  const AMBIENT_MS = 120;
+
+  const shown = new Set<string>();
+  let players: Player[] = [];
+
+  const currentTheme = (): Theme => (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+  /** Random painting, avoiding one already on this page and the one this slot showed last time. */
+  function pick(slot: string, pool: Entry[]): Entry {
+    let last: string | null = null;
+    try { last = sessionStorage.getItem(`ascii:${slot}`); } catch {}
+    const fresh = pool.filter((e) => !shown.has(e.id) && e.id !== last);
+    const options = fresh.length ? fresh : pool;
+    const entry = options[Math.floor(Math.random() * options.length)];
+    shown.add(entry.id);
+    try { sessionStorage.setItem(`ascii:${slot}`, entry.id); } catch {}
+    return entry;
+  }
+
+  /** Decodes rows in from noise, then keeps them breathing; show() swaps in new rows with a fresh decode. */
+  function animate(pre: HTMLElement, initial: string[], cols: number, ripple?: number) {
+    let rows: string[] = [];
+    let chars: string[] = [];
+    let threshold = new Float32Array(0);
+    let inked: number[] = [];
+    let raf = 0;
+    let start = 0;
+    let last = 0;
+
+    const show = (next: string[]) => {
+      rows = next;
+      chars = rows.join('\n').split('');
+      threshold = new Float32Array(chars.length);
+      inked = [];
+      const lineLength = cols + 1;
+      for (let i = 0; i < chars.length; i++) {
+        const x = (i % lineLength) / cols;
+        const y = Math.floor(i / lineLength) / rows.length;
+        threshold[i] = x * 0.35 + y * 0.25 + Math.random() * 0.4;
+        if (chars[i] !== ' ' && chars[i] !== '\n') inked.push(i);
+      }
+      start = 0;
+    };
+
+    const decode = (p: number) => {
+      const out = new Array<string>(chars.length);
+      for (let i = 0; i < chars.length; i++) {
+        const ch = chars[i];
+        const d = p - threshold[i];
+        out[i] = ch === ' ' || ch === '\n' || d >= 0.25 ? ch : d >= 0 ? NOISE[(Math.random() * NOISE.length) | 0] : ' ';
+      }
+      return out;
+    };
+
+    const ambient = (now: number) => {
+      let lines = rows;
+      if (ripple !== undefined) {
+        const t = now / 1000;
+        lines = rows.map((line, r) => {
+          if (r < ripple) return line;
+          const depth = (r - ripple) / (rows.length - ripple);
+          const s = Math.round(Math.sin(t * 1.6 + r * 0.9) * (0.45 + depth * 1.1));
+          if (s > 0) return ' '.repeat(s) + line.slice(0, cols - s);
+          if (s < 0) return line.slice(-s) + ' '.repeat(-s);
+          return line;
+        });
+      }
+      const out = lines.join('\n').split('');
+      // Nudge a few glyphs one step along the ramp so the painting breathes without drifting.
+      const count = Math.max(6, Math.round(inked.length * 0.006));
+      for (let k = 0; k < count; k++) {
+        const i = inked[(Math.random() * inked.length) | 0];
+        const level = RAMP.indexOf(out[i]);
+        if (level > 0) out[i] = RAMP[Math.min(RAMP.length - 1, Math.max(1, level + (Math.random() < 0.5 ? -1 : 1)))];
+      }
+      return out;
+    };
+
+    const step = (now: number) => {
+      raf = requestAnimationFrame(step);
+      if (!start) start = now;
+      const p = (now - start) / DECODE_MS;
+      if (now - last < (p < 1.25 ? 40 : AMBIENT_MS)) return;
+      last = now;
+      pre.textContent = (p < 1.25 ? decode(p) : ambient(now)).join('');
+    };
+
+    show(initial);
+    // Only animate while on screen; an off-screen painting decodes when it scrolls into view.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !raf) raf = requestAnimationFrame(step);
+      if (!entry.isIntersecting && raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    });
+    observer.observe(pre);
+
+    return {
+      show,
+      stop() {
+        cancelAnimationFrame(raf);
+        observer.disconnect();
+      },
+    };
+  }
+
+  async function play(root: HTMLElement) {
+    const pre = root.querySelector<HTMLElement>('pre');
+    const slot = root.dataset.slot;
+    const cols = Number(root.dataset.cols);
+    const rowCount = Number(root.dataset.rows);
+    const pool = JSON.parse(root.dataset.pool || '[]') as Entry[];
+    if (!pre || !slot || !pool.length) return;
+
+    const entry = pick(slot, pool);
+    const base = `/ascii/${slot}/${entry.id}`;
+    // Each theme has its own glyphs: bright areas densest on dark, dark areas densest on light.
+    const texts = new Map<Theme, Promise<string[] | null>>();
+    const load = (theme: Theme) => {
+      if (!texts.has(theme)) {
+        texts.set(theme, fetch(`${base}-${theme}.txt`)
+          .then((res) => (res.ok ? res.text() : null))
+          .then((text) => {
+            if (text === null) return null;
+            const rows = text.split('\n').slice(0, rowCount).map((line) => line.padEnd(cols));
+            while (rows.length < rowCount) rows.push(' '.repeat(cols));
+            return rows;
+          })
+          .catch(() => null));
+      }
+      return texts.get(theme)!;
+    };
+
+    let theme = currentTheme();
+    const rows = await load(theme);
+    // The visitor may have navigated on while the file was loading.
+    if (!rows || !root.isConnected) return;
+
+    // One pixel per glyph: the painting's own colours, painted through the text by background-clip.
+    pre.style.setProperty('--art-dark', `url(${base}-dark.webp)`);
+    pre.style.setProperty('--art-light', `url(${base}-light.webp)`);
+    const label = root.querySelector<HTMLElement>('[data-ascii-label]');
+    const caption = root.querySelector<HTMLElement>('[data-ascii-caption]');
+    if (label && caption) {
+      caption.textContent = entry.caption;
+      label.hidden = false;
+    }
+
+    const anim = document.documentElement.classList.contains('has-motion') ? animate(pre, rows, cols, entry.ripple) : null;
+    if (!anim) pre.textContent = rows.join('\n');
+
+    const player: Player = {
+      stop: () => anim?.stop(),
+      setTheme(next) {
+        if (next === theme) return;
+        theme = next;
+        void load(next).then((nextRows) => {
+          if (!nextRows || theme !== next || !root.isConnected) return;
+          if (anim) anim.show(nextRows);
+          else pre.textContent = nextRows.join('\n');
+        });
+      },
+    };
+    players.push(player);
+    // The theme may have changed while the first file was loading.
+    player.setTheme(currentTheme());
+  }
+
+  // <html> survives client-side navigation, so one observer serves every page.
+  new MutationObserver(() => {
+    const theme = currentTheme();
+    players.forEach((player) => player.setTheme(theme));
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-ascii]').forEach((root) => void play(root));
+  });
+
+  document.addEventListener('astro:before-swap', () => {
+    players.forEach((player) => player.stop());
+    players = [];
+    shown.clear();
+  });
+</script>

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AsciiArt from '../../components/ui/AsciiArt.astro';
+import Card from '../../components/ui/Card.astro';
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import FilterBar from '../../components/ui/FilterBar.astro';
 import { getCollection } from 'astro:content';
@@ -18,51 +20,44 @@ const allTags = [...new Set(sorted.flatMap((p) => p.data.tags))].sort();
 ---
 
 <BaseLayout title={t('title.blog', lang)} description={t('blogIndex.sub', lang)} activeNav="writing" lang={lang}>
-  <Breadcrumbs items={[
-    { label: t('crumb.home', lang), href: '/' },
-    { label: t('blogIndex.crumb', lang) },
-  ]} />
-
-  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]" data-reveal-group>
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-      <h1 class="h1-page leading-[1.1] m-0 mb-5 text-balance" data-reveal set:html={t('blogIndex.heading', lang)} />
-      <p class="text-[18px] leading-[1.6] text-muted m-0 text-pretty" data-reveal>{t('blogIndex.sub', lang)}</p>
+  <section class="page-intro page-intro--art" aria-labelledby="page-title">
+    <AsciiArt slot="figure" lang={lang} class="ascii-cover--side" />
+    <Breadcrumbs items={[
+      { label: t('crumb.home', lang), href: '/' },
+      { label: t('blogIndex.crumb', lang) },
+    ]} />
+    <div class="page-intro__copy mx-auto max-w-wrap px-5 sm:px-8 md:px-10" data-reveal-group>
+      <div class="max-w-[760px]">
+        <h1 id="page-title" class="h1-page m-0 max-w-[14ch]" data-reveal set:html={t('blogIndex.heading', lang)} />
+        <p class="lead text-muted mt-6 mb-0 max-w-[48ch] text-pretty" data-reveal>{t('blogIndex.sub', lang)}</p>
+      </div>
     </div>
-  </header>
+  </section>
 
   {hasPosts ? (
-    <>
+    <div class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 pt-10 pb-[clamp(72px,9vw,128px)]">
       <FilterBar tags={allTags} total={sorted.length} lang={lang} />
-      <section class="py-10 pb-16 md:pb-20">
-        <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-          <ul id="list" class="list-none p-0 m-0" data-reveal-group>
-            {sorted.map((post) => {
-              const { title, description, slug } = getLocalizedEntry(post, deMap, lang);
-              const dateStr = post.data.publishedAt.toLocaleDateString(dateLocale(lang), { month: 'short', year: 'numeric' });
-              return (
-                <li data-tags={post.data.tags.join(',')} data-reveal>
-                  <a class="row-link group grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] transition-colors" href={`/blog/${slug}/`}>
-                    <div class="min-w-0">
-                      <div class="font-display text-[20px] font-semibold leading-snug text-balance text-fg group-hover:text-accent transition-colors">
-                        {title}
-                        {post.data.draft && <span class="font-mono text-[11px] text-accent ml-2 tracking-wider align-[2px] uppercase">{t('blogIndex.draft', lang)}</span>}
-                      </div>
-                      <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">{description}</div>
-                    </div>
-                    <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap">{dateStr}</div>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-    </>
+      <ul id="list" class="card-grid card-grid--wide mt-8">
+        {sorted.map((post) => {
+          const { title, description, slug } = getLocalizedEntry(post, deMap, lang);
+          const dateStr = post.data.publishedAt.toLocaleDateString(dateLocale(lang), { month: 'short', year: 'numeric' });
+          const readTime = deMap.get(post.id)?.data.readTime || post.data.readTime;
+          return (
+            <Card
+              href={`/blog/${slug}/`}
+              title={title}
+              description={description}
+              meta={readTime ? `${dateStr} · ${readTime}` : dateStr}
+              tags={post.data.tags.join(',')}
+              draftLabel={post.data.draft ? t('blogIndex.draft', lang) : undefined}
+            />
+          );
+        })}
+      </ul>
+    </div>
   ) : (
-    <section class="py-16 md:py-24 border-t border-rule">
-      <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 text-center">
-        <p class="text-[17px] text-muted">{t('empty.blog', lang)}</p>
-      </div>
+    <section class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 py-16 md:py-24 text-center">
+      <p class="text-[17px] text-muted">{t('empty.blog', lang)}</p>
     </section>
   )}
 </BaseLayout>

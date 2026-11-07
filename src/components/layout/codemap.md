@@ -21,16 +21,15 @@
 
 ## Responsibility
 
-Provides site-wide navigation, branding, metadata, structured data, footer content, and decorative background layers.
+Provides site-wide navigation, branding, metadata, structured data, and footer content.
 
 ## Files
 
-- `Header.astro`: desktop/mobile navigation, active-route state, language switch, and theme/menu controls.
+- `Header.astro`: navigation (wraps to its own row on small screens), active-route state, language switch, and theme toggle.
 - `Footer.astro`: localized footer content and brand treatment.
 - `SEO.astro`: title composition, canonical, robots, Open Graph, article, and Twitter metadata.
 - `JsonLd.astro`: embeds page-provided schema objects as JSON-LD.
-- `AmbientBlobs.astro`: fixed decorative background gradients.
 
 ## Flow And Integration
 
-`BaseLayout.astro` supplies language and navigation state. `Header` emits IDs used by the global theme and mobile-menu handlers. Route files supply page-specific schema directly to `JsonLd`; `SEO` derives canonical URLs from `Astro.url` and `Astro.site`.
+`BaseLayout.astro` supplies language and navigation state. `Header` emits the `#theme-toggle` ID used by the global theme handler. Route files supply page-specific schema directly to `JsonLd`; `SEO` derives canonical URLs from `Astro.url` and `Astro.site`.

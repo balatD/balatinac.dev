@@ -11,17 +11,17 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<div class="breadcrumbs pt-[100px] md:pt-[110px] font-mono text-[13px] text-muted">
-  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap gap-2">
+<nav class="breadcrumbs relative z-[1] mx-auto max-w-wrap px-5 sm:px-8 md:px-10 pt-4 text-[14px] text-muted" aria-label="Breadcrumb">
+  <ol class="list-none m-0 p-0 flex flex-wrap gap-x-2.5">
     {items.map((item, i) => (
-      <>
-        {i > 0 && <span class="opacity-50">/</span>}
+      <li class="flex items-baseline gap-x-2.5">
+        {i > 0 && <span aria-hidden="true">/</span>}
         {item.href ? (
-          <a class="text-muted hover:text-accent transition-colors" href={item.href}>{item.label}</a>
+          <a class="inline-block py-2.5 hover:text-accent transition-colors" href={item.href}>{item.label}</a>
         ) : (
-          <span aria-current="page">{item.label}</span>
+          <span class="py-2.5 text-fg" aria-current="page">{item.label}</span>
         )}
-      </>
+      </li>
     ))}
-  </div>
-</div>
+  </ol>
+</nav>

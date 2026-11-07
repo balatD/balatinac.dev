@@ -72,6 +72,6 @@ Frontmatter drives route identity, list sorting, filters, SEO, JSON-LD, and RSS.
 - `astro:content` for collection loading and Markdown rendering.
 - `astro:transitions` for client-side navigation.
 - `@astrojs/rss` and `@astrojs/sitemap` for discovery feeds.
-- `motion` for reveal and magnetic effects.
+- `motion` for reveal effects.
 - Tailwind CSS v4 and `styles/global.css` for the visual system.
 - Cloudflare adapter and Wrangler for deployment.

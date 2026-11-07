@@ -25,10 +25,10 @@ Composes localized home pages from hero, biography, project, writing, and contac
 
 ## Files And Flow
 
-- `Hero.astro`: localized headline, cycling accent words, introduction, and anchor calls to action.
+- `Hero.astro`: localized headline and introduction over a random `hero` ASCII painting.
 - `About.astro`: translated biography content.
 - `Work.astro`: loads projects, orders by `order`, selects four, and overlays German content when requested.
 - `Writing.astro`: loads posts, orders by publication date, selects four, and overlays German content when requested.
-- `Contact.astro`: localized email and social links.
+- `Contact.astro`: email and social links over a random `band` ASCII painting.
 
 `pages/index.astro` and `pages/en/index.astro` instantiate these sections. Content sections call `getCollection()`, use `buildDeMap()` and `getLocalizedEntry()`, then emit links under the appropriate language prefix. `BaseLayout` consumes section reveal attributes for motion choreography.

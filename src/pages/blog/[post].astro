@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AsciiArt from '../../components/ui/AsciiArt.astro';
+import Card from '../../components/ui/Card.astro';
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
-import DetailHeaderDecor from '../../components/ui/DetailHeaderDecor.astro';
 import JsonLd from '../../components/layout/JsonLd.astro';
 import { getCollection, render } from 'astro:content';
 import { buildDeMap } from '../../lib/content-helpers';
@@ -70,95 +71,69 @@ const relatedSlugs = relatedPosts.map((p, i) => relatedDe[i]?.data.urlSlug || p.
     ],
   }} />
 
-  <header class="detail-header">
-    <DetailHeaderDecor variant="blog" />
+  <header class="page-intro page-intro--art">
+    <AsciiArt slot="band" lang={lang} class="ascii-cover--band" />
     <Breadcrumbs items={[
       { label: t('crumb.home', lang), href: '/' },
       { label: t('crumb.writing', lang), href: '/blog/' },
       { label: displayTitle },
     ]} />
-    <div class="detail-header__content mx-auto max-w-wrap px-5 pt-12 pb-12 sm:px-7 sm:pt-14 sm:pb-14 md:px-8 md:pt-14 md:pb-[60px]">
-      <p class="font-mono text-[13px] text-muted m-0 mb-5">{dateStr} · {displayReadTime}</p>
-      <h1 class="h1-page leading-[1.1] m-0 mb-5 text-balance">{displayTitle}</h1>
+    <div class="page-intro__copy mx-auto max-w-wrap px-5 sm:px-8 md:px-10" data-reveal-group>
+      <h1 class="h1-page m-0 max-w-[20ch]" data-reveal>{displayTitle}</h1>
+      <p class="lead text-muted mt-6 mb-0 max-w-[56ch] text-pretty" data-reveal>{displayDesc}</p>
     </div>
   </header>
 
-  <section class="py-3 border-y border-rule font-mono text-[13px] text-muted">
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 flex flex-wrap gap-x-6 gap-y-2">
-      <span>{t('meta.published', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{dateStr}</strong></span>
-      <span>{t('meta.readTime', lang)}<strong class="text-fg font-sans font-medium ml-1.5">{displayReadTime}</strong></span>
-      <span class="flex gap-2.5 sm:ml-auto">
+  <div class="meta-bar">
+    <div class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 flex flex-wrap items-center gap-x-8">
+      <dl>
+        <div><dt>{t('meta.published', lang)}</dt><dd>{dateStr}</dd></div>
+        <div><dt>{t('meta.readTime', lang)}</dt><dd>{displayReadTime}</dd></div>
+      </dl>
+      <ul class="tag-list" aria-label="Tags">
         {post.data.tags.map((tag) => (
-          <a href={`/blog/?tag=${tag.toLowerCase()}`} class="text-muted before:content-['#'] before:text-accent hover:text-fg transition-colors">{tag}</a>
+          <li><a href={`/blog/?tag=${tag.toLowerCase()}`}><span class="text-accent" aria-hidden="true">#</span>{tag}</a></li>
         ))}
-      </span>
+      </ul>
     </div>
-  </section>
+  </div>
 
-  <article class="py-12 sm:py-14 md:py-14 pb-16 md:pb-20">
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 prose-article">
+  <article class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 pt-[clamp(48px,6vw,80px)] pb-[clamp(72px,9vw,112px)]">
+    <div class="prose-article">
       <Content />
     </div>
   </article>
 
-{relatedPosts.length > 0 && (
-  <section class="border-t border-rule">
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 py-10 md:py-14">
-      <h2 class="font-mono text-[12px] uppercase tracking-[0.08em] text-muted mb-6">{t('blog.relatedPosts', lang)}</h2>
-      <ul class="list-none p-0 m-0">
-        {relatedPosts.map((rp, i) => {
-          const rpDe = relatedDe[i];
-          const rpTitle = rpDe?.data.title || rp.data.title;
-          const rpDesc = rpDe?.data.description || rp.data.description;
-          const rpDate = rp.data.publishedAt.toLocaleDateString('de-DE', { month: 'short', year: 'numeric' });
-          return (
-            <li>
-              <a class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] hover:text-accent transition-colors group" href={`/blog/${relatedSlugs[i]}/`}>
-                <div>
-                  <div class="text-[18px] font-medium leading-snug text-balance">{rpTitle}</div>
-                  <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">{rpDesc}</div>
-                </div>
-                <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap group-hover:text-accent transition-colors">{rpDate}</div>
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  </section>
-)}
+  {relatedPosts.length > 0 && (
+    <section class="border-t border-rule" aria-labelledby="related-title">
+      <div class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 py-[clamp(48px,6vw,72px)]">
+        <h2 id="related-title" class="h3-section m-0">{t('blog.relatedPosts', lang)}</h2>
+        <ul class="card-grid card-grid--wide mt-7">
+          {relatedPosts.map((rp, i) => (
+            <Card
+              href={`/blog/${relatedSlugs[i]}/`}
+              title={relatedDe[i]?.data.title || rp.data.title}
+              description={relatedDe[i]?.data.description || rp.data.description}
+              meta={rp.data.publishedAt.toLocaleDateString('de-DE', { month: 'short', year: 'numeric' })}
+            />
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
 
-<nav class="border-t border-rule">
-  <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 grid grid-cols-1 sm:grid-cols-2">
-    <a class="py-7 pr-4 hover:text-accent transition-colors" href="/blog/">
-      <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.backToWriting', lang)}</div>
-      <div class="text-[16px] font-medium">{t('blog.allPosts', lang)}</div>
-    </a>
-    {nextPost && (
-      <a class="py-7 pl-4 text-right border-t sm:border-t-0 sm:border-l border-rule hover:text-accent transition-colors" href={`/blog/${nextSlug}/`}>
-        <div class="font-mono text-[12px] text-muted mb-1.5">{t('blog.nextPost', lang)}</div>
-        <div class="text-[16px] font-medium">{nextDe?.data.title || nextPost.data.title} →</div>
+  <nav class="border-t border-rule" aria-label="Beitragsnavigation">
+    <div class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 grid grid-cols-1 sm:grid-cols-2">
+      <a class="post-nav" href="/blog/">
+        <span class="block text-[14px] text-muted">{t('blog.backToWriting', lang)}</span>
+        <span class="post-nav__title">{t('blog.allPosts', lang)}</span>
       </a>
-    )}
-  </div>
-</nav>
+      {nextPost && (
+        <a class="post-nav post-nav--next" href={`/blog/${nextSlug}/`}>
+          <span class="block text-[14px] text-muted">{t('blog.nextPost', lang)} →</span>
+          <span class="post-nav__title">{nextDe?.data.title || nextPost.data.title}</span>
+        </a>
+      )}
+    </div>
+  </nav>
 </BaseLayout>
-
-<style>
-  .prose-article :global(h2) { font-weight: 700; font-size: 26px; line-height: 1.25; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 16px; }
-  .prose-article :global(h3) { font-weight: 600; font-size: 20px; margin-top: 28px; margin-bottom: 8px; }
-  .prose-article :global(p) { font-size: 17px; line-height: 1.75; margin: 0 0 16px; text-wrap: pretty; }
-  .prose-article :global(ul), .prose-article :global(ol) { list-style: none; padding: 0; margin: 0 0 22px; counter-reset: ord; }
-  .prose-article :global(li) { position: relative; padding: 8px 0 8px 26px; font-size: 17px; line-height: 1.65; }
-  .prose-article :global(ul li::before) { content: "—"; position: absolute; left: 0; color: var(--accent); }
-  .prose-article :global(ol li) { counter-increment: ord; }
-  .prose-article :global(ol li::before) { content: counter(ord, decimal-leading-zero); position: absolute; left: 0; color: var(--accent); font-family: var(--font-mono); font-size: 13px; top: 10px; }
-  .prose-article :global(blockquote) { border-left: 2px solid var(--accent); padding: 4px 0 4px 18px; margin: 28px 0; font-size: 19px; line-height: 1.45; font-style: italic; }
-  .prose-article :global(blockquote p) { font-size: inherit; line-height: inherit; margin: 0; }
-  .prose-article :global(pre) { padding: 20px 24px; margin: 0 0 24px; font-size: 13px; line-height: 1.65; border-radius: 6px; overflow-x: auto; white-space: pre; }
-  .prose-article :global(pre code) { font-family: var(--font-mono); background: none; padding: 0; font-size: inherit; }
-  .prose-article :global(hr) { border: 0; border-top: 1px solid var(--rule); margin: 56px 0; }
-  .prose-article :global(a) { color: var(--fg); border-bottom: 1px solid var(--muted); transition: color 0.15s, border-color 0.15s; }
-  .prose-article :global(a:hover) { color: var(--accent); border-color: var(--accent); }
-  .prose-article :global(p:last-child > em:only-child) { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-style: normal; }
-</style>

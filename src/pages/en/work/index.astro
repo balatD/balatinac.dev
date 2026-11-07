@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AsciiArt from '../../../components/ui/AsciiArt.astro';
+import Card from '../../../components/ui/Card.astro';
 import Breadcrumbs from '../../../components/ui/Breadcrumbs.astro';
 import FilterBar from '../../../components/ui/FilterBar.astro';
 import { getCollection } from 'astro:content';
@@ -18,47 +20,40 @@ const allTags = [...new Set(sorted.flatMap((p) => p.data.tags))].sort();
 ---
 
 <BaseLayout title={t('title.work', lang)} description={t('workIndex.sub', lang)} activeNav="work" lang={lang}>
-  <Breadcrumbs items={[
-    { label: t('crumb.home', lang), href: '/en/' },
-    { label: t('workIndex.crumb', lang) },
-  ]} />
-
-  <header class="pt-12 pb-12 sm:pt-14 sm:pb-14 md:pt-14 md:pb-[60px]" data-reveal-group>
-    <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-      <h1 class="h1-page leading-[1.1] m-0 mb-5 text-balance" data-reveal set:html={t('workIndex.heading', lang)} />
-      <p class="text-[18px] leading-[1.6] text-muted m-0 text-pretty" data-reveal>{t('workIndex.sub', lang)}</p>
+  <section class="page-intro page-intro--cover" aria-labelledby="page-title">
+    <AsciiArt slot="band" lang={lang} class="ascii-cover--band" />
+    <Breadcrumbs items={[
+      { label: t('crumb.home', lang), href: '/en/' },
+      { label: t('workIndex.crumb', lang) },
+    ]} />
+    <div class="page-intro__copy mx-auto max-w-wrap px-5 sm:px-8 md:px-10" data-reveal-group>
+      <h1 id="page-title" class="h1-page m-0 max-w-[15ch]" data-reveal set:html={t('workIndex.heading', lang)} />
+      <p class="lead text-muted mt-6 mb-0 max-w-[44ch] text-pretty" data-reveal>{t('workIndex.sub', lang)}</p>
     </div>
-  </header>
+  </section>
 
   {hasProjects ? (
-    <>
+    <div class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 pt-10 pb-[clamp(72px,9vw,128px)]">
       <FilterBar tags={allTags} total={sorted.length} lang={lang} />
-      <section class="py-10 md:py-10 pb-16 md:pb-20">
-        <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-          <ul id="list" class="list-none p-0 m-0" data-reveal-group>
-            {sorted.map((project) => {
-              const { title, description } = getLocalizedEntry(project, deMap, lang);
-              return (
-                <li data-tags={project.data.tags.join(',')} data-reveal>
-                  <a class="row-link group grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-[22px] transition-colors" href={`/en/work/${project.id}/`}>
-                    <div class="min-w-0">
-                      <div class="font-display text-[20px] font-semibold leading-snug text-balance text-fg group-hover:text-accent transition-colors">{title}</div>
-                      <div class="text-[15px] text-muted mt-1 text-pretty max-w-[60ch]">{description}</div>
-                    </div>
-                    <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap">{project.data.year}</div>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-    </>
+      <ul id="list" class="card-grid mt-8">
+        {sorted.map((project) => {
+          const { title, description, slug } = getLocalizedEntry(project, deMap, lang);
+          const status = project.data.meta?.status;
+          return (
+            <Card
+              href={`/en/work/${slug}/`}
+              title={title}
+              description={description}
+              meta={status ? `${project.data.year} · ${status}` : String(project.data.year)}
+              tags={project.data.tags.join(',')}
+            />
+          );
+        })}
+      </ul>
+    </div>
   ) : (
-    <section class="py-16 md:py-24 border-t border-rule">
-      <div class="mx-auto max-w-wrap px-5 sm:px-7 md:px-8 text-center">
-        <p class="text-[17px] text-muted">{t('empty.work', lang)}</p>
-      </div>
+    <section class="mx-auto max-w-wrap px-5 sm:px-8 md:px-10 py-16 md:py-24 text-center">
+      <p class="text-[17px] text-muted">{t('empty.work', lang)}</p>
     </section>
   )}
 </BaseLayout>

@@ -31,33 +31,35 @@
 4. **View Transitions API** — circular reveal for theme toggle (clip-path animation), fade+scale for page navigation. Safari gets a fast crossfade instead.
 5. **Lightbox via `<dialog>`** — native focus trap, Esc to close, scroll lock via `body.lightbox-open` class.
 6. **Clone-and-replace event rebinding** — buttons are cloned before adding listeners to survive Astro view transitions.
+7. **ASCII paintings** — public-domain paintings are pre-rendered by `scripts/ascii-paintings.py` into `public/ascii/<slot>/`: per theme, shape-matched Geist Mono glyphs (`<id>-<theme>.txt`: bright areas densest on dark, dark areas densest on light, so both read as a positive) plus a one-pixel-per-glyph colour map (`<id>-<theme>.webp`) painted through the text with `background-clip: text`. Every file in a slot (`hero`, `band`, `figure`) shares one character grid, so `AsciiArt.astro` can pick a random one per visit without the frame changing size. The home hero, the contact section and every subpage header carry one behind their copy.
 
 ### Color Palette
 
-Defined in `src/styles/global.css`. All tokens are `oklch()` — the redesign moved
-off hex so lightness stays perceptually even between the two themes.
+Defined in `src/styles/global.css`. Every text colour is at least 5:1 against `--bg`.
 
 | Token | Light | Dark |
 |-------|-------|------|
-| `--bg` | `oklch(0.955 0.010 75)` | `oklch(0.180 0.008 62)` |
-| `--surface` | `oklch(0.925 0.012 75)` | `oklch(0.225 0.009 62)` |
-| `--fg` | `oklch(0.235 0.012 60)` | `oklch(0.920 0.008 75)` |
-| `--muted` | `oklch(0.520 0.016 62)` | `oklch(0.640 0.013 66)` |
-| `--rule` | `oklch(0.875 0.013 72)` | `oklch(0.310 0.009 62)` |
-| `--accent` | `oklch(0.560 0.150 48)` | `oklch(0.660 0.150 52)` |
-| `--accent-ink` | `oklch(0.985 0.004 75)` | `oklch(0.160 0.010 60)` |
+| `--bg` | `#efeae2` | `#0b0d12` |
+| `--surface` | `#e6e0d6` | `#12151c` |
+| `--fg` | `#16181d` | `#ece7df` |
+| `--muted` | `#5e5a54` | `#9d988f` |
+| `--rule` | `#d3cdc2` | `#2a2d35` |
+| `--accent` | `#a8401a` | `#ff8a4c` |
+| `--accent-ink` | `#efeae2` | `#0b0d12` |
 
-Fonts: **Bricolage Grotesque** (display) + **Hanken Grotesk** (sans) +
-**Spline Sans Mono** (mono), self-hosted WOFF2 in `public/fonts/`.
+`--mist`, `--dusk`, `--night` and `--star` only tint the ASCII paintings.
+
+Fonts: **Geist** (sans and headings) + **Geist Mono** (mono and the ASCII
+paintings), self-hosted WOFF2 in `public/fonts/`.
 
 ### Project Structure
 
 ```
 src/
 ├── components/
-│   ├── layout/       # Header, Footer, SEO, JsonLd, AmbientBlobs
+│   ├── layout/       # Header, Footer, SEO, JsonLd
 │   ├── sections/     # Hero, About, Work, Writing, Contact
-│   └── ui/           # Breadcrumbs, DetailHeaderDecor, FilterBar, ListItem, Tooltip
+│   └── ui/           # AsciiArt, Breadcrumbs, Card, FilterBar, ListItem, Tooltip
 ├── content/
 │   ├── blog/         # EN blog posts (.md)
 │   ├── blog/de/      # DE blog posts (.md)
@@ -67,7 +69,8 @@ src/
 │   └── BaseLayout.astro  # Single root layout — head, fonts, SEO, theme, lightbox, scripts
 ├── lib/
 │   ├── i18n.ts           # t(key, lang), langPrefix(), langSwitchUrl()
-│   └── content-helpers.ts # buildDeMap(), getLocalizedEntry(), getDeSlug()
+│   ├── content-helpers.ts # buildDeMap(), getLocalizedEntry(), getDeSlug()
+│   └── paintings.ts      # ASCII painting pools and captions per slot
 ├── pages/
 │   ├── index.astro       # DE home
 │   ├── blog/             # DE blog index + [post] detail
@@ -123,7 +126,7 @@ All JS is vanilla `<script>` in `BaseLayout.astro`, using `astro:page-load` and 
 | Feature | Mechanism |
 |---------|-----------|
 | Theme toggle | `data-theme` attribute on `<html>`, View Transitions API circular reveal (crossfade on Safari) |
-| Mobile menu | `data-open` attribute on `#mobile-menu`, max-height transition |
+| ASCII paintings | `AsciiArt.astro` script: random pick per slot (never the one shown last, via `sessionStorage`), decode-in, ambient shimmer/ripple, re-decodes the other theme's glyphs when `data-theme` changes, paused off-screen, static under reduced motion |
 | Lightbox | `<dialog id="lightbox">`, scroll lock via `body.lightbox-open`, focus trap, `aria-describedby` |
 | Tag filter | `FilterBar.astro` inline `<script>`, hides/shows `.filter-item` elements |
 | Tooltip | `clampTooltip()` positions `.tooltip-bubble` within viewport |

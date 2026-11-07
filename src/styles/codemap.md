@@ -27,8 +27,8 @@
 
 - Self-hosted font faces and semantic typography roles.
 - Light/dark CSS variables bridged into Tailwind v4 through `@theme`.
-- Shared layout dimensions, frame rails, buttons, rows, prose, tooltip, filter, and lightbox styles.
-- Astro view-transition pseudo-elements and reveal/magnetic motion states.
+- Shared layout dimensions, cards, chips, page intros, prose, ASCII painting frames, tooltip, and lightbox styles.
+- Astro view-transition pseudo-elements and reveal motion states.
 - Responsive and `prefers-reduced-motion` adaptations.
 
 ## Integration

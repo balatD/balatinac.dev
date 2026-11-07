@@ -15,6 +15,7 @@ const translations: Record<string, Record<Lang, string>> = {
   'title.404': { en: '404 — Not found', de: '404 — Nicht gefunden' },
 
   // === Homepage — Hero ===
+  'hero.title': { en: 'Building quiet systems', de: 'Ich baue ruhige Systeme' },
   'hero.sub': {
     en: 'Backend developer from NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span>, and the DevOps glue around them. This is where I keep my work, my notes, and the occasional opinion about why the boring choice is usually the right one.',
     de: 'Backend-Entwickler aus NRW — <span class="text-accent">TYPO3</span>, <span class="text-accent">PHP</span> und der DevOps-Klebstoff drumherum. Hier sammle ich meine Arbeit, meine Notizen und gelegentlich die Meinung, warum die langweilige Lösung meist die richtige ist.',
@@ -47,12 +48,21 @@ const translations: Record<string, Record<Lang, string>> = {
 
   // === Contact ===
   'contact.label': { en: 'Contact', de: 'Kontakt' },
-  'contact.email': { en: 'Email', de: 'E-Mail' },
-  'contact.code': { en: 'Code', de: 'Code' },
-  'contact.network': { en: 'Network', de: 'Netzwerk' },
 
   // === Footer ===
   'footer.built': { en: 'No tracking.', de: 'Kein Tracking.' },
+  'footer.top': { en: 'Back to top ↑', de: 'Nach oben ↑' },
+
+  // === Theme toggle — visible word names the theme it switches to ===
+  'theme.prefix': { en: 'Switch to ', de: 'Darstellung: ' },
+  'theme.suffix': { en: ' theme', de: '' },
+  'theme.dark': { en: 'Dark', de: 'Dunkel' },
+  'theme.light': { en: 'Light', de: 'Hell' },
+
+  // === ASCII painting captions ===
+  'art.after': { en: 'After', de: 'Nach' },
+  'art.circa': { en: 'c.', de: 'um' },
+  'art.characters': { en: 'characters', de: 'Zeichen' },
 
   // === Empty states ===
   'empty.work': { en: 'Projects coming soon.', de: 'Projekte folgen in Kürze.' },

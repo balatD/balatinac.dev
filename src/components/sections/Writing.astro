@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import { buildDeMap, getLocalizedEntry } from '../../lib/content-helpers';
 import type { Lang } from '../../lib/i18n';
 import { t, langPrefix, dateLocale } from '../../lib/i18n';
-import { sectionSheets } from '../../lib/ascii-decor';
+import Card from '../ui/Card.astro';
 
 interface Props { lang?: Lang; }
 const { lang = 'de' } = Astro.props;
@@ -18,35 +18,28 @@ const deMap = buildDeMap(dePosts);
 const hasPosts = posts.length > 0;
 ---
 
-<section id="writing" class="decorated-section py-16 sm:py-20 md:py-24 border-t border-rule" data-reveal-group>
-  <pre class="ascii-art section-decor section-decor--sheets" aria-hidden="true">{sectionSheets}</pre>
-  <div class="section-content mx-auto max-w-wrap px-5 sm:px-7 md:px-8">
-    <h2 class="section-title m-0 mb-7 md:mb-9" data-reveal>{t('writing.label', lang)}</h2>
-    {hasPosts ? (
-      <>
-        <ul class="list-none p-0 m-0">
-          {posts.map((post) => {
-            const { title, description, slug } = getLocalizedEntry(post, deMap, lang);
-            const dateStr = post.data.publishedAt.toLocaleDateString(dateLocale(lang), { month: 'short', year: 'numeric' });
-            return (
-              <li data-reveal>
-                <a class="row-link group grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-1 sm:gap-6 sm:items-baseline py-5 transition-colors" href={`${prefix}/blog/${slug}/`}>
-                  <div class="min-w-0">
-                    <div class="font-display text-[19px] sm:text-[20px] font-semibold leading-snug text-balance text-fg group-hover:text-accent transition-colors">{title}</div>
-                    <div class="text-[14px] sm:text-[15px] text-muted mt-1 text-pretty">{description}</div>
-                  </div>
-                  <div class="font-mono text-[12px] sm:text-[13px] text-muted whitespace-nowrap">{dateStr}</div>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-        <p class="mt-8" data-reveal>
-          <a class="cta-link inline-flex items-center gap-2 font-mono text-[13px] text-muted hover:text-accent" href={`${prefix}/blog/`}>{t('writing.all', lang)} <span aria-hidden="true">→</span></a>
-        </p>
-      </>
-    ) : (
-      <p class="text-[17px] text-muted" data-reveal>{t('empty.blog', lang)}</p>
-    )}
+<section id="writing" class="section mx-auto max-w-wrap px-5 sm:px-8 md:px-10" aria-labelledby="writing-title" data-reveal-group>
+  <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+    <h2 id="writing-title" class="h2-section m-0" data-reveal>{t('writing.label', lang)}</h2>
+    <a class="link-accent text-[15px] font-medium py-3" href={`${prefix}/blog/`} data-reveal>{t('writing.all', lang)}</a>
   </div>
+  {hasPosts ? (
+    <ul class="card-grid card-grid--wide mt-9">
+      {posts.map((post) => {
+        const { title, description, slug } = getLocalizedEntry(post, deMap, lang);
+        const dateStr = post.data.publishedAt.toLocaleDateString(dateLocale(lang), { month: 'short', year: 'numeric' });
+        const readTime = (lang === 'de' && deMap.get(post.id)?.data.readTime) || post.data.readTime;
+        return (
+          <Card
+            href={`${prefix}/blog/${slug}/`}
+            title={title}
+            description={description}
+            meta={readTime ? `${dateStr} · ${readTime}` : dateStr}
+          />
+        );
+      })}
+    </ul>
+  ) : (
+    <p class="text-[17px] text-muted mt-9" data-reveal>{t('empty.blog', lang)}</p>
+  )}
 </section>

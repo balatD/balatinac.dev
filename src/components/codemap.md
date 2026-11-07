@@ -35,7 +35,7 @@ Contains prop-driven Astro components for global chrome, homepage sections, and 
 |---|---|---|
 | `layout/` | Header, footer, metadata, structured data, branding, and decorative background. | [Layout components](layout/codemap.md) |
 | `sections/` | Content-aware sections composing the localized home pages. | [Homepage sections](sections/codemap.md) |
-| `ui/` | Filtering, breadcrumbs, list rows, and tooltip primitives. | [UI components](ui/codemap.md) |
+| `ui/` | ASCII paintings, cards, filtering, breadcrumbs, list rows, and tooltip primitives. | [UI components](ui/codemap.md) |
 
 ## Integration
 
