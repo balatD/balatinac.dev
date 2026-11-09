@@ -402,13 +402,27 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: max(620px, 60vw);
+  /* Never taller than the first screen below the header (72px from sm, 122px below), so the copy shows on load. */
+  min-height: min(max(620px, 60vw), calc(100svh - 122px));
+}
+@media (min-width: 640px) {
+  .hero {
+    min-height: min(max(620px, 60vw), calc(100svh - 72px));
+  }
+}
+@media (max-width: 639px) and (max-height: 600px) {
+  .hero .h1-display {
+    font-size: 36px;
+  }
+  .hero .lead {
+    font-size: 16px;
+  }
 }
 .hero-copy {
   position: relative;
   z-index: 1;
   width: 100%;
-  padding-top: 140px;
+  padding-top: 32px;
   padding-bottom: clamp(56px, 7vw, 104px);
 }
 .contact {
